@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>UnitsNet.Benchmark.UnitsNetBenchmarks-20210429-023218</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.202
+  [Host]     : .NET Core 5.0.5 (CoreCLR 5.0.521.16609, CoreFX 5.0.521.16609), X64 RyuJIT
+  Job-OYNRBM : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET 4.7.2  Toolchain=net472  IterationTime=125.0000 ms  
+</code></pre>
+
+<table>
+<thead><tr><th>          Method</th><th>   Mean</th><th>  Error</th><th>  StdDev</th><th> Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>Constructor</td><td>13.885 ns</td><td>0.3165 ns</td><td>0.7209 ns</td><td>13.823 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Constructor_SI</td><td>562.613 ns</td><td>10.7182 ns</td><td>17.3078 ns</td><td>565.409 ns</td><td>0.0205</td><td>-</td><td>-</td><td>201 B</td>
+</tr><tr><td>FromMethod</td><td>32.284 ns</td><td>0.6904 ns</td><td>1.8429 ns</td><td>32.155 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ToProperty</td><td>9.671 ns</td><td>0.2399 ns</td><td>0.3941 ns</td><td>9.722 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>As</td><td>9.703 ns</td><td>0.2389 ns</td><td>0.3789 ns</td><td>9.677 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>As_SI</td><td>563.740 ns</td><td>11.1023 ns</td><td>16.2737 ns</td><td>562.903 ns</td><td>0.0185</td><td>-</td><td>-</td><td>201 B</td>
+</tr><tr><td>ToUnit</td><td>21.000 ns</td><td>0.4626 ns</td><td>1.1605 ns</td><td>20.835 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ToUnit_SI</td><td>561.793 ns</td><td>11.2092 ns</td><td>28.5309 ns</td><td>560.098 ns</td><td>0.0213</td><td>-</td><td>-</td><td>201 B</td>
+</tr><tr><td>ToStringTest</td><td>16,146.316 ns</td><td>366.5945 ns</td><td>1,051.8282 ns</td><td>16,200.000 ns</td><td>-</td><td>-</td><td>-</td><td>8192 B</td>
+</tr><tr><td>Parse</td><td>94,052.525 ns</td><td>3,794.3686 ns</td><td>11,128.2261 ns</td><td>98,600.000 ns</td><td>-</td><td>-</td><td>-</td><td>57344 B</td>
+</tr><tr><td>TryParseValid</td><td>92,148.485 ns</td><td>3,610.2450 ns</td><td>10,588.2238 ns</td><td>88,600.000 ns</td><td>-</td><td>-</td><td>-</td><td>57344 B</td>
+</tr><tr><td>TryParseInvalid</td><td>96,197.980 ns</td><td>3,389.9157 ns</td><td>9,942.0359 ns</td><td>98,400.000 ns</td><td>-</td><td>-</td><td>-</td><td>57344 B</td>
+</tr><tr><td>QuantityFrom</td><td>1,767.677 ns</td><td>64.0358 ns</td><td>187.8060 ns</td><td>1,800.000 ns</td><td>-</td><td>-</td><td>-</td><td>8192 B</td>
+</tr><tr><td>IQuantity_As</td><td>21.092 ns</td><td>0.4649 ns</td><td>0.9906 ns</td><td>21.124 ns</td><td>0.0033</td><td>-</td><td>-</td><td>24 B</td>
+</tr><tr><td>IQuantity_As_SI</td><td>559.675 ns</td><td>11.1309 ns</td><td>22.4850 ns</td><td>561.111 ns</td><td>0.0210</td><td>-</td><td>-</td><td>201 B</td>
+</tr><tr><td>IQuantity_ToUnit</td><td>32.849 ns</td><td>0.7538 ns</td><td>1.4880 ns</td><td>32.803 ns</td><td>0.0081</td><td>-</td><td>-</td><td>56 B</td>
+</tr><tr><td>IQuantity_ToStringTest</td><td>16,455.670 ns</td><td>454.8633 ns</td><td>1,319.6408 ns</td><td>16,500.000 ns</td><td>-</td><td>-</td><td>-</td><td>8192 B</td>
+</tr></tbody></table>
+</body>
+</html>
