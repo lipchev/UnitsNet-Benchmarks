@@ -79,7 +79,7 @@ jobs:
       - name: Download Baseline
         uses: carlosperate/download-file-action@v1.0.3
         with:
-          file-url: ${{ github.event.actor.login }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results/${{ env.BENCHMARK_NAME }}-report-full.json
+          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results/${{ env.BENCHMARK_NAME }}-report-full.json
           location: baseline
           
       # publishing the current results to the benchmark-pages branch (overriding the previous result)
