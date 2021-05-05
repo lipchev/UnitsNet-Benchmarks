@@ -10,10 +10,11 @@ on:
       
 env: # Run No 3
   FRAMEWORK: net5.0 
-  EXECUTION_OPTIONS: --job Long --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --job Short --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
-  
+  BENCHMARK_NAME: UnitsNet.Benchmark.UnitsNetBenchmarks
+  STABLE_BASELINES: 'As' # TODO use something like Math.Min instead
 jobs:
   benchmark:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
@@ -66,13 +67,15 @@ jobs:
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
+        with:
+          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
 
       - name: Download Artifacts # The benchmark results are downloaded into a 'runtime' folder.
         uses: actions/download-artifact@v1
         with:
           name: UnitsNet Benchmarks (${{ matrix.runtime }})
           path: ${{ matrix.runtime }}        
-        
+          
       # publishing the current results to the benchmark-pages branch (overriding the previous result)
       - name: Saving benchmark results to ${{ env.BENCHMARK_PAGES_BRANCH }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results
         uses: JamesIves/github-pages-deploy-action@4.1.1
@@ -81,6 +84,37 @@ jobs:
           branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
           target-folder: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results
           commit-message: Automatic benchmark generation for ${{ github.sha }}
+ 
+      # The benchmark re-scaler is taken from lipchev/performance/src/tools/
+      - name: Download ResultRescaler
+        uses: actions/checkout@v2
+        with:
+          repository: lipchev/performance
+          path: performance
+          
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+          
+      # Executing the rescaler, placing the result in a 'runtime/rescaled' folder
+      - name: Running the ResultRescaler
+        env:
+          PERFLAB_TARGET_FRAMEWORKS: netcoreapp3.1
+        run: > 
+          dotnet run --project 'performance/src/tools/ResultRescaler' -c Release
+          --framework netcoreapp31
+          --base ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results
+          --diff ${{ matrix.runtime }}
+          --baselines ${{ env.STABLE_BASELINES }}
+          --output ${{ matrix.runtime }}
+      
+      - id: report
+        run: |
+          if [ -f ./${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json ]; then
+            echo ::set-output name=file::${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json
+          else
+            echo ::set-output name=file::${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-full.json
+          fi
       
       # appending to the running benchmark data on the benchmark-pages branch
       - name: Updating benchmark charts
@@ -88,7 +122,7 @@ jobs:
         with:
           name: UnitsNet Benchmarks (${{ matrix.runtime }})
           tool: 'benchmarkdotnet'
-          output-file-path: ${{ matrix.runtime }}/UnitsNet.Benchmark.UnitsNetBenchmarks-report-full.json
+          output-file-path: ${{ steps.report.file }}
           gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
           benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
