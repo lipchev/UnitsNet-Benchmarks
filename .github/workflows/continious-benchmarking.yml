@@ -111,10 +111,13 @@ jobs:
       - id: report
         run: |
           if [ -f ./${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json ]; then
-            echo ::set-output name=file::${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json
+            echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json"
           else
-            echo ::set-output name=file::${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-full.json
+            echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-full.json"
           fi
+          
+      - name: Chart file selection
+        run: echo "About to append ${{ steps.report.outputs.JSON_FILE }} to the chart for ${{ matrix.runtime }"
       
       # appending to the running benchmark data on the benchmark-pages branch
       - name: Updating benchmark charts
@@ -122,7 +125,7 @@ jobs:
         with:
           name: UnitsNet Benchmarks (${{ matrix.runtime }})
           tool: 'benchmarkdotnet'
-          output-file-path: ${{ steps.report.file }}
+          output-file-path: ${{ steps.report.JSON_FILE }}
           gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
           benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
