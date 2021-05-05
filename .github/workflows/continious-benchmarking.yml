@@ -113,14 +113,12 @@ jobs:
           --diff ${{ matrix.runtime }}
           --baselines ${{ env.STABLE_BASELINES }}
           --output ${{ matrix.runtime }}
-            
-      - name: Result
-        run: |
-          echo ls -R $matrix.runtime
-          
+                      
       - id: report
+        working-directory: ${{ matrix.runtime }}
         run: |
-          if [ -f "${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json" ]; then
+          ls -R 
+          if [ -f ${{ env.BENCHMARK_NAME }}-report-rescaled.json ]; then
             echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json"
           else
             echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-full.json"
