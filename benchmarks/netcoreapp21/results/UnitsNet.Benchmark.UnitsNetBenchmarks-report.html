@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>UnitsNet.Benchmark.UnitsNetBenchmarks-20210502-010338</title>
+<title>UnitsNet.Benchmark.UnitsNetBenchmarks-20210505-210518</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -17,32 +17,32 @@ BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Reds
 Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.202
   [Host]     : .NET Core 5.0.5 (CoreCLR 5.0.521.16609, CoreFX 5.0.521.16609), X64 RyuJIT
-  Job-EQKQIN : .NET Core 2.1.27 (CoreCLR 4.6.29916.01, CoreFX 4.6.29916.03), X64 RyuJIT
+  Job-QBYFHB : .NET Core 2.1.27 (CoreCLR 4.6.29916.01, CoreFX 4.6.29916.03), X64 RyuJIT
 </code></pre>
-<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  IterationCount=100  
-LaunchCount=3  WarmupCount=15  
+<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  IterationCount=3  
+LaunchCount=1  WarmupCount=3  
 </code></pre>
 
 <table>
-<thead><tr><th>          Method</th><th>   Mean</th><th>Error</th><th> StdDev</th><th> Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+<thead><tr><th>          Method</th><th>   Mean</th><th>  Error</th><th> StdDev</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>Constructor</td><td>13.067 ns</td><td>0.0359 ns</td><td>0.1864 ns</td><td>13.047 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>Constructor_SI</td><td>629.387 ns</td><td>1.7787 ns</td><td>9.2227 ns</td><td>630.058 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
-</tr><tr><td>FromMethod</td><td>30.664 ns</td><td>0.0913 ns</td><td>0.4734 ns</td><td>30.635 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>ToProperty</td><td>9.821 ns</td><td>0.0269 ns</td><td>0.1392 ns</td><td>9.807 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>As</td><td>9.858 ns</td><td>0.0239 ns</td><td>0.1241 ns</td><td>9.863 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>As_SI</td><td>593.366 ns</td><td>1.8242 ns</td><td>9.4588 ns</td><td>592.379 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
-</tr><tr><td>ToUnit</td><td>21.150 ns</td><td>0.0512 ns</td><td>0.2654 ns</td><td>21.129 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>ToUnit_SI</td><td>611.631 ns</td><td>1.6763 ns</td><td>8.6770 ns</td><td>611.151 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
-</tr><tr><td>ToStringTest</td><td>2,343.653 ns</td><td>6.7173 ns</td><td>34.8300 ns</td><td>2,343.443 ns</td><td>0.1411</td><td>-</td><td>-</td><td>952 B</td>
-</tr><tr><td>Parse</td><td>69,671.782 ns</td><td>206.4900 ns</td><td>1,070.6699 ns</td><td>69,498.315 ns</td><td>6.8359</td><td>0.2441</td><td>-</td><td>44816 B</td>
-</tr><tr><td>TryParseValid</td><td>69,981.312 ns</td><td>213.6101 ns</td><td>1,107.5886 ns</td><td>69,758.618 ns</td><td>6.8359</td><td>0.2441</td><td>-</td><td>44792 B</td>
-</tr><tr><td>TryParseInvalid</td><td>76,564.578 ns</td><td>224.0621 ns</td><td>1,167.7539 ns</td><td>76,430.615 ns</td><td>6.7139</td><td>0.2441</td><td>-</td><td>44392 B</td>
-</tr><tr><td>QuantityFrom</td><td>1,654.514 ns</td><td>20.4075 ns</td><td>104.1664 ns</td><td>1,600.000 ns</td><td>-</td><td>-</td><td>-</td><td>56 B</td>
-</tr><tr><td>IQuantity_As</td><td>23.931 ns</td><td>0.0625 ns</td><td>0.3246 ns</td><td>23.925 ns</td><td>0.0038</td><td>-</td><td>-</td><td>24 B</td>
-</tr><tr><td>IQuantity_As_SI</td><td>595.849 ns</td><td>1.6801 ns</td><td>8.7263 ns</td><td>595.776 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
-</tr><tr><td>IQuantity_ToUnit</td><td>32.736 ns</td><td>0.1158 ns</td><td>0.6017 ns</td><td>32.664 ns</td><td>0.0088</td><td>-</td><td>-</td><td>56 B</td>
-</tr><tr><td>IQuantity_ToStringTest</td><td>2,351.041 ns</td><td>6.9030 ns</td><td>35.9157 ns</td><td>2,350.281 ns</td><td>0.1411</td><td>-</td><td>-</td><td>952 B</td>
+</thead><tbody><tr><td>Constructor</td><td>10.592 ns</td><td>4.962 ns</td><td>0.2720 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Constructor_SI</td><td>535.133 ns</td><td>148.003 ns</td><td>8.1126 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>FromMethod</td><td>26.568 ns</td><td>11.545 ns</td><td>0.6328 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ToProperty</td><td>8.825 ns</td><td>1.622 ns</td><td>0.0889 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>As</td><td>8.270 ns</td><td>6.505 ns</td><td>0.3566 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>As_SI</td><td>493.978 ns</td><td>164.703 ns</td><td>9.0279 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>ToUnit</td><td>17.466 ns</td><td>12.428 ns</td><td>0.6812 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ToUnit_SI</td><td>506.860 ns</td><td>126.441 ns</td><td>6.9306 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>ToStringTest</td><td>1,891.772 ns</td><td>585.514 ns</td><td>32.0940 ns</td><td>0.1469</td><td>-</td><td>-</td><td>952 B</td>
+</tr><tr><td>Parse</td><td>58,337.773 ns</td><td>31,073.485 ns</td><td>1,703.2426 ns</td><td>6.8359</td><td>0.2441</td><td>-</td><td>44816 B</td>
+</tr><tr><td>TryParseValid</td><td>57,792.128 ns</td><td>7,935.616 ns</td><td>434.9779 ns</td><td>6.9580</td><td>0.2441</td><td>-</td><td>44792 B</td>
+</tr><tr><td>TryParseInvalid</td><td>64,911.080 ns</td><td>46,695.770 ns</td><td>2,559.5527 ns</td><td>6.7139</td><td>0.2441</td><td>-</td><td>44392 B</td>
+</tr><tr><td>QuantityFrom</td><td>1,933.333 ns</td><td>2,786.775 ns</td><td>152.7525 ns</td><td>-</td><td>-</td><td>-</td><td>56 B</td>
+</tr><tr><td>IQuantity_As</td><td>20.194 ns</td><td>9.387 ns</td><td>0.5145 ns</td><td>0.0038</td><td>-</td><td>-</td><td>24 B</td>
+</tr><tr><td>IQuantity_As_SI</td><td>491.170 ns</td><td>104.124 ns</td><td>5.7074 ns</td><td>0.0286</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>IQuantity_ToUnit</td><td>27.016 ns</td><td>2.390 ns</td><td>0.1310 ns</td><td>0.0088</td><td>-</td><td>-</td><td>56 B</td>
+</tr><tr><td>IQuantity_ToStringTest</td><td>2,335.523 ns</td><td>1,882.357 ns</td><td>103.1783 ns</td><td>0.1411</td><td>-</td><td>-</td><td>952 B</td>
 </tr></tbody></table>
 </body>
 </html>
