@@ -107,10 +107,11 @@ jobs:
           --diff ${{ matrix.runtime }}
           --baselines ${{ env.STABLE_BASELINES }}
           --output ${{ matrix.runtime }}
-      
+            
       - id: report
         run: |
-          if [ -f ./${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json ]; then
+          echo ls ${{ matrix.runtime }}
+          if [ -f "${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json" ]; then
             echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json"
           else
             echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-full.json"
@@ -125,7 +126,7 @@ jobs:
         with:
           name: UnitsNet Benchmarks (${{ matrix.runtime }})
           tool: 'benchmarkdotnet'
-          output-file-path: ${{ steps.report.JSON_FILE }}
+          output-file-path: ${{ steps.report.outputs.JSON_FILE }}
           gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
           benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
