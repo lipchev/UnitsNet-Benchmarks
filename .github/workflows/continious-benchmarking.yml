@@ -8,13 +8,13 @@ on:
       - ".github/workflows/**"
       - ".github/actions/**"
       
-env: # IQuantity_ToStringTest.ScaledByMean Run No 2
+env: # Min_Double.ScaledByMean Run No 1
   FRAMEWORK: net5.0 
   EXECUTION_OPTIONS: --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   BENCHMARK_NAME: UnitsNet.Benchmark.UnitsNetBenchmarks
-  STABLE_BASELINES: "IQuantity_ToStringTest" # TODO use something like Math.Min instead
+  STABLE_BASELINES: "Min_Double" # TODO use something like Math.Min instead
 jobs:
   benchmark:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
