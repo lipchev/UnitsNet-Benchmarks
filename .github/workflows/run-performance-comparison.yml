@@ -25,7 +25,15 @@ on:
       execution-options:
         description: 'Any additional parameters passed to the benchmark'
         required: false
-        default: --disableLogFile      
+        default: --disableLogFile     
+      baseline-repository:
+        description: 'The (upstream) repository used as the baseline for the report'
+        required: true
+        default: 'lipchev/UnitsNet-Benchmarks'
+      baseline-ref:
+        description: 'The branch, tag or SHA to checkout for the (upstream) repository used as the baseline for the report'
+        required: true
+        default: ''     
       retention-days:
         description: 'Artifacts are retained for 90 days by default. You can specify a shorter retention period (>0)'
         required:true
@@ -34,8 +42,22 @@ jobs:
   benchmark:
     runs-on: windows-latest
     steps:      
-      # checkout the current branch
-      - uses: actions/checkout@v2
+      # The benchmark ResultComparer is taken from dotnet/performance/src/tools (or possibly from the smaller lipchev/performance/src/tools/)
+      - name: Download ResultComparer
+        uses: actions/checkout@v2
+        with:
+          repository: dotnet/performance
+          path: performance
+          
+      # checkout the baseline branch
+      - name: Download baseline branch
+        uses: actions/checkout@v2 
+        with:
+          path: 'UnitsNet'
+          repository: ${{ github.event.inputs.baseline-repository }}
+          ref: ${{ github.event.inputs.baseline-ref }}
+          
+      - run: cd UnitsNet
       
       # we need all frameworks (even if only running one target at a time)
       - uses: actions/setup-dotnet@v1
@@ -50,15 +72,31 @@ jobs:
         with:
           dotnet-version: '5.0.x'
             
-      # executing the benchmark for the current framework(s)
+      # executing the baseline benchmark for the current framework(s)
       - uses: ./.github/actions/run-benchmark-scenario
         with:
-          runtimes: ${{ github.event.inputs.runtimes }}
           scenario: ${{ github.event.inputs.benchmarks }}
+          runtimes: ${{ github.event.inputs.runtimes }}
           exporters: ${{ github.event.inputs.exporters }}
           categories: ${{ github.event.inputs.categories }}
           execution-options: ${{ github.event.inputs.execution-options }}
-            
+      
+      # checkout the current branch
+      - uses: dotnet/checkout@v2  
+
+      - name: Benchmark Baseline
+        run: ls -R      
+        working-directory: Artifacts/Benchmarks
+        
+      # executing the benchmark for the current framework(s)
+      - uses: ./.github/actions/run-benchmark-scenario
+        with:
+          scenario: Comparison
+          runtimes: ${{ github.event.inputs.runtimes }}
+          exporters: ${{ github.event.inputs.exporters }}
+          categories: ${{ github.event.inputs.categories }}
+          execution-options: ${{ github.event.inputs.execution-options }}
+      
       # saving the current artifact (downloadable until the expiration date of this action)        
       - name: Store benchmark result
         uses: actions/upload-artifact@v2
@@ -67,5 +105,6 @@ jobs:
           path: Artifacts/Benchmarks
           if-no-files-found: error 
           retention-days: ${{ github.event.inputs.retention-days }} 
-          
+
+
           

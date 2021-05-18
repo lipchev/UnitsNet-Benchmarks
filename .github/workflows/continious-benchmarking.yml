@@ -8,26 +8,45 @@ on:
       - ".github/workflows/**"
       - ".github/actions/**"
       
-env: # Min_Double.ScaledByMean Run No 3
-  FRAMEWORK: net5.0 
-  EXECUTION_OPTIONS: --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
+
+env: 
+  SCENARIO: [Micro, Baseline]
+  EXPORTERS: fulljson rplot
+  CATEGORIES_FILTER: ''
+  EXECUTION_OPTIONS: --job Short --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
-  BENCHMARK_NAME: UnitsNet.Benchmark.UnitsNetBenchmarks
-  STABLE_BASELINES: "Min_Double" # TODO use something like Math.Min instead
+  STABLE_BASELINES: "UnitsNet.Benchmark.Baseline*" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:
   benchmark:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     strategy:
-      # max-parallel: 1 # is it better to avoid running in parallel?
       matrix: 
         runtime: ["netcoreapp50", "netcoreapp21", "net472"]        
     steps:
       - run: echo Starting benchmarks for ${{ matrix.runtime }} 
       
       # checkout the current branch
-      - uses: actions/checkout@v2 
+      - uses: actions/checkout@v2
+        with:
+          path: UnitsNet
+           
+      # checkout the ResultRescaler
+      - name: Checkout the ResultRescaler
+        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        uses: actions/checkout@v2
+        with:
+          repository: lipchev/performance
+          path: performance
+          
+      # checkout the baseline branch
+      - name: Checkout previous results 
+        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
+          path: gh-pages
       
       # we need all frameworks (even if only running one target at a time)
       - uses: actions/setup-dotnet@v1
@@ -42,20 +61,50 @@ jobs:
         with: 
           dotnet-version: '5.0.x'
             
-      # executing the benchmark for the current framework, placing the result in a corresponding sub-folder              
-      - uses: ./.github/actions/run-benchmarks
+      # executing the benchmark for the current framework(s)
+      - uses: ./.github/actions/run-benchmark-scenario
         with:
-          framework: ${{ env.FRAMEWORK }}
           runtimes: ${{ matrix.runtime }}
-          output-folder: Artifacts/Benchmark/${{ matrix.runtime }}
+          scenario: ${{ env.SCENARIO }}
+          exporters: ${{ env.EXPORTERS }}
+          categories: ${{ env.CATEGORIES_FILTER }}
           execution-options: ${{ env.EXECUTION_OPTIONS }}
-            
+      
+      - name: Stable baseline comparison
+        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        env:
+          PERFLAB_TARGET_FRAMEWORKS: netcoreapp3.1
+        run: |
+          if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
+            echo Running the ResultRescaler using the original baseline
+            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f netcoreapp31 --base baselines\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline --diff UnitsNet\Artifacts\Benchmark -b ${{ env.STABLE_BASELINES }} -o UnitsNet\Artifacts\Benchmark
+            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline | Copy-Item -Destination UnitsNet\Artifacts\Benchmark\Baseline -Recurse -filter *-report-rescaled.json
+          }else{
+            echo No previous baseline found (using current results)
+            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
+          }      
+                
       # saving the current artifact (downloadable until the expiration date of this action)        
-      - name: Store benchmark artifact
+      - name: Store micro benchmark artifact
+        if: ${{ contains(env.SCENARIO, 'Micro') }}
         uses: actions/upload-artifact@v2
         with:
-          name: UnitsNet Benchmarks (${{ matrix.runtime }})
-          path: Artifacts/Benchmark/${{ matrix.runtime }}/results/
+          name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
+          path: UnitsNet/Artifacts/Benchmark/Micro
+          
+      - name: Store gradient benchmark artifact
+        if: ${{ contains(env.SCENARIO, 'Gradient') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
+          path: UnitsNet/Artifacts/Benchmark/Gradient
+          
+      - name: Store baseline benchmark artifact
+        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
+          path: UnitsNet/Artifacts/Benchmark/Baseline
           
   publish-results:
     needs: [benchmark]
@@ -67,66 +116,36 @@ jobs:
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
+        with:
+          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
+        
+      # The benchmark results are downloaded into the corresponding 'scenario' folder.
+      - name: Download micro benchmark artifact
+        if: ${{ contains(env.SCENARIO, 'Micro') }}
+        uses: actions/download-artifact@v2
+        with:
+          name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
+          path: ${{ env.BENCHMARK_DATA_FOLDER }/${{ matrix.runtime }}/Micro        
+          
+      - name: Download gradient benchmark artifact
+        if: ${{ contains(env.SCENARIO, 'Gradient') }}
+        uses: actions/download-artifact@2
+        with:
+          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
+          path: ${{ env.BENCHMARK_DATA_FOLDER }/${{ matrix.runtime }}/Gradient  
+          
+      - name: Download baseline benchmark artifact
+        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        uses: actions/download-artifact@2
+        with:
+          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
+          path: ${{ env.BENCHMARK_DATA_FOLDER }/${{ matrix.runtime }}/Baseline  
 
-      # The benchmark results are downloaded into a 'runtime' folder.
-      - name: Download Artifacts 
-        uses: actions/download-artifact@v1
+      - name: Git Auto Commit
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
-          name: UnitsNet Benchmarks (${{ matrix.runtime }})
-          path: ${{ matrix.runtime }}        
-          
-      # The baseline results are downloaded into a 'baseline' folder.  
-      - name: Download Baseline
-        uses: carlosperate/download-file-action@v1.0.3
-        with:
-          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results/${{ env.BENCHMARK_NAME }}-report-full.json
-          location: baseline
-          
-      # publishing the current results to the benchmark-pages branch (overriding the previous result)
-      - name: Saving benchmark results to ${{ env.BENCHMARK_PAGES_BRANCH }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results
-        uses: JamesIves/github-pages-deploy-action@4.1.1
-        with:
-          folder: ${{ matrix.runtime }}
-          branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
-          target-folder: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/results
-          commit-message: Automatic benchmark generation for ${{ github.sha }}
- 
-      # The benchmark re-scaler is taken from lipchev/performance/src/tools/
-      - name: Download ResultRescaler
-        uses: actions/checkout@v2
-        with:
-          repository: lipchev/performance
-          path: performance
-          
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.x'
-          
-      # Executing the rescaler, placing the result in a 'runtime/rescaled' folder
-      - name: Running the ResultRescaler
-        env:
-          PERFLAB_TARGET_FRAMEWORKS: netcoreapp3.1
-        run: > 
-          dotnet run --project 'performance/src/tools/ResultRescaler' -c Release
-          --framework netcoreapp31
-          --base baseline
-          --diff ${{ matrix.runtime }}
-          --baselines ${{ env.STABLE_BASELINES }}
-          --output ${{ matrix.runtime }}
-                      
-      - id: report
-        working-directory: ${{ matrix.runtime }}
-        run: |
-          ls -R 
-          if [ -f ${{ env.BENCHMARK_NAME }}-report-rescaled.json ]; then
-            echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-rescaled.json"
-          else
-            echo ::set-output name=JSON_FILE::"${{ matrix.runtime }}/${{ env.BENCHMARK_NAME }}-report-full.json"
-          fi
-          
-      - name: Chart file selection
-        run: echo "About to append ${{ steps.report.outputs.JSON_FILE }} to the chart for ${{ matrix.runtime }}"
-      
+          commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.runtime }})
+
       # appending to the running benchmark data on the benchmark-pages branch
       - name: Updating benchmark charts
         uses: starburst997/github-action-benchmark@v1.8.7
@@ -136,6 +155,49 @@ jobs:
           output-file-path: ${{ steps.report.outputs.JSON_FILE }}
           gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
           benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          # Show alert with commit comment on detecting possible performance regression
+          alert-threshold: '200%'
+          comment-always: true
+          comment-on-alert: true
+          fail-on-alert: false
+          alert-comment-cc-users: '@lipchev'
+     
+  update-history:
+    needs: [publish-results]
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1 # cannot commit on the same branch in parallel
+      matrix: 
+        runtime: ["netcoreapp50", "netcoreapp21", "net472"]
+        benchmark: [Micro/Construction/QuantityFromUnit, Micro/Construction/UnitFromString, Micro/Construction/QuantityFromString, Micro/Comparison, Micro/Conversion/QuantityToValue, Micro/Conversion/QuantityToUnit, Micro/Conversion/QuantityToString, Micro/Init, Baseline/Construction, Baseline/Comparison, Baseline/Conversion/Value, Baseline/Conversion/String] 
+        report: [report-full, report-rescaled]
+    steps:        
+      - name: Initializing git folder ️
+        uses: actions/checkout@v2.3.1
+        
+      - name: Result path configuration
+        id: path
+        run: echo ::set-output name=FILE_NAME::"${{ matrix.benchmark }}.replace("/", "-")-${{ matrix.report }}.json"
+        
+      # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
+      - name: Fetch latest ${{ matrix.report }}
+        id: report
+        uses: carlosperate/download-file-action@v1.0.3
+        with:
+          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/{{ matrix.benchmark }}/results/${{ steps.outputs.path.FILE_NAME }}
+          location: Artifacts/Benchmark
+
+      # appending to the running benchmark data on the benchmark-pages branch
+      - name: Updating benchmark charts
+        uses: starburst997/github-action-benchmark@v1.8.7
+        with:
+          name: UnitsNet Benchmarks (${{ matrix.runtime }})
+          tool: 'benchmarkdotnet'
+          output-file-path: ${{ steps.report.outputs.file-path }}
+          gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
+          benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
           # Show alert with commit comment on detecting possible performance regression
