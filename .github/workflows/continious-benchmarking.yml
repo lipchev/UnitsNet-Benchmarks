@@ -13,7 +13,7 @@ env:
   SCENARIO: Micro Baseline
   EXPORTERS: fulljson rplot
   CATEGORIES_FILTER: ''
-  EXECUTION_OPTIONS: --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --job Short --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "UnitsNet.Benchmark.Baseline*" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
@@ -172,14 +172,14 @@ jobs:
         
       - name: Result path configuration
         id: path
-        run: echo ::set-output name=FILE_NAME::"${{ matrix.benchmark }}.replace("/", "-")-${{ matrix.report }}.json"
+        run: echo ::set-output name=FILE_NAME::${{ matrix.benchmark }}.replace("/", "-")-${{ matrix.report }}.json
         
       # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
       - name: Fetch latest ${{ matrix.report }}
         id: report
         uses: carlosperate/download-file-action@v1.0.3
         with:
-          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.outputs.path.FILE_NAME }}
+          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.path.outputs.FILE_NAME }}
           location: Artifacts/Benchmark
 
       # appending to the running benchmark data on the benchmark-pages branch
