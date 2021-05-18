@@ -1,4 +1,4 @@
-name: Run UnitsNet Benchmarks
+name: UnitsNet Performance Comparison
 on:
   workflow_dispatch:
     inputs:
@@ -72,7 +72,7 @@ jobs:
             
       # executing the baseline benchmark for the current framework(s)
       - uses: ./UnitsNet/.github/actions/run-benchmark-scenario
-        if: contains(env.benchmarks, 'Micro')
+        if: contains(github.event.inputs.benchmarks, 'Micro')
         with:
           scenario: run-micro-benchmarks.bat
           runtimes: ${{ github.event.inputs.runtimes }}
@@ -81,7 +81,7 @@ jobs:
           execution-options: ${{ github.event.inputs.execution-options }}
           
       - uses: ./UnitsNet/.github/actions/run-benchmark-scenario
-        if: contains(env.benchmarks, 'Gradient')
+        if: contains(github.event.inputs.benchmarks, 'Gradient')
         with:
           scenario: run-gradient-benchmarks.bat
           runtimes: ${{ github.event.inputs.runtimes }}
@@ -90,7 +90,7 @@ jobs:
           execution-options: ${{ github.event.inputs.execution-options }}
           
       - uses: ./UnitsNet/.github/actions/run-benchmark-scenario
-        if: contains(env.benchmarks, 'Baseline')
+        if: contains(github.event.inputs.benchmarks, 'Baseline')
         with:
           scenario: run-stable-baseline-benchmarks.bat
           runtimes: ${{ github.event.inputs.runtimes }}

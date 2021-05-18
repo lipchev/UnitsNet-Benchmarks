@@ -61,6 +61,9 @@ jobs:
         with: 
           dotnet-version: '5.0.x'
       
+      - run: cd UnitsNet
+      - run: ls -R
+      
       # executing the benchmark for the current framework(s)
       - name: Benchmark scenario execution (Micro)
         if: contains(env.SCENARIO, 'Micro')
