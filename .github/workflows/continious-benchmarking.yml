@@ -140,14 +140,14 @@ jobs:
           
       - name: Download gradient benchmark artifact
         if: contains(env.SCENARIO, 'Gradient')
-        uses: actions/download-artifact@2
+        uses: actions/download-artifact@v2
         with:
           name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
           path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/Gradient  
           
       - name: Download baseline benchmark artifact
         if: contains(env.SCENARIO, 'Baseline')
-        uses: actions/download-artifact@2
+        uses: actions/download-artifact@v2
         with:
           name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
           path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/Baseline  
