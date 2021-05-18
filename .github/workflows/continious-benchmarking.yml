@@ -21,7 +21,6 @@ jobs:
   benchmark:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
-    defaults:
     strategy:
       matrix: 
         runtime: ["netcoreapp50", "netcoreapp21", "net472"]        

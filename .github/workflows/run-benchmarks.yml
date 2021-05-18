@@ -78,7 +78,7 @@ jobs:
           categories: ${{ github.event.inputs.categories }}
           execution-options: ${{ github.event.inputs.execution-options }}
             
-      -run: ls Artifacts/Benchmark      
+      - run: ls Artifacts/Benchmark      
       
       # saving the current artifact (downloadable until the expiration date of this action)        
       - name: Store benchmark result
