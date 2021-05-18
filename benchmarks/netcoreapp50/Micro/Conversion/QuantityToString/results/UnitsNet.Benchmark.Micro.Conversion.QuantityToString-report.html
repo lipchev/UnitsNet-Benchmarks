@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>UnitsNet.Benchmark.Micro.Conversion.QuantityToString-20210518-205639</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-TDZZPE : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET Core 5.0  Toolchain=netcoreapp50  
+</code></pre>
+
+<table>
+<thead><tr><th>      Method</th><th>                 Categories</th><th>quantity</th><th>format</th><th>culture</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>1,234.56 m</td><td>v</td><td></td><td>418.9 ns</td><td>8.41 ns</td><td>12.84 ns</td><td>2.31 ns</td><td>392.8 ns</td><td>442.8 ns</td><td>418.7 ns</td><td>0.0119</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>1,234.56 m</td><td>v</td><td></td><td>425.8 ns</td><td>5.69 ns</td><td>5.05 ns</td><td>1.35 ns</td><td>419.2 ns</td><td>437.3 ns</td><td>425.7 ns</td><td>0.0119</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>1,234.56 m</td><td>a</td><td></td><td>569.4 ns</td><td>11.37 ns</td><td>20.21 ns</td><td>3.20 ns</td><td>521.6 ns</td><td>613.0 ns</td><td>569.6 ns</td><td>0.0401</td><td>-</td><td>-</td><td>640 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>1,234.56 m</td><td>a</td><td></td><td>583.3 ns</td><td>11.71 ns</td><td>17.52 ns</td><td>3.20 ns</td><td>549.3 ns</td><td>616.0 ns</td><td>588.4 ns</td><td>0.0401</td><td>-</td><td>-</td><td>640 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>1,234.56 ft</td><td>a2</td><td></td><td>700.9 ns</td><td>13.96 ns</td><td>17.14 ns</td><td>3.65 ns</td><td>663.7 ns</td><td>728.9 ns</td><td>702.0 ns</td><td>0.0439</td><td>-</td><td>-</td><td>696 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>1,234.56 ft</td><td>a2</td><td></td><td>704.2 ns</td><td>14.22 ns</td><td>21.71 ns</td><td>3.90 ns</td><td>659.0 ns</td><td>744.0 ns</td><td>700.0 ns</td><td>0.0439</td><td>-</td><td>-</td><td>696 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>1,234.56 m</td><td>f2</td><td></td><td>1,190.9 ns</td><td>23.45 ns</td><td>26.06 ns</td><td>5.98 ns</td><td>1,150.9 ns</td><td>1,242.4 ns</td><td>1,187.0 ns</td><td>0.0477</td><td>-</td><td>-</td><td>752 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>1,234.56 m</td><td>f2</td><td></td><td>1,251.5 ns</td><td>25.03 ns</td><td>27.83 ns</td><td>6.38 ns</td><td>1,172.6 ns</td><td>1,283.8 ns</td><td>1,256.3 ns</td><td>0.0477</td><td>-</td><td>-</td><td>752 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>8.1e-04 m</td><td>?</td><td></td><td>1,423.8 ns</td><td>25.93 ns</td><td>24.25 ns</td><td>6.26 ns</td><td>1,383.6 ns</td><td>1,474.1 ns</td><td>1,429.0 ns</td><td>0.0591</td><td>-</td><td>-</td><td>952 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>8.1e-04 m</td><td>?</td><td></td><td>1,465.8 ns</td><td>28.55 ns</td><td>45.29 ns</td><td>7.88 ns</td><td>1,387.2 ns</td><td>1,551.3 ns</td><td>1,466.3 ns</td><td>0.0591</td><td>-</td><td>-</td><td>952 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>1,234.56 ft</td><td>?</td><td>ru-RU</td><td>1,538.9 ns</td><td>29.93 ns</td><td>39.95 ns</td><td>7.99 ns</td><td>1,473.9 ns</td><td>1,620.5 ns</td><td>1,533.1 ns</td><td>0.0610</td><td>-</td><td>-</td><td>960 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>1,234.56 ft</td><td>?</td><td>ru-RU</td><td>1,545.4 ns</td><td>27.87 ns</td><td>56.94 ns</td><td>7.97 ns</td><td>1,444.0 ns</td><td>1,691.8 ns</td><td>1,534.7 ns</td><td>0.0610</td><td>-</td><td>-</td><td>960 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>1,234.56 m</td><td>?</td><td></td><td>1,586.0 ns</td><td>31.14 ns</td><td>34.61 ns</td><td>7.94 ns</td><td>1,515.6 ns</td><td>1,642.9 ns</td><td>1,592.1 ns</td><td>0.0610</td><td>-</td><td>-</td><td>960 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>1,234.56 m</td><td>?</td><td></td><td>1,602.7 ns</td><td>32.06 ns</td><td>32.93 ns</td><td>7.99 ns</td><td>1,550.6 ns</td><td>1,664.7 ns</td><td>1,600.6 ns</td><td>0.0610</td><td>-</td><td>-</td><td>960 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>8.1e-04 m</td><td>s4</td><td></td><td>1,614.9 ns</td><td>31.84 ns</td><td>40.26 ns</td><td>8.40 ns</td><td>1,542.2 ns</td><td>1,677.2 ns</td><td>1,616.6 ns</td><td>0.0629</td><td>-</td><td>-</td><td>992 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>8.1e-04 m</td><td>s4</td><td></td><td>1,622.7 ns</td><td>30.67 ns</td><td>28.69 ns</td><td>7.41 ns</td><td>1,585.1 ns</td><td>1,665.9 ns</td><td>1,618.6 ns</td><td>0.0629</td><td>-</td><td>-</td><td>992 B</td>
+</tr><tr><td>IQuantity_ToString</td><td>Interface,Micro,Conversion,String</td><td>1,234.56 ft</td><td>?</td><td></td><td>1,630.2 ns</td><td>31.14 ns</td><td>33.32 ns</td><td>7.85 ns</td><td>1,566.0 ns</td><td>1,698.7 ns</td><td>1,626.3 ns</td><td>0.0610</td><td>-</td><td>-</td><td>976 B</td>
+</tr><tr><td>ToString</td><td>Struct,Micro,Conversion,String</td><td>1,234.56 ft</td><td>?</td><td></td><td>1,644.5 ns</td><td>32.57 ns</td><td>37.51 ns</td><td>8.39 ns</td><td>1,585.6 ns</td><td>1,731.6 ns</td><td>1,646.4 ns</td><td>0.0610</td><td>-</td><td>-</td><td>976 B</td>
+</tr></tbody></table>
+</body>
+</html>
