@@ -83,7 +83,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.inputs.benchmark-name }} (${{ github.event.inputs.runtimes }})
-          path: Artifacts/Benchmarks
+          path: Artifacts\Benchmarks
           if-no-files-found: error 
           retention-days: ${{ github.event.inputs.retention-days }} 
           
