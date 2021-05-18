@@ -25,3 +25,4 @@ runs:
   steps:
     - name: Generating benchmark results (Micro)
       run: UnitsNet.Benchmark\Scripts\${{ inputs.scenario }} ${{ inputs.runtimes }} --exporters ${{ inputs.exporters }} ${{ inputs.categories }} ${{ inputs.execution-options }}
+      shell: pwsh
