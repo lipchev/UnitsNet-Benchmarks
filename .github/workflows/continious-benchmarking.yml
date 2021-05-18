@@ -179,7 +179,7 @@ jobs:
         id: report
         uses: carlosperate/download-file-action@v1.0.3
         with:
-          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/{{ matrix.benchmark }}/results/${{ steps.outputs.path.FILE_NAME }}
+          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.outputs.path.FILE_NAME }}
           location: Artifacts/Benchmark
 
       # appending to the running benchmark data on the benchmark-pages branch
