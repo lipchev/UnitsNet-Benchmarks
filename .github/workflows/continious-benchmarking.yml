@@ -77,8 +77,8 @@ jobs:
           execution-options: ${{ env.EXECUTION_OPTIONS }}
           
       
-      - name: Benchmark scenario execution (Micro)
-        if: contains(env.SCENARIO, 'Micro')
+      - name: Benchmark scenario execution (Baseline)
+        if: contains(env.SCENARIO, 'Baseline')
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.runtime }} --exporters ${{ env.EXPORTERS }} ${{ env.EXECUTION_OPTIONS }}
                 
       - name: Stable baseline comparison
@@ -87,11 +87,11 @@ jobs:
           PERFLAB_TARGET_FRAMEWORKS: netcoreapp3.1
         run: |
           if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
-            echo Running the ResultRescaler using the original baseline
+            echo "Running the ResultRescaler using the original baseline"
             dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f netcoreapp31 --base baselines\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline --diff UnitsNet\Artifacts\Benchmark -b ${{ env.STABLE_BASELINES }} -o UnitsNet\Artifacts\Benchmark
             Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline | Copy-Item -Destination UnitsNet\Artifacts\Benchmark\Baseline -Recurse -filter *-report-rescaled.json
           }else{
-            echo No previous baseline found (using current results)
+            echo "No previous baseline found (using current results)"
             Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
           }      
                 

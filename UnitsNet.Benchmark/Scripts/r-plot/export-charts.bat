@@ -1,6 +1,8 @@
 @echo off
 cd %~p1 
-echo Generating plots...
-%1 1> nul 2> nul
+echo Generating plots:
+dir %1
+type %1
+%1 rem 1> nul 2> nul
 mkdir plots
 move *.png plots
