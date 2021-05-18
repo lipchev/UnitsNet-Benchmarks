@@ -62,7 +62,7 @@ jobs:
           dotnet-version: '5.0.x'
             
       # executing the benchmark for the current framework(s)
-      - uses: ./.github/actions/run-benchmark-scenario
+      - uses: UnitsNet/.github/actions/run-benchmark-scenario
         with:
           runtimes: ${{ matrix.runtime }}
           scenario: ${{ env.SCENARIO }}
