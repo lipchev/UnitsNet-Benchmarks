@@ -24,21 +24,21 @@ runs:
   using: "composite"
   steps:
     - name: Generating benchmark results (Micro)
-      if: ${{ contains(github.event.inputs.scenario, 'Micro') }}
+      if: contains(github.event.inputs.scenario, 'Micro')
       run: UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ inputs.runtimes }} --exporters ${{ inputs.exporters }} ${{ inputs.categories }} ${{ inputs.execution-options }}
       shell: bash
       
     - name: Generating benchmark results (Gradient)
-      if: ${{ contains(github.event.inputs.scenario, 'Gradient') }}
+      if: contains(github.event.inputs.scenario, 'Gradient')
       run: UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ inputs.runtimes }} --exporters ${{ inputs.exporters }} ${{ inputs.categories }} ${{ inputs.execution-options }}
       shell: bash
       
     - name: Generating benchmark results (Baseline)
-      if: ${{ contains(github.event.inputs.scenario, 'Baseline') }}
+      if: contains(github.event.inputs.scenario, 'Baseline')
       run: UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ inputs.runtimes }} --exporters ${{ inputs.exporters }} ${{ inputs.categories }} ${{ inputs.execution-options }}
       shell: bash
       
     - name: Generating benchmark results (Comparison)
-      if: ${{ contains(github.event.inputs.scenario, 'Comparison') }}
+      if: contains(github.event.inputs.scenario, 'Comparison')
       run: UnitsNet.Benchmark\Scripts\run-comparison-benchmarks.bat ${{ inputs.runtimes }} --exporters ${{ inputs.exporters }} ${{ inputs.categories }} ${{ inputs.execution-options }}
       shell: bash

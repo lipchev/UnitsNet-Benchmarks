@@ -34,7 +34,7 @@ jobs:
            
       # checkout the ResultRescaler
       - name: Checkout the ResultRescaler
-        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        if: contains(env.SCENARIO, 'Baseline')
         uses: actions/checkout@v2
         with:
           repository: lipchev/performance
@@ -42,7 +42,7 @@ jobs:
           
       # checkout the baseline branch
       - name: Checkout previous results 
-        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        if: contains(env.SCENARIO, 'Baseline')
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
@@ -70,11 +70,9 @@ jobs:
           exporters: ${{ env.EXPORTERS }}
           categories: ${{ env.CATEGORIES_FILTER }}
           execution-options: ${{ env.EXECUTION_OPTIONS }}
-          
-      - run: cd ..
-      
+                
       - name: Stable baseline comparison
-        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        if: contains(env.SCENARIO, 'Baseline')
         env:
           PERFLAB_TARGET_FRAMEWORKS: netcoreapp3.1
         run: |
@@ -89,21 +87,21 @@ jobs:
                 
       # saving the current artifact (downloadable until the expiration date of this action)        
       - name: Store micro benchmark artifact
-        if: ${{ contains(env.SCENARIO, 'Micro') }}
+        if: contains(env.SCENARIO, 'Micro')
         uses: actions/upload-artifact@v2
         with:
           name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
           path: UnitsNet/Artifacts/Benchmark/Micro
           
       - name: Store gradient benchmark artifact
-        if: ${{ contains(env.SCENARIO, 'Gradient') }}
+        if: contains(env.SCENARIO, 'Gradient')
         uses: actions/upload-artifact@v2
         with:
           name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
           path: UnitsNet/Artifacts/Benchmark/Gradient
           
       - name: Store baseline benchmark artifact
-        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        if: contains(env.SCENARIO, 'Baseline')
         uses: actions/upload-artifact@v2
         with:
           name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
@@ -124,21 +122,21 @@ jobs:
         
       # The benchmark results are downloaded into the corresponding 'scenario' folder.
       - name: Download micro benchmark artifact
-        if: ${{ contains(env.SCENARIO, 'Micro') }}
+        if: contains(env.SCENARIO, 'Micro')
         uses: actions/download-artifact@v2
         with:
           name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
           path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/Micro        
           
       - name: Download gradient benchmark artifact
-        if: ${{ contains(env.SCENARIO, 'Gradient') }}
+        if: contains(env.SCENARIO, 'Gradient')
         uses: actions/download-artifact@2
         with:
           name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
           path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/Gradient  
           
       - name: Download baseline benchmark artifact
-        if: ${{ contains(env.SCENARIO, 'Baseline') }}
+        if: contains(env.SCENARIO, 'Baseline')
         uses: actions/download-artifact@2
         with:
           name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
