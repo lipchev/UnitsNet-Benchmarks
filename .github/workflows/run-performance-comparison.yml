@@ -57,8 +57,6 @@ jobs:
           repository: ${{ github.event.inputs.baseline-repository }}
           ref: ${{ github.event.inputs.baseline-ref }}
           
-      - run: cd UnitsNet
-      
       # we need all frameworks (even if only running one target at a time)
       - uses: actions/setup-dotnet@v1
         with:
@@ -73,9 +71,28 @@ jobs:
           dotnet-version: '5.0.x'
             
       # executing the baseline benchmark for the current framework(s)
-      - uses: ./.github/actions/run-benchmark-scenario
+      - uses: ./UnitsNet/.github/actions/run-benchmark-scenario
+        if: contains(env.benchmarks, 'Micro')
         with:
-          scenario: ${{ github.event.inputs.benchmarks }}
+          scenario: run-micro-benchmarks.bat
+          runtimes: ${{ github.event.inputs.runtimes }}
+          exporters: ${{ github.event.inputs.exporters }}
+          categories: ${{ github.event.inputs.categories }}
+          execution-options: ${{ github.event.inputs.execution-options }}
+          
+      - uses: ./UnitsNet/.github/actions/run-benchmark-scenario
+        if: contains(env.benchmarks, 'Gradient')
+        with:
+          scenario: run-gradient-benchmarks.bat
+          runtimes: ${{ github.event.inputs.runtimes }}
+          exporters: ${{ github.event.inputs.exporters }}
+          categories: ${{ github.event.inputs.categories }}
+          execution-options: ${{ github.event.inputs.execution-options }}
+          
+      - uses: ./UnitsNet/.github/actions/run-benchmark-scenario
+        if: contains(env.benchmarks, 'Baseline')
+        with:
+          scenario: run-stable-baseline-benchmarks.bat
           runtimes: ${{ github.event.inputs.runtimes }}
           exporters: ${{ github.event.inputs.exporters }}
           categories: ${{ github.event.inputs.categories }}
@@ -86,12 +103,12 @@ jobs:
 
       - name: Benchmark Baseline
         run: ls -R      
-        working-directory: Artifacts/Benchmarks
+        working-directory: UnitsNet/Artifacts/Benchmarks
         
       # executing the benchmark for the current framework(s)
-      - uses: ./.github/actions/run-benchmark-scenario
+      - uses: ./UnitsNet/.github/actions/run-benchmark-scenario
         with:
-          scenario: Comparison
+          scenario: run-comparison-benchmarks.bat
           runtimes: ${{ github.event.inputs.runtimes }}
           exporters: ${{ github.event.inputs.exporters }}
           categories: ${{ github.event.inputs.categories }}
@@ -102,7 +119,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.inputs.benchmark-name }} (${{ github.event.inputs.runtimes }})
-          path: Artifacts/Benchmarks
+          path: UnitsNet/Artifacts/Benchmarks
           if-no-files-found: error 
           retention-days: ${{ github.event.inputs.retention-days }} 
 

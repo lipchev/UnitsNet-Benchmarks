@@ -52,9 +52,28 @@ jobs:
             
       # executing the benchmark for the current framework(s)
       - uses: ./.github/actions/run-benchmark-scenario
+        if: contains(env.benchmarks, 'Micro')
         with:
+          scenario: run-micro-benchmarks.bat
           runtimes: ${{ github.event.inputs.runtimes }}
-          scenario: ${{ github.event.inputs.benchmarks }}
+          exporters: ${{ github.event.inputs.exporters }}
+          categories: ${{ github.event.inputs.categories }}
+          execution-options: ${{ github.event.inputs.execution-options }}
+          
+      - uses: ./.github/actions/run-benchmark-scenario
+        if: contains(env.benchmarks, 'Gradient')
+        with:
+          scenario: run-gradient-benchmarks.bat
+          runtimes: ${{ github.event.inputs.runtimes }}
+          exporters: ${{ github.event.inputs.exporters }}
+          categories: ${{ github.event.inputs.categories }}
+          execution-options: ${{ github.event.inputs.execution-options }}
+          
+      - uses: ./.github/actions/run-benchmark-scenario
+        if: contains(env.benchmarks, 'Baseline')
+        with:
+          scenario: run-stable-baseline-benchmarks.bat
+          runtimes: ${{ github.event.inputs.runtimes }}
           exporters: ${{ github.event.inputs.exporters }}
           categories: ${{ github.event.inputs.categories }}
           execution-options: ${{ github.event.inputs.execution-options }}

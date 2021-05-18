@@ -62,11 +62,32 @@ jobs:
           dotnet-version: '5.0.x'
       
       # executing the benchmark for the current framework(s)
-      - name: Benchmark execution
+      - name: Benchmark scenario execution (Micro)
+        if: contains(env.SCENARIO, 'Micro')
         uses: ./UnitsNet/.github/actions/run-benchmark-scenario
         with:
+          scenario: run-micro-benchmarks.bat
           runtimes: ${{ matrix.runtime }}
-          scenario: ${{ env.SCENARIO }}
+          exporters: ${{ env.EXPORTERS }}
+          categories: ${{ env.CATEGORIES_FILTER }}
+          execution-options: ${{ env.EXECUTION_OPTIONS }}
+          
+      - name: Benchmark execution (Gradient) 
+        if: contains(env.SCENARIO, 'Gradient')
+        uses: ./UnitsNet/.github/actions/run-benchmark-scenario
+        with:
+          scenario: run-gradient-benchmarks.bat
+          runtimes: ${{ matrix.runtime }}
+          exporters: ${{ env.EXPORTERS }}
+          categories: ${{ env.CATEGORIES_FILTER }}
+          execution-options: ${{ env.EXECUTION_OPTIONS }}
+          
+      - name: Benchmark execution (Baseline)
+        if: contains(env.SCENARIO, 'Baseline')
+        uses: ./UnitsNet/.github/actions/run-benchmark-scenario
+        with:
+          scenario: run-stable-baseline-benchmarks.bat
+          runtimes: ${{ matrix.runtime }}
           exporters: ${{ env.EXPORTERS }}
           categories: ${{ env.CATEGORIES_FILTER }}
           execution-options: ${{ env.EXECUTION_OPTIONS }}
