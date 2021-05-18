@@ -22,8 +22,6 @@ jobs:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     defaults:
-      run:
-        working-directory: UnitsNet
     strategy:
       matrix: 
         runtime: ["netcoreapp50", "netcoreapp21", "net472"]        
@@ -64,19 +62,10 @@ jobs:
         with: 
           dotnet-version: '5.0.x'
       
-      - run: cd UnitsNet
-      - run: ls -R
-      
       # executing the benchmark for the current framework(s)
       - name: Benchmark scenario execution (Micro)
         if: contains(env.SCENARIO, 'Micro')
-        uses: ./UnitsNet/.github/actions/run-benchmark-scenario
-        with:
-          scenario: run-micro-benchmarks.bat
-          runtimes: ${{ matrix.runtime }}
-          exporters: ${{ env.EXPORTERS }}
-          categories: ${{ env.CATEGORIES_FILTER }}
-          execution-options: ${{ env.EXECUTION_OPTIONS }}
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.runtime }} --exporters ${{ env.EXPORTERS }} ${{ env.EXECUTION_OPTIONS }}
           
       - name: Benchmark execution (Gradient) 
         if: contains(env.SCENARIO, 'Gradient')
@@ -88,15 +77,10 @@ jobs:
           categories: ${{ env.CATEGORIES_FILTER }}
           execution-options: ${{ env.EXECUTION_OPTIONS }}
           
-      - name: Benchmark execution (Baseline)
-        if: contains(env.SCENARIO, 'Baseline')
-        uses: ./UnitsNet/.github/actions/run-benchmark-scenario
-        with:
-          scenario: run-stable-baseline-benchmarks.bat
-          runtimes: ${{ matrix.runtime }}
-          exporters: ${{ env.EXPORTERS }}
-          categories: ${{ env.CATEGORIES_FILTER }}
-          execution-options: ${{ env.EXECUTION_OPTIONS }}
+      
+      - name: Benchmark scenario execution (Micro)
+        if: contains(env.SCENARIO, 'Micro')
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.runtime }} --exporters ${{ env.EXPORTERS }} ${{ env.EXECUTION_OPTIONS }}
                 
       - name: Stable baseline comparison
         if: contains(env.SCENARIO, 'Baseline')

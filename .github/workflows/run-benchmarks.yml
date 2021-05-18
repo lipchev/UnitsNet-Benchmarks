@@ -78,12 +78,14 @@ jobs:
           categories: ${{ github.event.inputs.categories }}
           execution-options: ${{ github.event.inputs.execution-options }}
             
+      -run: ls Artifacts/Benchmark      
+      
       # saving the current artifact (downloadable until the expiration date of this action)        
       - name: Store benchmark result
         uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.inputs.benchmark-name }} (${{ github.event.inputs.runtimes }})
-          path: Artifacts\Benchmarks
+          path: Artifacts/Benchmark/
           if-no-files-found: error 
           retention-days: ${{ github.event.inputs.retention-days }} 
           
