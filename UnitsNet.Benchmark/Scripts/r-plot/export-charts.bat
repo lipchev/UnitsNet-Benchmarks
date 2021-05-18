@@ -1,13 +1,12 @@
 @echo off
 cd %~p1 
-echo Generating plots:
-dir %1
-type %1
-echo Before run:
-dir
-del *.png
-Rscript %1
-echo After run:
-dir
+if exist %1 (
+  echo Re-generating plots using %~s1
+  del *.png
+  Rscript %1 1> nul 2> nul
+)
+else(
+  echo Re-using the previously generated plots (output from BuildPlots.R)
+)
 mkdir plots
 move *.png plots
