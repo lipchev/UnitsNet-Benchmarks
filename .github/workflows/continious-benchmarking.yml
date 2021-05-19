@@ -88,7 +88,7 @@ jobs:
         run: |
           if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
             echo "Running the ResultRescaler using the original baseline"
-            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f net5.0 --base baselines\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline --diff UnitsNet\Artifacts\Benchmark -b ${{ env.STABLE_BASELINES }} -o UnitsNet\Artifacts\Benchmark
+            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f net5.0 --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline --diff UnitsNet\Artifacts\Benchmark -b ${{ env.STABLE_BASELINES }} -o UnitsNet\Artifacts\Benchmark
             Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline | Copy-Item -Destination UnitsNet\Artifacts\Benchmark\Baseline -Recurse -filter *-report-rescaled.json
           }else{
             echo "No previous baseline found (using current results)"
