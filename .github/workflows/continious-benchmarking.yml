@@ -50,7 +50,11 @@ jobs:
         id: path
         run: echo "::set-output name=file-name::UnitsNet.Benchmark.$("${{ matrix.benchmark }}".replace("/", "."))-${{ matrix.report }}.json"
         shell: pwsh
-        
+      
+      - run: ls -R ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history
+      
+      - run: ls ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}/${{ steps.path.outputs.file-name }}
+      
       # appending to the running benchmark data on the benchmark-pages branch
       - name: Updating benchmark charts
         uses: starburst997/github-action-benchmark@v1.8.7
