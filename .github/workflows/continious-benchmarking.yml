@@ -43,54 +43,66 @@ jobs:
       
       - run: echo "Benchmark options ${{ matrix.cfg.benchmark-options }}"
       
-      - if: ${{ matrix.cfg.scaled }}
-        run: echo "Baseline options ${{ matrix.cfg.baseline-options }}
+      - if: matrix.cfg.scaled
+        run: echo "Baseline options ${{ matrix.cfg.baseline-options }}"       
+        
+  get-reports:
+    runs-on: ubuntu-latest
+    outputs:
+      reports: ${{ steps.path.outputs.reports }}        
+    steps:
+      - name: Initializing git folder ️
+        uses: actions/checkout@v2.3.1
+        with:
+          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
+          
+      - name: Result path configuration
+        id: path
+        working-directory: ${{ env.BENCHMARK_DATA_FOLDER }}
+        run: echo "::set-output name=reports::Get-ChildItem -Filter *report*.json -Recurse | Resolve-Path -Relative | ConvertTo-Json"
+        shell: pwsh 
 
     
   update-history:
-    needs: [ check-matrix ]
+    needs: [ get-reports ]
     #needs: [publish-results]
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
       matrix: 
-        runtime: [netcoreapp50, netcoreapp21, net472]
-        benchmark: [
-        Micro/Construction/QuantityFromUnit, 
-        Micro/Construction/UnitFromString, 
-        Micro/Construction/QuantityFromString, 
-        Micro/Comparison, 
-        Micro/Conversion/QuantityToValue, 
-        Micro/Conversion/QuantityToUnit, 
-        Micro/Conversion/QuantityToString, 
-        Micro/Init, 
-        Baseline/Construction, 
-        Baseline/Comparison, 
-        Baseline/Conversion/Value, 
-        Baseline/Conversion/String] 
-        report: [report-full, report-rescaled]
+        report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
-        with:
-          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
-          path: gh-pages
         
-      - name: Result path configuration
-        id: path
-        run: echo "::set-output name=file-name::UnitsNet.Benchmark.$("${{ matrix.benchmark }}".replace("/", "."))-${{ matrix.report }}.json"
+      # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
+      - name: Fetch report
+        id: report
+        uses: carlosperate/download-file-action@v1.0.3
+        with:
+          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.report-path }}
+          location: Artifacts/Benchmark
+              
+      - name: History path selection
+        id: target
+        run: |
+          echo "::set-output name=file-name::if '${{ matrix.report-path }}'.Contains('rescaled')) {
+            (Split-Path ${{ matrix.report-path }} | Split-Path) + 'history/report-rescaled'
+          }
+          else{
+            (Split-Path ${{ matrix.report-path }} | Split-Path) + 'history/report-full'
+          }"
         shell: pwsh
-      
+          
       # appending to the running benchmark data on the benchmark-pages branch
       - name: Updating benchmark charts
         uses: starburst997/github-action-benchmark@v1.8.7
         with:
-          name: UnitsNet Benchmarks (${{ matrix.runtime }})
           tool: 'benchmarkdotnet'
-          output-file-path: gh-pages/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.path.outputs.file-name }}
+          output-file-path: ${{ steps.report.outputs.file-path }}
           gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
-          benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}
+          benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ steps.target.outputs.report-path }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
           # Show alert with commit comment on detecting possible performance regression
