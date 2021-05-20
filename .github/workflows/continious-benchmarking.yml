@@ -90,7 +90,7 @@ jobs:
             echo "Running the ResultRescaler using the original baseline"
             Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline *-report-rescaled.json -Recurse |
             % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-rescaled.json", "-report-full.json") }
-            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release `
+            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f net5.0 `
             --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline `
             --diff UnitsNet\Artifacts\Benchmark `
             --stable ${{ env.STABLE_BASELINES }} `
