@@ -17,9 +17,65 @@ env:
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "UnitsNet.Benchmark.Baseline" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
-jobs:
+jobs:  
+  update-history:
+    #needs: [publish-results]
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    strategy:
+      max-parallel: 1 # cannot commit on the same branch in parallel
+      matrix: 
+        runtime: [netcoreapp50, netcoreapp21, net472]
+        benchmark: [
+        Micro/Construction/QuantityFromUnit, 
+        Micro/Construction/UnitFromString, 
+        Micro/Construction/QuantityFromString, 
+        Micro/Comparison, 
+        Micro/Conversion/QuantityToValue, 
+        Micro/Conversion/QuantityToUnit, 
+        Micro/Conversion/QuantityToString, 
+        Micro/Init, Baseline/Construction, 
+        Baseline/Comparison, 
+        Baseline/Conversion/Value, 
+        Baseline/Conversion/String] 
+        report: [report-full, report-rescaled]
+    steps:        
+      - name: Initializing git folder ️
+        uses: actions/checkout@v2.3.1
+        
+      - name: Result path configuration
+        id: path
+        run: echo "::set-output name=FILE_NAME::$("${{ matrix.benchmark }}".replace("/", "-"))-${{ matrix.report }}.json"
+        shell: pwsh
+        
+      # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
+      - name: Fetch latest ${{ matrix.report }}
+        id: report
+        uses: carlosperate/download-file-action@v1.0.3
+        with:
+          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.path.outputs.FILE_NAME }}
+          location: Artifacts/Benchmark
+
+      # appending to the running benchmark data on the benchmark-pages branch
+      - name: Updating benchmark charts
+        uses: starburst997/github-action-benchmark@v1.8.7
+        with:
+          name: UnitsNet Benchmarks (${{ matrix.runtime }})
+          tool: 'benchmarkdotnet'
+          output-file-path: ${{ steps.report.outputs.file-path }}
+          gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
+          benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          # Show alert with commit comment on detecting possible performance regression
+          alert-threshold: '200%'
+          comment-always: true
+          comment-on-alert: true
+          fail-on-alert: false
+          alert-comment-cc-users: '@lipchev'
+          
   benchmark:
-    #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
+    if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     strategy:
       matrix: 
@@ -166,48 +222,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.runtime }})
-    
-  update-history:
-    needs: [publish-results]
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    strategy:
-      max-parallel: 1 # cannot commit on the same branch in parallel
-      matrix: 
-        runtime: [netcoreapp50, netcoreapp21, net472]
-        benchmark: [Micro/Construction/QuantityFromUnit, Micro/Construction/UnitFromString, Micro/Construction/QuantityFromString, Micro/Comparison, Micro/Conversion/QuantityToValue, Micro/Conversion/QuantityToUnit, Micro/Conversion/QuantityToString, Micro/Init, Baseline/Construction, Baseline/Comparison, Baseline/Conversion/Value, Baseline/Conversion/String] 
-        report: [report-full, report-rescaled]
-    steps:        
-      - name: Initializing git folder ️
-        uses: actions/checkout@v2.3.1
-        
-      - name: Result path configuration
-        id: path
-        run: echo "::set-output name=FILE_NAME::$("${{ matrix.benchmark }}".replace("/", "-"))-${{ matrix.report }}.json"
-        
-      # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
-      - name: Fetch latest ${{ matrix.report }}
-        id: report
-        uses: carlosperate/download-file-action@v1.0.3
-        with:
-          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.path.outputs.FILE_NAME }}
-          location: Artifacts/Benchmark
-
-      # appending to the running benchmark data on the benchmark-pages branch
-      - name: Updating benchmark charts
-        uses: starburst997/github-action-benchmark@v1.8.7
-        with:
-          name: UnitsNet Benchmarks (${{ matrix.runtime }})
-          tool: 'benchmarkdotnet'
-          output-file-path: ${{ steps.report.outputs.file-path }}
-          gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
-          benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: true
-          # Show alert with commit comment on detecting possible performance regression
-          alert-threshold: '200%'
-          comment-always: true
-          comment-on-alert: true
-          fail-on-alert: false
-          alert-comment-cc-users: '@lipchev'
+  
      
