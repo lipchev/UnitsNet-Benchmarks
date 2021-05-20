@@ -20,15 +20,15 @@ env:
 jobs:  
 
   matrix:
-  runs-on: ubuntu-latest
-  outputs:
-    scenarios: ${{ steps.load-matrix.outputs.scenarios }}
-  steps:
-    - uses: actions/checkout@v2
-    - id: load-matrix
-      run: |
-        SCENARIOS=$(echo $(cat .github/workflows/benchmark-scenarios.json) | sed 's/ //g' )
-        echo "::set-output name=scenarios::$SCENARIOS"
+    runs-on: ubuntu-latest
+    outputs:
+      scenarios: ${{ steps.load-matrix.outputs.scenarios }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: load-matrix
+        run: |
+          SCENARIOS=$(echo $(cat .github/workflows/benchmark-scenarios.json) | sed 's/ //g' )
+          echo "::set-output name=scenarios::$SCENARIOS"
         
   check-matrix:
     needs: [ matrix ]
