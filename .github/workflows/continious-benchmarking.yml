@@ -33,7 +33,7 @@ jobs:
           $fname='${{ matrix.runtime }}'.replace('/', '-') + '-' + $ {{ matrix.runtime }} + '.json'
           echo $fname
           echo "::set-output name=FILE_NAME::$fname"
-      -name: FFS
+      - name: FFS
         run: echo ${{ steps.wtf.outputs.FILE_NAME}} 
         
       # checkout the current branch
