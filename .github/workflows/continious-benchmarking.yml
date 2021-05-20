@@ -34,7 +34,8 @@ jobs:
         Micro/Conversion/QuantityToValue, 
         Micro/Conversion/QuantityToUnit, 
         Micro/Conversion/QuantityToString, 
-        Micro/Init, Baseline/Construction, 
+        Micro/Init, 
+        Baseline/Construction, 
         Baseline/Comparison, 
         Baseline/Conversion/Value, 
         Baseline/Conversion/String] 
@@ -45,7 +46,7 @@ jobs:
         
       - name: Result path configuration
         id: path
-        run: echo "::set-output name=FILE_NAME::$("${{ matrix.benchmark }}".replace("/", "."))-${{ matrix.report }}.json"
+        run: echo "::set-output name=file-name::UnitsNet.Benchmark.$("${{ matrix.benchmark }}".replace("/", "."))-${{ matrix.report }}.json"
         shell: pwsh
         
       # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
@@ -53,7 +54,7 @@ jobs:
         id: report
         uses: carlosperate/download-file-action@v1.0.3
         with:
-          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.path.outputs.FILE_NAME }}
+          file-url: ${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/results/${{ steps.path.outputs.file-name }}
           location: Artifacts/Benchmark
 
       # appending to the running benchmark data on the benchmark-pages branch
