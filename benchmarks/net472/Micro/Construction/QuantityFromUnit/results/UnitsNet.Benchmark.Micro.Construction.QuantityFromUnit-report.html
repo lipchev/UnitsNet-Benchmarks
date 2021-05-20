@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit-20210520-073728</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-OOBOKF : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET 4.7.2  Toolchain=net472  
+</code></pre>
+
+<table>
+<thead><tr><th>                         Method</th><th>             Categories</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>&#39;new (value, unit)&#39;</td><td>Unit,Micro,Construction</td><td>16.28 ns</td><td>0.157 ns</td><td>0.139 ns</td><td>0.037 ns</td><td>16.05 ns</td><td>16.51 ns</td><td>16.26 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>FromUnit(quantityValue)</td><td>Unit,Micro,Construction</td><td>35.73 ns</td><td>0.698 ns</td><td>0.882 ns</td><td>0.184 ns</td><td>34.46 ns</td><td>37.57 ns</td><td>35.64 ns</td><td>2.22</td><td>Slower</td><td>0.05</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>&#39;FromQuantityInfo(randomInfo, value)&#39;</td><td>Quantity,Micro,Construction</td><td>70.76 ns</td><td>1.270 ns</td><td>1.126 ns</td><td>0.301 ns</td><td>69.09 ns</td><td>73.30 ns</td><td>70.60 ns</td><td>4.35</td><td>Slower</td><td>0.08</td><td>0.0046</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>&#39;Quantity&lt;Q,U&gt;.From(value, unit)&#39;</td><td>Unit,Micro,Construction</td><td>105.16 ns</td><td>1.066 ns</td><td>0.890 ns</td><td>0.247 ns</td><td>103.36 ns</td><td>106.49 ns</td><td>105.26 ns</td><td>6.45</td><td>Slower</td><td>0.07</td><td>0.0083</td><td>-</td><td>-</td><td>57 B</td>
+</tr><tr><td>&#39;Quantity.From(value, unit)&#39;</td><td>Unit,Micro,Construction</td><td>106.42 ns</td><td>1.666 ns</td><td>1.477 ns</td><td>0.395 ns</td><td>103.78 ns</td><td>109.75 ns</td><td>106.36 ns</td><td>6.54</td><td>Slower</td><td>0.13</td><td>0.0045</td><td>-</td><td>-</td><td>33 B</td>
+</tr><tr><td>&#39;Quantity.From(value, randomUnit)&#39;</td><td>Unit,Micro,Construction</td><td>156.27 ns</td><td>1.960 ns</td><td>1.737 ns</td><td>0.464 ns</td><td>154.09 ns</td><td>159.70 ns</td><td>155.74 ns</td><td>9.60</td><td>Slower</td><td>0.15</td><td>0.0045</td><td>-</td><td>-</td><td>33 B</td>
+</tr><tr><td>&#39;new (value, unitSystem)&#39;</td><td>UnitSystem,Micro,Construction</td><td>575.11 ns</td><td>6.753 ns</td><td>6.316 ns</td><td>1.631 ns</td><td>563.74 ns</td><td>585.41 ns</td><td>575.13 ns</td><td>35.31</td><td>Slower</td><td>0.51</td><td>0.0288</td><td>-</td><td>-</td><td>201 B</td>
+</tr></tbody></table>
+</body>
+</html>
