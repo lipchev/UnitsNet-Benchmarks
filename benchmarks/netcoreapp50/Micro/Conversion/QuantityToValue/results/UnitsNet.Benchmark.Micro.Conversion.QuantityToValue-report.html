@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>UnitsNet.Benchmark.Micro.Conversion.QuantityToValue-20210520-080932</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-NXAETD : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET Core 5.0  Toolchain=netcoreapp50  
+</code></pre>
+
+<table>
+<thead><tr><th>                          Method</th><th>                        Categories</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>Length&lt;BaseUnit&gt;.As(derivedUnit)</td><td>Struct,Unit,Value,Micro,Conversion</td><td>11.28 ns</td><td>0.217 ns</td><td>0.232 ns</td><td>0.055 ns</td><td>10.99 ns</td><td>11.74 ns</td><td>11.31 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Length&lt;DerivedUnit&gt;.As(derivedUnit)</td><td>Struct,Unit,Value,Micro,Conversion</td><td>12.31 ns</td><td>0.234 ns</td><td>0.250 ns</td><td>0.059 ns</td><td>11.72 ns</td><td>12.68 ns</td><td>12.31 ns</td><td>1.09</td><td>Slower</td><td>0.04</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ILength&lt;DerivedUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>14.57 ns</td><td>0.289 ns</td><td>0.475 ns</td><td>0.080 ns</td><td>13.89 ns</td><td>15.53 ns</td><td>14.46 ns</td><td>1.32</td><td>Slower</td><td>0.05</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ILength&lt;BaseUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>14.79 ns</td><td>0.291 ns</td><td>0.272 ns</td><td>0.070 ns</td><td>14.38 ns</td><td>15.31 ns</td><td>14.78 ns</td><td>1.31</td><td>Slower</td><td>0.04</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>IQuantity&lt;BaseUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>70.67 ns</td><td>1.408 ns</td><td>2.064 ns</td><td>0.383 ns</td><td>67.14 ns</td><td>75.28 ns</td><td>70.36 ns</td><td>6.23</td><td>Slower</td><td>0.19</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.As(baseUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>72.85 ns</td><td>1.450 ns</td><td>1.552 ns</td><td>0.366 ns</td><td>70.11 ns</td><td>75.96 ns</td><td>72.98 ns</td><td>6.46</td><td>Slower</td><td>0.18</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>91.01 ns</td><td>1.801 ns</td><td>2.074 ns</td><td>0.464 ns</td><td>87.98 ns</td><td>94.78 ns</td><td>90.90 ns</td><td>8.07</td><td>Slower</td><td>0.27</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Length&lt;BaseUnit&gt;.As(untSystem)</td><td>Struct,UnitSystem,Value,Micro,Conversion</td><td>301.63 ns</td><td>5.111 ns</td><td>8.107 ns</td><td>1.411 ns</td><td>288.05 ns</td><td>321.52 ns</td><td>300.57 ns</td><td>26.89</td><td>Slower</td><td>0.96</td><td>0.0072</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>Length&lt;DerivedUnit&gt;.As(untSystem)</td><td>Struct,UnitSystem,Value,Micro,Conversion</td><td>311.13 ns</td><td>6.216 ns</td><td>5.510 ns</td><td>1.473 ns</td><td>300.70 ns</td><td>321.20 ns</td><td>311.35 ns</td><td>27.48</td><td>Slower</td><td>0.65</td><td>0.0072</td><td>-</td><td>-</td><td>192 B</td>
+</tr></tbody></table>
+</body>
+</html>
