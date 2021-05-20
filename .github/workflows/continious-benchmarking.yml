@@ -16,7 +16,7 @@ env:
   EXECUTION_OPTIONS: --job Short --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
-  STABLE_BASELINES: "UnitsNet.Benchmark.Baseline*" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
+  STABLE_BASELINES: "UnitsNet.Benchmark.Baseline" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:
   benchmark:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
