@@ -88,12 +88,17 @@ jobs:
         run: |
           if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
             echo "Running the ResultRescaler using the original baseline"
-            Get-ChildItem .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline -Recurse -Include *-report-full.json | Remove-Item
-            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f net5.0 --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline --diff UnitsNet\Artifacts\Benchmark -b ${{ env.STABLE_BASELINES }} -o UnitsNet\Artifacts\Benchmark
-            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline | Copy-Item -Destination UnitsNet\Artifacts\Benchmark\Baseline -Recurse -filter *-report-rescaled.json
+            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline *-report-full.json -Recurse | `
+            % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-rescaled.json", "-report-full.json") }
+            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release `
+            --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline `
+            --diff UnitsNet\Artifacts\Benchmark `
+            --stable ${{ env.STABLE_BASELINES }} ` 
+            --output UnitsNet\Artifacts\Benchmark          
           }else{
             echo "No previous baseline found (using current results)"
             Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
+            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\*\Baseline *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-scale.json") }
           }      
                 
       # saving the current artifact (downloadable until the expiration date of this action)        
