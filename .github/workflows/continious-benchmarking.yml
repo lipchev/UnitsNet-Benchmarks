@@ -30,10 +30,7 @@ jobs:
       
       - name: WTF
         id: wtf
-        run: |
-          $fname= echo ("${{ matrix.runtime }}".replace("/", "-"))-${{ matrix.runtime }}'.json'
-          echo $fname
-          echo "::set-output name=FILE_NAME::$fname"
+        run: echo "::set-output name=FILE_NAME::("${{ matrix.runtime }}".replace("p", "z"))-${{ matrix.runtime }}.json"
       - name: FFS
         run: echo ${{ steps.wtf.outputs.FILE_NAME}} 
         
