@@ -45,7 +45,7 @@ jobs:
         
       - name: Result path configuration
         id: path
-        run: echo "::set-output name=FILE_NAME::$("${{ matrix.benchmark }}".replace("/", "-"))-${{ matrix.report }}.json"
+        run: echo "::set-output name=FILE_NAME::$("${{ matrix.benchmark }}".replace("/", "."))-${{ matrix.report }}.json"
         shell: pwsh
         
       # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
