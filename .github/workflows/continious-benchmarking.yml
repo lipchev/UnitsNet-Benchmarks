@@ -27,6 +27,15 @@ jobs:
     steps:
       - run: echo Starting benchmarks for ${{ matrix.runtime }} 
       
+      - name: WTF
+        id: wtf
+        run: |
+          $fname='${{ matrix.runtime }}'.replace('/', '-') + '-' + $ {{ matrix.runtime }} + '.json'
+          echo $fname
+          echo "::set-output name=FILE_NAME::$fname"
+      -name: FFS
+        run: echo ${{ steps.wtf.outputs.FILE_NAME}} 
+        
       # checkout the current branch
       - uses: actions/checkout@v2
         with:
@@ -179,7 +188,7 @@ jobs:
       - name: Result path configuration
         id: path
         run: |
-          $fname=${{ matrix.benchmark }}.replace('/', '-') + '-' + $ {{ matrix.report }} + '.json'
+          $fname='${{ matrix.benchmark }}'.replace('/', '-') + '-' + $ {{ matrix.report }} + '.json'
           echo $fname
           echo "::set-output name=FILE_NAME::$fname"
         
