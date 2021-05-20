@@ -13,7 +13,7 @@ env:
   SCENARIO: Micro Baseline
   EXPORTERS: fulljson rplot
   CATEGORIES_FILTER: ''
-  EXECUTION_OPTIONS: --job Short --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "UnitsNet.Benchmark.Baseline" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
@@ -23,17 +23,14 @@ jobs:
     runs-on: windows-latest # required by the older frameworks
     strategy:
       matrix: 
-        #runtime: ["netcoreapp50", "netcoreapp21", "net472"]        
-        runtime: ["netcoreapp50"]        
+        runtime: [
+        netcoreapp50, 
+        netcoreapp21, 
+        net472
+        ]    
     steps:
       - run: echo Starting benchmarks for ${{ matrix.runtime }} 
-      
-      - name: WTF
-        id: wtf
-        run: echo "::set-output name=FILE_NAME::$("${{ matrix.runtime }}".replace("p", "z"))-${{ matrix.runtime }}.json"
-      - name: FFS
-        run: echo ${{ steps.wtf.outputs.FILE_NAME}} 
-        
+              
       # checkout the current branch
       - uses: actions/checkout@v2
         with:
@@ -95,8 +92,8 @@ jobs:
         run: |
           if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
             echo "Running the ResultRescaler using the original baseline"
-            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline *-report-rescaled.json -Recurse |
-            % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-rescaled.json", "-report-full.json") }
+            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline *-report-scale.json -Recurse |
+            % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-scale.json", "-report-full.json") }
             dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f net5.0 `
             --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline `
             --diff UnitsNet\Artifacts\Benchmark `
@@ -136,7 +133,7 @@ jobs:
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
       matrix: 
-        runtime: ["netcoreapp50", "netcoreapp21", "net472"]
+        runtime: [netcoreapp50, netcoreapp21, net472]
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
@@ -173,10 +170,11 @@ jobs:
   update-history:
     needs: [publish-results]
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
       matrix: 
-        runtime: ["netcoreapp50", "netcoreapp21", "net472"]
+        runtime: [netcoreapp50, netcoreapp21, net472]
         benchmark: [Micro/Construction/QuantityFromUnit, Micro/Construction/UnitFromString, Micro/Construction/QuantityFromString, Micro/Comparison, Micro/Conversion/QuantityToValue, Micro/Conversion/QuantityToUnit, Micro/Conversion/QuantityToString, Micro/Init, Baseline/Construction, Baseline/Comparison, Baseline/Conversion/Value, Baseline/Conversion/String] 
         report: [report-full, report-rescaled]
     steps:        
@@ -185,10 +183,7 @@ jobs:
         
       - name: Result path configuration
         id: path
-        run: |
-          $fname='${{ matrix.benchmark }}'.replace('/', '-') + '-' + $ {{ matrix.report }} + '.json'
-          echo $fname
-          echo "::set-output name=FILE_NAME::$fname"
+        run: echo "::set-output name=FILE_NAME::$("${{ matrix.benchmark }}".replace("/", "-"))-${{ matrix.report }}.json"
         
       # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
       - name: Fetch latest ${{ matrix.report }}
