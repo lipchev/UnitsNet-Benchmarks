@@ -1,21 +1,22 @@
 ``` ini
 
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
-Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
   [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-RBCOLX : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-RYOXDL : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
 
-Runtime=.NET Core 5.0  Toolchain=netcoreapp50  Categories=Micro,Construction,Quantity,String  
+Runtime=.NET Core 5.0  Toolchain=netcoreapp50  IterationCount=3  
+LaunchCount=1  WarmupCount=3  Categories=Micro,Construction,Quantity,String  
 
 ```
-|                           Method |     Mean |    Error |   StdDev |   StdErr |      Min |      Max |   Median | Ratio | MannWhitney(5%) | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|--------------------------------- |---------:|---------:|---------:|---------:|---------:|---------:|---------:|------:|---------------- |--------:|-------:|------:|------:|----------:|
-|               Parse(validString) | 65.74 μs | 1.132 μs | 1.431 μs | 0.298 μs | 63.59 μs | 69.04 μs | 65.50 μs |  1.00 |            Base |    0.00 | 1.2201 |     - |     - |  32.34 KB |
-|            TryParse(validString) | 66.03 μs | 1.315 μs | 2.625 μs | 0.375 μs | 60.82 μs | 72.61 μs | 66.08 μs |  1.00 |            Same |    0.05 | 1.1646 |     - |     - |  32.32 KB |
-| Quantity.TryParse(invalidNumber) | 66.68 μs | 1.325 μs | 2.251 μs | 0.370 μs | 60.52 μs | 71.46 μs | 67.13 μs |  1.02 |            Same |    0.03 | 1.1646 |     - |     - |  31.93 KB |
-|          TryParse(invalidNumber) | 69.54 μs | 1.318 μs | 1.353 μs | 0.328 μs | 66.81 μs | 71.93 μs | 69.74 μs |  1.06 |            Same |    0.03 | 1.1646 |     - |     - |  31.93 KB |
-|   Quantity.TryParse(validString) | 70.65 μs | 1.406 μs | 3.989 μs | 0.414 μs | 62.99 μs | 79.83 μs | 69.65 μs |  1.13 |            Same |    0.07 | 1.2920 |     - |     - |  35.36 KB |
-|   Quantity.TryParse(invalidUnit) | 73.90 μs | 1.450 μs | 1.425 μs | 0.356 μs | 70.48 μs | 75.79 μs | 74.11 μs |  1.12 |          Slower |    0.04 | 1.1646 |     - |     - |  31.78 KB |
-|            TryParse(invalidUnit) | 75.47 μs | 1.477 μs | 2.810 μs | 0.419 μs | 69.92 μs | 80.63 μs | 75.04 μs |  1.16 |          Slower |    0.05 | 1.2422 |     - |     - |  31.78 KB |
-|      Quantity.Parse(validString) | 76.03 μs | 1.486 μs | 2.270 μs | 0.408 μs | 70.38 μs | 80.14 μs | 76.21 μs |  1.16 |          Slower |    0.04 | 1.2920 |     - |     - |  35.36 KB |
+|                           Method |     Mean |     Error |   StdDev |   StdErr |      Min |      Max |   Median | Ratio | MannWhitney(5%) | RatioSD |  Gen 0 |  Gen 1 | Gen 2 | Allocated |
+|--------------------------------- |---------:|----------:|---------:|---------:|---------:|---------:|---------:|------:|---------------- |--------:|-------:|-------:|------:|----------:|
+|            TryParse(validString) | 60.47 μs | 13.890 μs | 0.761 μs | 0.440 μs | 59.62 μs | 61.10 μs | 60.70 μs |  0.99 |               ? |    0.01 | 2.1074 |      - |     - |  32.32 KB |
+|               Parse(validString) | 61.27 μs |  5.228 μs | 0.287 μs | 0.165 μs | 61.06 μs | 61.59 μs | 61.15 μs |  1.00 |            Base |    0.00 | 2.1074 |      - |     - |  32.34 KB |
+| Quantity.TryParse(invalidNumber) | 65.78 μs | 51.505 μs | 2.823 μs | 1.630 μs | 62.52 μs | 67.54 μs | 67.27 μs |  1.07 |               ? |    0.04 | 2.0704 |      - |     - |  31.93 KB |
+|          TryParse(invalidNumber) | 66.40 μs | 14.310 μs | 0.784 μs | 0.453 μs | 65.68 μs | 67.24 μs | 66.29 μs |  1.08 |               ? |    0.02 | 2.0704 |      - |     - |  31.93 KB |
+|            TryParse(invalidUnit) | 70.27 μs | 22.658 μs | 1.242 μs | 0.717 μs | 69.41 μs | 71.69 μs | 69.71 μs |  1.15 |               ? |    0.01 | 2.0704 |      - |     - |  31.78 KB |
+|   Quantity.TryParse(validString) | 71.31 μs | 16.623 μs | 0.911 μs | 0.526 μs | 70.62 μs | 72.34 μs | 70.97 μs |  1.16 |               ? |    0.02 | 2.1964 | 0.1292 |     - |  35.36 KB |
+|   Quantity.TryParse(invalidUnit) | 71.91 μs | 20.961 μs | 1.149 μs | 0.663 μs | 70.59 μs | 72.58 μs | 72.57 μs |  1.17 |               ? |    0.02 | 2.0704 |      - |     - |  31.78 KB |
+|      Quantity.Parse(validString) | 73.78 μs | 20.918 μs | 1.147 μs | 0.662 μs | 72.97 μs | 75.09 μs | 73.28 μs |  1.20 |               ? |    0.02 | 2.1964 | 0.1292 |     - |  35.36 KB |
