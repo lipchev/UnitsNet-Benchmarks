@@ -18,7 +18,37 @@ env:
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "UnitsNet.Benchmark.Baseline" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:  
+
+  matrix:
+  runs-on: ubuntu-latest
+  outputs:
+    scenarios: ${{ steps.load-matrix.outputs.scenarios }}
+  steps:
+    - uses: actions/checkout@v2
+    - id: load-matrix
+      run: |
+        SCENARIOS=$(echo $(cat .github/workflows/benchmark-scenarios.json) | sed 's/ //g' )
+        echo "::set-output name=scenarios::$SCENARIOS"
+        
+  check-matrix:
+    needs: [ matrix ]
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    strategy: 
+      matrix:
+        cfg: ${{ fromJson(needs.matrix.outputs.scenarios) }}
+        
+    steps:
+      - run: echo Starting benchmarks for ${{ matrix.cfg.benchmark }} (tracked = ${{ matrix.cfg.tracked }}) running on ${{ matrix.cfg.runtime }} (${{ matrix.cfg.dotnet }})
+      
+        run: echo Benchmark options: ${{ matrix.cfg.benchmark-options }}
+      
+      - if: ${{ matrix.cfg.scaled }}
+        run: echo Baseline options: ${{ matrix.cfg.baseline-options }}
+
+    
   update-history:
+    needs: [ check-matrix ]
     #needs: [publish-results]
     runs-on: ubuntu-latest
     continue-on-error: false
@@ -75,11 +105,7 @@ jobs:
     runs-on: windows-latest # required by the older frameworks
     strategy:
       matrix: 
-        runtime: [
-        netcoreapp50, 
-        netcoreapp21, 
-        net472
-        ]    
+        runtime: [netcoreapp50, netcoreapp21, net472]    
     steps:
       - run: echo Starting benchmarks for ${{ matrix.runtime }} 
               
