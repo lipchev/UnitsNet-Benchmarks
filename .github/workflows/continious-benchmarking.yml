@@ -39,12 +39,12 @@ jobs:
         cfg: ${{ fromJson(needs.matrix.outputs.scenarios) }}
         
     steps:
-      - run: echo Starting benchmarks for ${{ matrix.cfg.benchmark }} (tracked = ${{ matrix.cfg.tracked }}) running on ${{ matrix.cfg.runtime }} (${{ matrix.cfg.dotnet }})
+      - run: echo "Starting benchmarks for ${{ matrix.cfg.benchmark }} (tracked = ${{ matrix.cfg.tracked }}) running on ${{ matrix.cfg.runtime }} (${{ matrix.cfg.dotnet }})"
       
-      - run: echo Benchmark options ${{ matrix.cfg.benchmark-options }}
+      - run: echo "Benchmark options: ${{ matrix.cfg.benchmark-options }}"
       
       - if: ${{ matrix.cfg.scaled }}
-        run: echo Baseline options ${{ matrix.cfg.baseline-options }}
+        run: echo "Baseline options: ${{ matrix.cfg.baseline-options }}"
 
     
   update-history:
