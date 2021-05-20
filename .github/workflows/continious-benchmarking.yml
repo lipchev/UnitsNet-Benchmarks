@@ -178,7 +178,10 @@ jobs:
         
       - name: Result path configuration
         id: path
-        run: echo ::set-output name=FILE_NAME::${{ matrix.benchmark }}.replace("/", "-")-${{ matrix.report }}.json
+        run: |
+          $fname=${{ matrix.benchmark }}.replace('/', '-') + '-' + $ {{ matrix.report }} + '.json'
+          echo $fname
+          echo "::set-output name=FILE_NAME::$fname"
         
       # The latest results are downloaded from the gh-pages url into the 'Artifacts/Benchmark' folder.  
       - name: Fetch latest ${{ matrix.report }}
