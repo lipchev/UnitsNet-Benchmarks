@@ -57,7 +57,7 @@ jobs:
         with:
           name: UnitsNet Benchmarks (${{ matrix.runtime }})
           tool: 'benchmarkdotnet'
-          output-file-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}/${{ steps.path.outputs.file-path }}
+          output-file-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}/${{ steps.path.outputs.file-name }}
           gh-pages-branch: ${{ env.BENCHMARK_PAGES_BRANCH }}
           benchmark-data-dir-path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/${{ matrix.benchmark }}/history/${{ matrix.report }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
