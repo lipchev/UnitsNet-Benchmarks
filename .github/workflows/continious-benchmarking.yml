@@ -23,14 +23,15 @@ jobs:
     runs-on: windows-latest # required by the older frameworks
     strategy:
       matrix: 
-        runtime: ["netcoreapp50", "netcoreapp21", "net472"]        
+        #runtime: ["netcoreapp50", "netcoreapp21", "net472"]        
+        runtime: ["netcoreapp50"]        
     steps:
       - run: echo Starting benchmarks for ${{ matrix.runtime }} 
       
       - name: WTF
         id: wtf
         run: |
-          $fname='${{ matrix.runtime }}'.replace('/', '-') + '-' + $ {{ matrix.runtime }} + '.json'
+          $fname= echo ("${{ matrix.runtime }}".replace("/", "-"))-${{ matrix.runtime }}'.json'
           echo $fname
           echo "::set-output name=FILE_NAME::$fname"
       - name: FFS
