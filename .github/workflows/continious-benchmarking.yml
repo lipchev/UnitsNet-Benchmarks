@@ -72,7 +72,7 @@ jobs:
             '${{ matrix.scenario.framework }};${{ matrix.scenario.runtime}}'
           } 
           else {
-            ${{ matrix.scenario.framework }}
+            '${{ matrix.scenario.framework }}'
           }
           echo "::set-output name=frameworks::$Frameworks"
         shell: pwsh           
