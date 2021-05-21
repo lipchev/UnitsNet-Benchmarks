@@ -59,8 +59,11 @@ jobs:
       - name: Result path configuration
         id: path
         working-directory: ${{ env.BENCHMARK_DATA_FOLDER }}
-        run: echo "::set-output name=reports::Get-ChildItem -Filter *report*.json -Recurse | Resolve-Path -Relative | ConvertTo-Json"
+        run: echo "::set-output name=reports::(Get-ChildItem -Filter *report*.json -Recurse | Resolve-Path -Relative | ConvertTo-Json)"
         shell: pwsh 
+        
+      - name: Result
+        run: echo ${{ steps.path.outputs.reports }}
 
     
   update-history:
