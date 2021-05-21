@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621565301705,
+  "lastUpdate": 1621628004082,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks-report-full": [
@@ -48,6 +48,54 @@ window.BENCHMARK_DATA = {
             "value": 10.915501348297472,
             "unit": "ns",
             "range": "± 0.14722172329991026"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "d92ef51c61a7e085132654a7e0f87c40a37690e6",
+          "message": "manually publish the results (-job short)",
+          "timestamp": "2021-05-21T22:29:31+03:00",
+          "tree_id": "aa0beff90e0f3392d399f915ac9bf717d8f63a5f",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/d92ef51c61a7e085132654a7e0f87c40a37690e6"
+        },
+        "date": 1621627975145,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Equals",
+            "value": 0.5834563301710362,
+            "unit": "ns",
+            "range": "± 0.005169952211517553"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Decimal_Equals",
+            "value": 8.586050906289932,
+            "unit": "ns",
+            "range": "± 0.09471352912871867"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.MinMax",
+            "value": 0.4053988195107343,
+            "unit": "ns",
+            "range": "± 0.010825683817252817"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Decimal_MinMax",
+            "value": 10.18989456366308,
+            "unit": "ns",
+            "range": "± 0.10373785141431555"
           }
         ]
       }
