@@ -209,7 +209,8 @@ jobs:
     strategy:
       max-parallel: 1 # we cannot commit on the same branch in parallel (multiple points added on retry- can we 'force' this?)
       matrix: 
-        report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
+        report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
+        #report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
