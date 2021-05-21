@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621629212735,
+  "lastUpdate": 1621639506435,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks-report-full": [
@@ -72,6 +72,42 @@ window.BENCHMARK_DATA = {
             "value": 146.4844306310018,
             "unit": "ns",
             "range": "± 1.7986922466148898"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8",
+          "message": "Manual publish N1 (short)",
+          "timestamp": "2021-05-22T01:07:01+03:00",
+          "tree_id": "49ff670af70e4c4de72523822f7a08fb500e8b5e",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8"
+        },
+        "date": 1621639468145,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Parse(textValue: \"1234.56789\")",
+            "value": 118.40118964513142,
+            "unit": "ns",
+            "range": "± 1.931507396941685"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Decimal_Parse(textValue: \"1234.56789\")",
+            "value": 126.63593292236328,
+            "unit": "ns",
+            "range": "± 4.054270623225215"
           }
         ]
       }
