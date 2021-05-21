@@ -69,19 +69,19 @@ jobs:
       # executing the benchmark for the current framework(s)
       - name: Benchmark scenario execution (Micro)
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }} net472
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }};net472
         if: contains(matrix.scenario.Benchmark, 'Micro')
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
           
       - name: Benchmark execution (Gradient) 
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }}
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }};net472
         if: contains(matrix.scenario.Benchmark, 'Gradient')
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
                 
       - name: Benchmark scenario execution (Baseline)
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }} net472
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }};net472
         if: matrix.scenario.scaled
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.baseline-options }} ${{ env.EXECUTION_OPTIONS }}
                 
