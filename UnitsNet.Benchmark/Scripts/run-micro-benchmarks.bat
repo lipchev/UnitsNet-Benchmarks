@@ -6,7 +6,7 @@ SET filter=UnitsNet.Benchmark.Micro
 SET build-plots=results\BuildPlots.R
 SET generate-plots=results\GeneratePlots.R
 
-SET run-benchmarks=dotnet run --project "%projectdir%\UnitsNet.Benchmark" -c Release --framework "net5.0" --statisticalTest "5 %%"
+SET run-benchmarks=dotnet run --project "%projectdir%\UnitsNet.Benchmark" -c Release --statisticalTest "5 %%"
 ::SET run-benchmarks=dotnet run --project "%projectdir%\UnitsNet.Benchmark" -c Release --framework "net5.0" --statisticalTest "5 %%" --exporters fullJson rplot 
 
 setlocal

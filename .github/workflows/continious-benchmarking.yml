@@ -10,27 +10,180 @@ on:
       
 
 env: 
-  SCENARIO: Micro Baseline
-  EXPORTERS: fulljson rplot
-  CATEGORIES_FILTER: ''
-  EXECUTION_OPTIONS: --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --disableLogFile --job Short  # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "UnitsNet.Benchmark.Baseline" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:  
 
-  matrix:
+  scenarios:
     runs-on: ubuntu-latest
     outputs:
-      scenarios: ${{ steps.load-matrix.outputs.scenarios }}
+      json: ${{ steps.load-matrix.outputs.scenarios }}
     steps:
       - uses: actions/checkout@v2
       - id: load-matrix
         run: |
           SCENARIOS=$(echo $(cat .github/workflows/benchmark-scenarios.json))
-          echo "::set-output name=scenarios::$SCENARIOS"
-        
+          echo "::set-output name=json::$SCENARIOS"
+                   
+           
+  benchmark:
+    needs: [ scenarios ]
+    #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
+    runs-on: windows-latest # required by the older frameworks
+    strategy: 
+      matrix: ${{ fromJson(needs.scenarios.outputs.json) }}
+    steps:
+      - name: "Starting benchmarks for ${{ matrix.benchmark }} (tracked = ${{ matrix.tracked }}) running on ${{ matrix.runtime }} (${{ matrix.dotnet }})"
+      
+      - name: "Benchmark options ${{ matrix.benchmark-options }}"
+      
+      - name: "Baseline comparison ${{ matrix.tracked }}"
+        if: matrix.scaled
+        run: echo "Baseline options ${{ matrix.baseline-options }}"  
+              
+      # checkout the current branch
+      - uses: actions/checkout@v2.3.1
+        with:
+          path: UnitsNet
+           
+      # checkout the ResultRescaler
+      - name: Checkout the ResultRescaler
+        if: matrix.scaled
+        uses: actions/checkout@v2
+        with:
+          repository: lipchev/performance
+          path: performance
+          
+      # checkout the baseline branch
+      - name: Checkout previous results 
+        if: matrix.scaled
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
+          path: gh-pages
+            
+      - uses: actions/setup-dotnet@v1
+        with: 
+          dotnet-version: matrix.dotnet
+      
+      # executing the benchmark for the current framework(s)
+      - name: Benchmark scenario execution (Micro)
+        env:
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
+        if: contains(matrix.Benchmark, 'Micro')
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.runtime }} -f ${{ matrix.framework }} ${{ matrix.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+          
+      - name: Benchmark execution (Gradient) 
+        env:
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
+        if: contains(matrix.Benchmark, 'Gradient')
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.runtime }} -f ${{ matrix.framework }} ${{ matrix.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+                
+      - name: Benchmark scenario execution (Baseline)
+        env:
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
+        if: matrix.scaled
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.runtime }} -f ${{ matrix.framework }} ${{ matrix.baseline-options }} ${{ env.EXECUTION_OPTIONS }}
+                
+      - name: Stable baseline comparison
+        if: matrix.scaled
+        env:
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
+        run: |
+          if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
+            echo "Running the ResultRescaler using the original baseline"
+            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline *-report-scale.json -Recurse |
+            % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-scale.json", "-report-full.json") }
+            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f ${{ matrix.framework }}`
+            --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline `
+            --diff UnitsNet\Artifacts\Benchmark `
+            --stable ${{ env.STABLE_BASELINES }} `
+            --output UnitsNet\Artifacts\Benchmark          
+          }else{
+            echo "No previous baseline found (using current results)"
+            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
+            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\*\Baseline *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-scale.json") }
+          }      
+                
+      # saving the current artifact (downloadable until the expiration date of this action)        
+      - name: Store micro benchmark artifact
+        if: contains(matrix.Benchmark, 'Micro')
+        uses: actions/upload-artifact@v2
+        with:
+          name: Micro Benchmarks (${{ matrix.runtime }})
+          path: UnitsNet\Artifacts\Benchmark\Micro
+          
+      - name: Store gradient benchmark artifact
+        if: contains(matrix.Benchmark, 'Gradient')
+        uses: actions/upload-artifact@v2
+        with:
+          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
+          path: UnitsNet\Artifacts\Benchmark\Gradient
+          
+      - name: Store baseline benchmark artifact
+        if: matrix.scaled
+        uses: actions/upload-artifact@v2
+        with:
+          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
+          path: UnitsNet\Artifacts\Benchmark\Baseline
+          
+  publish-results:
+    needs: [benchmark, scenarios]
+    runs-on: ubuntu-latest
+    outputs:
+      reports: ${{ steps.path.update-reports.reports }} 
+    strategy:
+      max-parallel: 1 # cannot commit on the same branch in parallel
+      matrix: ${{ fromJson(needs.scenarios.outputs.json) }}
+    steps:                 
+      # The benchmarks reporistory (e.g. gh-pages) is checked out 
+      - name: Benchmark reporistory checkout ️
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
+      
+      # The benchmark results are downloaded into the corresponding 'scenario' folder.
+      - name: Download micro benchmark artifact
+        if: contains(matrix.Benchmark, 'Micro')
+        uses: actions/download-artifact@v2
+        with:
+          name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
+          path: .${{ matrix.runtime }}/Micro        
+          
+      - name: Download gradient benchmark artifact
+        if: contains(matrix.Benchmark, 'Gradient')
+        uses: actions/download-artifact@v2
+        with:
+          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
+          path: .${{ matrix.runtime }}/Gradient  
+          
+      - name: Download baseline benchmark artifact
+        if: matrix.scaled
+        uses: actions/download-artifact@v2
+        with:
+          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
+          path: .${{ matrix.runtime }}/Baseline  
+          
+      # Copy all of the results to the target framework folder and output the (json) list of updated json files
+      - name: Update benchmark reports
+        id: update-reports
+        working-directory: ${{ env.BENCHMARK_DATA_FOLDER }}
+        run: |
+          $Reports = Get-ChildItem .${{ matrix.runtime }} | Move-Item -Destination ${{ matrix.runtime }} -Force -PassThru | Get-ChildItem -Recurse -Filter *.json | Resolve-Path -Relative | ConvertTo-Json -Compress
+          rm .${{ matrix.runtime }}
+          echo "::set-output name=reports::$Reports"
+        shell: pwsh
+      
+      # Push the modifications to the benchmarks branch
+      - name: Git Auto Commit
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
+        with:
+          commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.runtime }})  
+  
   get-reports:
+    if: false # break glass in case of emergency
     runs-on: ubuntu-latest
     outputs:
       reports: ${{ steps.path.outputs.reports }}        
@@ -44,39 +197,22 @@ jobs:
         id: path
         working-directory: ${{ env.BENCHMARK_DATA_FOLDER }}
         run: |
-          $REPORTS = Get-ChildItem -Filter *report*.json -Recurse | Resolve-Path -Relative | ConvertTo-Json -Compress
-          echo "::set-output name=reports::$REPORTS"
+          $Reports = Get-ChildItem -Filter *report*.json -Recurse | Resolve-Path -Relative | ConvertTo-Json -Compress
+          echo "::set-output name=reports::$Reports"
         shell: pwsh 
         
       - name: Result
         run: echo ${{ steps.path.outputs.reports }}
-
-  check-matrix:
-    needs: [ get-reports, matrix ]
-    runs-on: ubuntu-latest
-    continue-on-error: false
-    strategy: 
-      matrix:
-        cfg: ${{ fromJson(needs.matrix.outputs.scenarios) }}
         
-    steps:
-      - run: echo "Starting benchmarks for ${{ matrix.cfg.benchmark }} (tracked = ${{ matrix.cfg.tracked }}) running on ${{ matrix.cfg.runtime }} (${{ matrix.cfg.dotnet }})"
-      
-      - run: echo "Benchmark options ${{ matrix.cfg.benchmark-options }}"
-      
-      - if: matrix.cfg.scaled
-        run: echo "Baseline options ${{ matrix.cfg.baseline-options }}"       
-        
-    
   update-history:
-    needs: [ get-reports ]
-    #needs: [publish-results]
+    #needs: [ get-reports ]
+    needs: [publish-results]
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
       max-parallel: 1 # we cannot commit on the same branch in parallel (multiple points added on retry- can we 'force' this?)
       matrix: 
-        report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
+        report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
@@ -124,150 +260,6 @@ jobs:
         
       - name: Result
         run: echo http://${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ steps.history.outputs.target-path }}/
-          
-  benchmark:
-    if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
-    runs-on: windows-latest # required by the older frameworks
-    strategy:
-      matrix: 
-        runtime: [netcoreapp50, netcoreapp21, net472]    
-    steps:
-      - run: echo Starting benchmarks for ${{ matrix.runtime }} 
-              
-      # checkout the current branch
-      - uses: actions/checkout@v2
-        with:
-          path: UnitsNet
-           
-      # checkout the ResultRescaler
-      - name: Checkout the ResultRescaler
-        if: contains(env.SCENARIO, 'Baseline')
-        uses: actions/checkout@v2
-        with:
-          repository: lipchev/performance
-          path: performance
-          
-      # checkout the baseline branch
-      - name: Checkout previous results 
-        if: contains(env.SCENARIO, 'Baseline')
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
-          path: gh-pages
-      
-      # we need all frameworks (even if only running one target at a time)
-      - uses: actions/setup-dotnet@v1
-        with: 
-          dotnet-version: '2.1.x'
-            
-      - uses: actions/setup-dotnet@v1
-        with: 
-          dotnet-version: '3.1.x'
-            
-      - uses: actions/setup-dotnet@v1
-        with: 
-          dotnet-version: '5.0.x'
-      
-      # executing the benchmark for the current framework(s)
-      - name: Benchmark scenario execution (Micro)
-        if: contains(env.SCENARIO, 'Micro')
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.runtime }} --exporters ${{ env.EXPORTERS }} ${{ env.EXECUTION_OPTIONS }}
-          
-      - name: Benchmark execution (Gradient) 
-        if: contains(env.SCENARIO, 'Gradient')
-        uses: ./UnitsNet/.github/actions/run-benchmark-scenario
-        with:
-          scenario: run-gradient-benchmarks.bat
-          runtimes: ${{ matrix.runtime }}
-          exporters: ${{ env.EXPORTERS }}
-          categories: ${{ env.CATEGORIES_FILTER }}
-          execution-options: ${{ env.EXECUTION_OPTIONS }}
-          
-      
-      - name: Benchmark scenario execution (Baseline)
-        if: contains(env.SCENARIO, 'Baseline')
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.runtime }} --exporters ${{ env.EXPORTERS }} ${{ env.EXECUTION_OPTIONS }}
-                
-      - name: Stable baseline comparison
-        if: contains(env.SCENARIO, 'Baseline')
-        env:
-          PERFLAB_TARGET_FRAMEWORKS: net5.0
-        run: |
-          if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
-            echo "Running the ResultRescaler using the original baseline"
-            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline *-report-scale.json -Recurse |
-            % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-scale.json", "-report-full.json") }
-            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f net5.0 `
-            --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline `
-            --diff UnitsNet\Artifacts\Benchmark `
-            --stable ${{ env.STABLE_BASELINES }} `
-            --output UnitsNet\Artifacts\Benchmark          
-          }else{
-            echo "No previous baseline found (using current results)"
-            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
-            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\*\Baseline *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-scale.json") }
-          }      
-                
-      # saving the current artifact (downloadable until the expiration date of this action)        
-      - name: Store micro benchmark artifact
-        if: contains(env.SCENARIO, 'Micro')
-        uses: actions/upload-artifact@v2
-        with:
-          name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
-          path: UnitsNet\Artifacts\Benchmark\Micro
-          
-      - name: Store gradient benchmark artifact
-        if: contains(env.SCENARIO, 'Gradient')
-        uses: actions/upload-artifact@v2
-        with:
-          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
-          path: UnitsNet\Artifacts\Benchmark\Gradient
-          
-      - name: Store baseline benchmark artifact
-        if: contains(env.SCENARIO, 'Baseline')
-        uses: actions/upload-artifact@v2
-        with:
-          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
-          path: UnitsNet\Artifacts\Benchmark\Baseline
-          
-  publish-results:
-    needs: [benchmark]
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1 # cannot commit on the same branch in parallel
-      matrix: 
-        runtime: [netcoreapp50, netcoreapp21, net472]
-    steps:        
-      - name: Initializing git folder ️
-        uses: actions/checkout@v2.3.1
-        with:
-          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
-        
-      # The benchmark results are downloaded into the corresponding 'scenario' folder.
-      - name: Download micro benchmark artifact
-        if: contains(env.SCENARIO, 'Micro')
-        uses: actions/download-artifact@v2
-        with:
-          name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
-          path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/Micro        
-          
-      - name: Download gradient benchmark artifact
-        if: contains(env.SCENARIO, 'Gradient')
-        uses: actions/download-artifact@v2
-        with:
-          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
-          path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/Gradient  
-          
-      - name: Download baseline benchmark artifact
-        if: contains(env.SCENARIO, 'Baseline')
-        uses: actions/download-artifact@v2
-        with:
-          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
-          path: ${{ env.BENCHMARK_DATA_FOLDER }}/${{ matrix.runtime }}/Baseline  
-
-      - name: Git Auto Commit
-        uses: stefanzweifel/git-auto-commit-action@v4.11.0
-        with:
-          commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.runtime }})
+     
   
      

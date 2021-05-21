@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!-- <TargetFrameworks>net5.0</TargetFrameworks> -->
-    <TargetFrameworks>net5.0;netcoreapp3.1;netcoreapp2.1;net48;net472</TargetFrameworks>
+    <!-- Used by Workflow scripts to narrow down the specified target frameworks to test, and avoid downloading all supported SDKs -->
+    <TargetFrameworks>$(PERFLAB_TARGET_FRAMEWORKS)</TargetFrameworks>
+    <!-- Supported target frameworks -->
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == '' AND '$(OS)' == 'Windows_NT'">net5.0;netcoreapp3.1;netcoreapp2.1;net48;net472</TargetFrameworks>
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == ''">net5.0;netcoreapp3.1;netcoreapp2.1</TargetFrameworks>
     <Version>4.0.0.0</Version>
     <AssemblyVersion>4.0.0.0</AssemblyVersion> 
     <AssemblyTitle>UnitsNet.Benchmark</AssemblyTitle>
