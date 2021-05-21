@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621566556120,
+  "lastUpdate": 1621625790721,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit-report-full": [
@@ -66,6 +66,72 @@ window.BENCHMARK_DATA = {
             "value": 575.1086602694746,
             "unit": "ns",
             "range": "± 6.316418084374169"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "d92ef51c61a7e085132654a7e0f87c40a37690e6",
+          "message": "manually publish the results (-job short)",
+          "timestamp": "2021-05-21T22:29:31+03:00",
+          "tree_id": "aa0beff90e0f3392d399f915ac9bf717d8f63a5f",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/d92ef51c61a7e085132654a7e0f87c40a37690e6"
+        },
+        "date": 1621625761604,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit.Constructor",
+            "value": 17.143570167430934,
+            "unit": "ns",
+            "range": "± 0.2811051851405141"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit.Constructor_FromUnit",
+            "value": 62.82933237142938,
+            "unit": "ns",
+            "range": "± 1.3115599910631808"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit.QuantityFromQuantityInfo",
+            "value": 67.85951050572426,
+            "unit": "ns",
+            "range": "± 1.1448129117940757"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit.QuantityFrom",
+            "value": 104.23541335585696,
+            "unit": "ns",
+            "range": "± 2.070280731383416"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit.QuantityFrom_Generic",
+            "value": 106.89795199881922,
+            "unit": "ns",
+            "range": "± 2.4461443250661277"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit.QuantityFrom_RandomUnit",
+            "value": 145.63783128315865,
+            "unit": "ns",
+            "range": "± 2.5950189975593743"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromUnit.Constructor_UnitSystem",
+            "value": 620.1158480120989,
+            "unit": "ns",
+            "range": "± 12.296136888471622"
           }
         ]
       }
