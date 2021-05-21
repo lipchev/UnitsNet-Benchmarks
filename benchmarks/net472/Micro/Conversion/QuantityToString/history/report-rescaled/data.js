@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621625621105,
+  "lastUpdate": 1621635129777,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "UnitsNet.Benchmark.Micro.Conversion.QuantityToString-report-rescaled": [
@@ -1584,6 +1584,138 @@ window.BENCHMARK_DATA = {
             "value": 2654.8108673095703,
             "unit": "ns",
             "range": "± 60.14741786581278"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8",
+          "message": "Manual publish N1 (short)",
+          "timestamp": "2021-05-22T01:07:01+03:00",
+          "tree_id": "49ff670af70e4c4de72523822f7a08fb500e8b5e",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8"
+        },
+        "date": 1621635081670,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: \"a\", culture: )",
+            "value": 679.6770878061675,
+            "unit": "ns",
+            "range": "± 39.90767654626248"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: \"a\", culture: )",
+            "value": 690.6296454360198,
+            "unit": "ns",
+            "range": "± 30.803856981022435"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: \"v\", culture: )",
+            "value": 964.1375056004684,
+            "unit": "ns",
+            "range": "± 26.530705610184395"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 ft, format: \"a2\", culture: )",
+            "value": 978.5913170114645,
+            "unit": "ns",
+            "range": "± 20.5112516581867"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 ft, format: \"a2\", culture: )",
+            "value": 1003.5321007694573,
+            "unit": "ns",
+            "range": "± 13.160704606890839"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: \"v\", culture: )",
+            "value": 1012.8942657645856,
+            "unit": "ns",
+            "range": "± 10.388564535435329"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: \"f2\", culture: )",
+            "value": 2074.1580181209733,
+            "unit": "ns",
+            "range": "± 52.52812656151323"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: \"f2\", culture: )",
+            "value": 2135.0694206717408,
+            "unit": "ns",
+            "range": "± 38.20017994983911"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 ft, format: null, culture: ru-RU)",
+            "value": 2327.1829701802094,
+            "unit": "ns",
+            "range": "± 34.904646893773105"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: null, culture: )",
+            "value": 2410.430978127863,
+            "unit": "ns",
+            "range": "± 49.14052420063179"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: null, culture: )",
+            "value": 2464.4472192629614,
+            "unit": "ns",
+            "range": "± 130.6796063986501"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 ft, format: null, culture: ru-RU)",
+            "value": 2475.5957778060815,
+            "unit": "ns",
+            "range": "± 66.99583541295378"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 ft, format: null, culture: )",
+            "value": 2514.3860799218946,
+            "unit": "ns",
+            "range": "± 30.434501643993205"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 8.1e-04 m, format: null, culture: )",
+            "value": 2752.6630529725453,
+            "unit": "ns",
+            "range": "± 52.76210543829056"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 ft, format: null, culture: )",
+            "value": 2814.4636997722955,
+            "unit": "ns",
+            "range": "± 71.59756078099637"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 8.1e-04 m, format: null, culture: )",
+            "value": 2858.1070376934867,
+            "unit": "ns",
+            "range": "± 95.2822818847906"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 8.1e-04 m, format: \"s4\", culture: )",
+            "value": 2942.260063050689,
+            "unit": "ns",
+            "range": "± 57.34517263835122"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Conversion.QuantityToString.ToString_(quantity: 8.1e-04 m, format: \"s4\", culture: )",
+            "value": 2956.7348745595355,
+            "unit": "ns",
+            "range": "± 68.98848854903612"
           }
         ]
       }
