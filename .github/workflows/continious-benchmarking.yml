@@ -92,7 +92,7 @@ jobs:
       - name: History path selection
         id: history
         run: |
-          $Name = (Get-Item ${{ steps.download.outputs.file-path }}).Name
+          $Name = (Get-Item ${{ steps.download.outputs.file-path }}).BaseName
           $Path = if ($Name.Contains('rescaled')) {
             (Split-Path ${{ matrix.report-path }} | Split-Path).replace('./', '') + '/history/report-rescaled'
           }
@@ -122,9 +122,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
           # Show alert with commit comment on detecting possible performance regression
-          alert-threshold: '200%'
+          alert-threshold: '100%'
           comment-always: false
-          comment-on-alert: contains(${{ steps.history.outputs.target-path }}, 'rescaled')
+          comment-on-alert: ${{ contains(steps.history.outputs.target-path, 'rescaled') }}
           fail-on-alert: false
           alert-comment-cc-users: '@lipchev'
           
