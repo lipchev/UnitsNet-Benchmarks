@@ -33,15 +33,16 @@ jobs:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     strategy: 
-      matrix: ${{ fromJson(needs.scenarios.outputs.json) }}
+      matrix: 
+        scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:
-      - run: echo "Starting benchmarks for ${{ matrix.benchmark }} (tracked = ${{ matrix.tracked }}) running on ${{ matrix.runtime }} (${{ matrix.dotnet }})"
+      - run: echo "Starting benchmarks for ${{ matrix.scenario.benchmark }} (tracked = ${{ matrix.scenario.tracked }}) running on ${{ matrix.scenario.runtime }} (${{ matrix.scenario.dotnet }})"
       
-      - run: echo "Benchmark options ${{ matrix.benchmark-options }}"
+      - run: echo "Benchmark options ${{ matrix.scenario.benchmark-options }}"
       
-      - name: "Baseline comparison ${{ matrix.tracked }}"
-        if: matrix.scaled
-        run: echo "Baseline options ${{ matrix.baseline-options }}"  
+      - name: "Baseline comparison ${{ matrix.scenario.tracked }}"
+        if: matrix.scenario.scaled
+        run: echo "Baseline options ${{ matrix.scenario.baseline-options }}"  
               
       # checkout the current branch
       - uses: actions/checkout@v2.3.1
@@ -50,7 +51,7 @@ jobs:
            
       # checkout the ResultRescaler
       - name: Checkout the ResultRescaler
-        if: matrix.scaled
+        if: matrix.scenario.scaled
         uses: actions/checkout@v2
         with:
           repository: lipchev/performance
@@ -58,7 +59,7 @@ jobs:
           
       # checkout the baseline branch
       - name: Checkout previous results 
-        if: matrix.scaled
+        if: matrix.scenario.scaled
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
@@ -66,38 +67,38 @@ jobs:
             
       - uses: actions/setup-dotnet@v1
         with: 
-          dotnet-version: matrix.dotnet
+          dotnet-version: matrix.scenario.dotnet
       
       # executing the benchmark for the current framework(s)
       - name: Benchmark scenario execution (Micro)
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
-        if: contains(matrix.Benchmark, 'Micro')
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.runtime }} -f ${{ matrix.framework }} ${{ matrix.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }}
+        if: contains(matrix.scenario.Benchmark, 'Micro')
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
           
       - name: Benchmark execution (Gradient) 
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
-        if: contains(matrix.Benchmark, 'Gradient')
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.runtime }} -f ${{ matrix.framework }} ${{ matrix.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }}
+        if: contains(matrix.scenario.Benchmark, 'Gradient')
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
                 
       - name: Benchmark scenario execution (Baseline)
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
-        if: matrix.scaled
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.runtime }} -f ${{ matrix.framework }} ${{ matrix.baseline-options }} ${{ env.EXECUTION_OPTIONS }}
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }}
+        if: matrix.scenario.scaled
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.baseline-options }} ${{ env.EXECUTION_OPTIONS }}
                 
       - name: Stable baseline comparison
-        if: matrix.scaled
+        if: matrix.scenario.scaled
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.framework }}
+          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }}
         run: |
-          if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline ) {
+          if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.scenario.runtime }}\Baseline ) {
             echo "Running the ResultRescaler using the original baseline"
-            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline *-report-scale.json -Recurse |
+            Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.scenario.runtime }}\Baseline *-report-scale.json -Recurse |
             % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-scale.json", "-report-full.json") }
-            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f ${{ matrix.framework }}`
-            --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.runtime }}\Baseline `
+            dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f ${{ matrix.scenario.framework }}`
+            --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.scenario.runtime }}\Baseline `
             --diff UnitsNet\Artifacts\Benchmark `
             --stable ${{ env.STABLE_BASELINES }} `
             --output UnitsNet\Artifacts\Benchmark          
@@ -109,24 +110,24 @@ jobs:
                 
       # saving the current artifact (downloadable until the expiration date of this action)        
       - name: Store micro benchmark artifact
-        if: contains(matrix.Benchmark, 'Micro')
+        if: contains(matrix.scenario.Benchmark, 'Micro')
         uses: actions/upload-artifact@v2
         with:
-          name: Micro Benchmarks (${{ matrix.runtime }})
+          name: Micro Benchmarks (${{ matrix.scenario.runtime }})
           path: UnitsNet\Artifacts\Benchmark\Micro
           
       - name: Store gradient benchmark artifact
-        if: contains(matrix.Benchmark, 'Gradient')
+        if: contains(matrix.scenario.Benchmark, 'Gradient')
         uses: actions/upload-artifact@v2
         with:
-          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
+          name: UnitsNet Gradient Benchmarks (${{ matrix.scenario.runtime }})
           path: UnitsNet\Artifacts\Benchmark\Gradient
           
       - name: Store baseline benchmark artifact
-        if: matrix.scaled
+        if: matrix.scenario.scaled
         uses: actions/upload-artifact@v2
         with:
-          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
+          name: UnitsNet Baseline Benchmarks (${{ matrix.scenario.runtime }})
           path: UnitsNet\Artifacts\Benchmark\Baseline
           
   publish-results:
@@ -136,7 +137,8 @@ jobs:
       reports: ${{ steps.path.update-reports.reports }} 
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
-      matrix: ${{ fromJson(needs.scenarios.outputs.json) }}
+      matrix: 
+        scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:                 
       # The benchmarks reporistory (e.g. gh-pages) is checked out 
       - name: Benchmark reporistory checkout ️
@@ -146,33 +148,35 @@ jobs:
       
       # The benchmark results are downloaded into the corresponding 'scenario' folder.
       - name: Download micro benchmark artifact
-        if: contains(matrix.Benchmark, 'Micro')
+        if: contains(matrix.scenario.Benchmark, 'Micro')
         uses: actions/download-artifact@v2
         with:
-          name: UnitsNet Micro Benchmarks (${{ matrix.runtime }})
-          path: .${{ matrix.runtime }}/Micro        
+          name: UnitsNet Micro Benchmarks (${{ matrix.scenario.runtime }})
+          path: .${{ matrix.scenario.runtime }}/Micro        
           
       - name: Download gradient benchmark artifact
-        if: contains(matrix.Benchmark, 'Gradient')
+        if: contains(matrix.scenario.Benchmark, 'Gradient')
         uses: actions/download-artifact@v2
         with:
-          name: UnitsNet Gradient Benchmarks (${{ matrix.runtime }})
-          path: .${{ matrix.runtime }}/Gradient  
+          name: UnitsNet Gradient Benchmarks (${{ matrix.scenario.runtime }})
+          path: .${{ matrix.scenario.runtime }}/Gradient  
           
       - name: Download baseline benchmark artifact
-        if: matrix.scaled
+        if: matrix.scenario.scaled
         uses: actions/download-artifact@v2
         with:
-          name: UnitsNet Baseline Benchmarks (${{ matrix.runtime }})
-          path: .${{ matrix.runtime }}/Baseline  
+          name: UnitsNet Baseline Benchmarks (${{ matrix.scenario.runtime }})
+          path: .${{ matrix.scenario.runtime }}/Baseline  
           
       # Copy all of the results to the target framework folder and output the (json) list of updated json files
       - name: Update benchmark reports
         id: update-reports
         working-directory: ${{ env.BENCHMARK_DATA_FOLDER }}
         run: |
-          $Reports = Get-ChildItem .${{ matrix.runtime }} | Move-Item -Destination ${{ matrix.runtime }} -Force -PassThru | Get-ChildItem -Recurse -Filter *.json | Resolve-Path -Relative | ConvertTo-Json -Compress
-          rm .${{ matrix.runtime }}
+          $Reports = Get-ChildItem .${{ matrix.scenario.runtime }} | 
+          Move-Item -Destination ${{ matrix.scenario.runtime }} -Force -PassThru | 
+          Get-ChildItem -Recurse -Filter *.json | Resolve-Path -Relative | ConvertTo-Json -Compress
+          rm .${{ matrix.scenario.runtime }}
           echo "::set-output name=reports::$Reports"
         shell: pwsh
       
@@ -180,7 +184,7 @@ jobs:
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
-          commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.runtime }})  
+          commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.scenario.runtime }})  
   
   get-reports:
     if: false # break glass in case of emergency
