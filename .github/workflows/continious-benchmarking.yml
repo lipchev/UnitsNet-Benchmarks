@@ -35,9 +35,9 @@ jobs:
     strategy: 
       matrix: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:
-      - name: "Starting benchmarks for ${{ matrix.benchmark }} (tracked = ${{ matrix.tracked }}) running on ${{ matrix.runtime }} (${{ matrix.dotnet }})"
+      - run: echo "Starting benchmarks for ${{ matrix.benchmark }} (tracked = ${{ matrix.tracked }}) running on ${{ matrix.runtime }} (${{ matrix.dotnet }})"
       
-      - name: "Benchmark options ${{ matrix.benchmark-options }}"
+      - run: echo "Benchmark options ${{ matrix.benchmark-options }}"
       
       - name: "Baseline comparison ${{ matrix.tracked }}"
         if: matrix.scaled
