@@ -30,7 +30,7 @@ jobs:
            
   benchmark:
     needs: [ scenarios ]
-    #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
+    if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     strategy: 
       matrix: 
@@ -131,7 +131,7 @@ jobs:
     needs: [benchmark, scenarios]
     runs-on: ubuntu-latest
     outputs:
-      reports: ${{ steps.path.update-reports.reports }} 
+      reports: ${{ steps.update-reports.reports }} 
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
       matrix: 
@@ -180,7 +180,7 @@ jobs:
           commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.scenario.runtime }})  
   
   get-reports:
-    if: false # break glass in case of emergency
+    if: true # break glass in case of emergency
     runs-on: ubuntu-latest
     outputs:
       reports: ${{ steps.path.outputs.reports }}        
@@ -202,8 +202,8 @@ jobs:
         run: echo ${{ steps.path.outputs.reports }}
         
   update-history:
-    #needs: [ get-reports ]
-    needs: [publish-results]
+    needs: [ get-reports ]
+    #needs: [publish-results]
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:

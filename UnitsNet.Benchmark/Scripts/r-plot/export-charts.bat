@@ -10,3 +10,4 @@ else(
 )
 mkdir plots
 move *.png plots
+del BuildPlots.log 
