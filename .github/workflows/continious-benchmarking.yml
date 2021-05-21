@@ -149,21 +149,21 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Micro Benchmarks (${{ matrix.scenario.runtime }})
-          path: .${{ matrix.scenario.runtime }}/Micro        
+          path: ${{ env.BENCHMARK_DATA_FOLDER }}/.${{ matrix.scenario.runtime }}/Micro        
           
       - name: Download gradient benchmark artifact
         if: contains(matrix.scenario.Benchmark, 'Gradient')
         uses: actions/download-artifact@v2
         with:
           name: Gradient Benchmarks (${{ matrix.scenario.runtime }})
-          path: .${{ matrix.scenario.runtime }}/Gradient  
+          path: ${{ env.BENCHMARK_DATA_FOLDER }}/.${{ matrix.scenario.runtime }}/Gradient  
           
       - name: Download baseline benchmark artifact
         if: matrix.scenario.scaled
         uses: actions/download-artifact@v2
         with:
           name: Baseline Benchmarks (${{ matrix.scenario.runtime }})
-          path: .${{ matrix.scenario.runtime }}/Baseline  
+          path: ${{ env.BENCHMARK_DATA_FOLDER }}/.${{ matrix.scenario.runtime }}/Baseline  
           
       # Copy all of the results to the target framework folder and output the (json) list of updated json files
       - name: Update benchmark reports
