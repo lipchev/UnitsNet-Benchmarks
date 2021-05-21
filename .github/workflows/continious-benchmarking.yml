@@ -28,7 +28,7 @@ jobs:
            
   benchmark:
     needs: [ scenarios ]
-    #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
+    if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     strategy: 
       matrix: 
@@ -141,7 +141,7 @@ jobs:
     needs: [benchmark, scenarios]
     runs-on: ubuntu-latest
     outputs:
-      reports: ${{ steps.update-reports.reports }} 
+      reports: ${{ steps.update-reports.outputs.json }} 
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
       matrix: 
@@ -180,7 +180,7 @@ jobs:
         id: update-reports
         run: |
           $Reports = git diff --name-only '*.json' | ConvertTo-Json -Compress
-          echo "::set-output name=reports::$Reports"
+          echo "::set-output name=json::$Reports"
         shell: pwsh
       
       # Push the modifications to the benchmarks branch
@@ -190,13 +190,13 @@ jobs:
           commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.scenario.runtime }})  
           
       - name: Result
-        run: echo ${{ steps.update-reports.outputs.reports }}
+        run: echo ${{ steps.update-reports.outputs.json }}
   
   get-reports:
-    if: false # break glass in case of emergency
+    if: true # break glass in case of emergency
     runs-on: ubuntu-latest
     outputs:
-      reports: ${{ steps.path.outputs.reports }}        
+      reports: ${{ steps.path.outputs.json }}        
     steps:
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
@@ -208,22 +208,22 @@ jobs:
         # working-directory: ${{ env.BENCHMARK_DATA_FOLDER }}
         run: |
           $Reports = (Get-ChildItem -Filter *report*.json -Recurse | Resolve-Path -Relative).replace('./', '') | ConvertTo-Json -Compress
-          echo "::set-output name=reports::$Reports"
+          echo "::set-output name=json::$Reports"
         shell: pwsh 
         
       - name: Result
-        run: echo ${{ steps.path.outputs.reports }}
+        run: echo ${{ steps.path.outputs.json }}
         
   update-history:
-    #needs: [ get-reports ]
-    needs: [publish-results]
+    needs: [ get-reports ]
+    #needs: [publish-results]
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
       max-parallel: 1 # we cannot commit on the same branch in parallel (multiple points added on retry- can we 'force' this?)
       matrix: 
-        #report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
-        report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
+        report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
+        #report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
