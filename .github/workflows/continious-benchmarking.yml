@@ -19,7 +19,7 @@ jobs:
   scenarios:
     runs-on: ubuntu-latest
     outputs:
-      json: ${{ steps.load-matrix.outputs.scenarios }}
+      json: ${{ steps.load-matrix.outputs.json }}
     steps:
       - uses: actions/checkout@v2
       - id: load-matrix
