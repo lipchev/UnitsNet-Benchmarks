@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
-      #max-parallel: 1 # can we commit on the same branch in parallel ?
+      max-parallel: 1 # we cannot commit on the same branch in parallel (multiple points added on retry- can we 'force' this?)
       matrix: 
         report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
     steps:        
@@ -102,12 +102,6 @@ jobs:
           echo "::set-output name=target-name::$Name"
           echo "::set-output name=target-path::$Path"
         shell: pwsh
-        
-      - name: Check name
-        run: echo ${{ steps.history.outputs.target-name }}
-        
-      - name: Check path
-        run: echo ${{ steps.history.outputs.target-path }}
           
       # appending to the running benchmark data on the benchmark-pages branch
       - name: Updating benchmark charts
@@ -127,6 +121,9 @@ jobs:
           comment-on-alert: ${{ contains(steps.history.outputs.target-path, 'rescaled') }}
           fail-on-alert: false
           alert-comment-cc-users: '@lipchev'
+        
+      - name: Result
+        run: echo http://${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ steps.history.outputs.target-path }}/
           
   benchmark:
     if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
