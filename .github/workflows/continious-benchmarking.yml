@@ -67,7 +67,7 @@ jobs:
             
       - uses: actions/setup-dotnet@v1
         with: 
-          dotnet-version: matrix.scenario.dotnet
+          dotnet-version: ${{ matrix.scenario.dotnet }}
       
       # executing the benchmark for the current framework(s)
       - name: Benchmark scenario execution (Micro)
