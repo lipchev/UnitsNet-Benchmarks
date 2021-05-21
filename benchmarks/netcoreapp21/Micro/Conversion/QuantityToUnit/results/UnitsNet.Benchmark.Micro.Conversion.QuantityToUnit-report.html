@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>UnitsNet.Benchmark.Micro.Conversion.QuantityToUnit-20210520-080332</title>
+<title>UnitsNet.Benchmark.Micro.Conversion.QuantityToUnit-20210521-184818</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,27 +13,28 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
 Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
-  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-JAQLFZ : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-CVNAWX : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
 </code></pre>
-<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
+<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  IterationCount=3  
+LaunchCount=1  WarmupCount=3  
 </code></pre>
 
 <table>
 <thead><tr><th>                              Method</th><th>                           Categories</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>Length&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Struct,Unit,Quantity,Micro,Conversion</td><td>22.01 ns</td><td>0.418 ns</td><td>0.391 ns</td><td>0.101 ns</td><td>21.13 ns</td><td>22.70 ns</td><td>22.04 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>Length&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Struct,Unit,Quantity,Micro,Conversion</td><td>22.22 ns</td><td>0.443 ns</td><td>0.528 ns</td><td>0.115 ns</td><td>21.25 ns</td><td>23.27 ns</td><td>22.31 ns</td><td>1.00</td><td>Same</td><td>0.03</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>ILength&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>32.52 ns</td><td>0.642 ns</td><td>0.764 ns</td><td>0.167 ns</td><td>30.98 ns</td><td>34.18 ns</td><td>32.59 ns</td><td>1.47</td><td>Slower</td><td>0.04</td><td>0.0049</td><td>-</td><td>-</td><td>32 B</td>
-</tr><tr><td>ILength&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>32.62 ns</td><td>0.649 ns</td><td>0.910 ns</td><td>0.175 ns</td><td>30.87 ns</td><td>33.97 ns</td><td>32.84 ns</td><td>1.48</td><td>Slower</td><td>0.04</td><td>0.0049</td><td>-</td><td>-</td><td>32 B</td>
-</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.ToUnit(baseUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>117.89 ns</td><td>2.138 ns</td><td>2.000 ns</td><td>0.516 ns</td><td>113.29 ns</td><td>121.54 ns</td><td>117.81 ns</td><td>5.36</td><td>Slower</td><td>0.14</td><td>0.0046</td><td>-</td><td>-</td><td>32 B</td>
-</tr><tr><td>IQuantity&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>125.37 ns</td><td>2.504 ns</td><td>3.343 ns</td><td>0.669 ns</td><td>119.16 ns</td><td>131.93 ns</td><td>126.26 ns</td><td>5.66</td><td>Slower</td><td>0.17</td><td>0.0043</td><td>-</td><td>-</td><td>33 B</td>
-</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>151.08 ns</td><td>2.988 ns</td><td>3.779 ns</td><td>0.788 ns</td><td>143.41 ns</td><td>158.18 ns</td><td>151.52 ns</td><td>6.87</td><td>Slower</td><td>0.24</td><td>0.0041</td><td>-</td><td>-</td><td>32 B</td>
-</tr><tr><td>Length&lt;BaseUnit&gt;.ToUnit(untSystem)</td><td>Struct,UnitSystem,Quantity,Micro,Conversion</td><td>600.71 ns</td><td>11.523 ns</td><td>13.717 ns</td><td>2.993 ns</td><td>569.55 ns</td><td>626.39 ns</td><td>598.91 ns</td><td>27.11</td><td>Slower</td><td>0.82</td><td>0.0281</td><td>-</td><td>-</td><td>192 B</td>
-</tr><tr><td>Length&lt;DerivedUnit&gt;.ToUnit(untSystem)</td><td>Struct,UnitSystem,Quantity,Micro,Conversion</td><td>618.99 ns</td><td>9.690 ns</td><td>8.590 ns</td><td>2.296 ns</td><td>603.28 ns</td><td>631.55 ns</td><td>621.37 ns</td><td>28.11</td><td>Slower</td><td>0.68</td><td>0.0281</td><td>-</td><td>-</td><td>192 B</td>
+</thead><tbody><tr><td>Length&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Struct,Unit,Quantity,Micro,Conversion</td><td>20.86 ns</td><td>11.858 ns</td><td>0.650 ns</td><td>0.375 ns</td><td>20.29 ns</td><td>21.57 ns</td><td>20.74 ns</td><td>0.85</td><td>?</td><td>0.01</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Length&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Struct,Unit,Quantity,Micro,Conversion</td><td>24.50 ns</td><td>8.985 ns</td><td>0.492 ns</td><td>0.284 ns</td><td>24.15 ns</td><td>25.07 ns</td><td>24.29 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ILength&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>28.89 ns</td><td>20.390 ns</td><td>1.118 ns</td><td>0.645 ns</td><td>27.63 ns</td><td>29.77 ns</td><td>29.27 ns</td><td>1.18</td><td>?</td><td>0.03</td><td>0.0049</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>ILength&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>29.50 ns</td><td>7.017 ns</td><td>0.385 ns</td><td>0.222 ns</td><td>29.07 ns</td><td>29.80 ns</td><td>29.63 ns</td><td>1.20</td><td>?</td><td>0.02</td><td>0.0049</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.ToUnit(baseUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>108.10 ns</td><td>22.023 ns</td><td>1.207 ns</td><td>0.697 ns</td><td>107.23 ns</td><td>109.48 ns</td><td>107.58 ns</td><td>4.41</td><td>?</td><td>0.04</td><td>0.0046</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>IQuantity&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>117.59 ns</td><td>81.579 ns</td><td>4.472 ns</td><td>2.582 ns</td><td>113.28 ns</td><td>122.21 ns</td><td>117.28 ns</td><td>4.80</td><td>?</td><td>0.20</td><td>0.0043</td><td>-</td><td>-</td><td>33 B</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>139.27 ns</td><td>119.570 ns</td><td>6.554 ns</td><td>3.784 ns</td><td>131.96 ns</td><td>144.61 ns</td><td>141.25 ns</td><td>5.68</td><td>?</td><td>0.19</td><td>0.0041</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>Length&lt;BaseUnit&gt;.ToUnit(untSystem)</td><td>Struct,UnitSystem,Quantity,Micro,Conversion</td><td>517.62 ns</td><td>185.884 ns</td><td>10.189 ns</td><td>5.883 ns</td><td>505.98 ns</td><td>524.94 ns</td><td>521.95 ns</td><td>21.13</td><td>?</td><td>0.53</td><td>0.0281</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>Length&lt;DerivedUnit&gt;.ToUnit(untSystem)</td><td>Struct,UnitSystem,Quantity,Micro,Conversion</td><td>639.71 ns</td><td>463.644 ns</td><td>25.414 ns</td><td>14.673 ns</td><td>610.57 ns</td><td>657.33 ns</td><td>651.22 ns</td><td>26.11</td><td>?</td><td>1.05</td><td>0.0281</td><td>-</td><td>-</td><td>192 B</td>
 </tr></tbody></table>
 </body>
 </html>

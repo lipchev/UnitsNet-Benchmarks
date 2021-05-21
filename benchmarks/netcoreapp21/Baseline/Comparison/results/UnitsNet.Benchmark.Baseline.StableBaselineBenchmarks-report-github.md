@@ -1,17 +1,18 @@
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
 Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
-  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-SARWRE : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-RAATXT : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
 
-Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
+Runtime=.NET Core 2.1  Toolchain=netcoreapp21  IterationCount=3  
+LaunchCount=1  WarmupCount=3  
 
 ```
 |         Method |       Mean |     Error |    StdDev |    StdErr |        Min |        Max |     Median | Ratio | MannWhitney(5%) | RatioSD |
 |--------------- |-----------:|----------:|----------:|----------:|-----------:|-----------:|-----------:|------:|---------------- |--------:|
-|         Equals |  0.6609 ns | 0.0129 ns | 0.0180 ns | 0.0035 ns |  0.6261 ns |  0.6915 ns |  0.6566 ns |  1.00 |            Base |    0.00 |
-| Decimal_Equals |  9.9893 ns | 0.1861 ns | 0.1911 ns | 0.0463 ns |  9.6233 ns | 10.2973 ns |  9.9656 ns | 15.24 |          Slower |    0.56 |
-|         MinMax |  0.4277 ns | 0.0081 ns | 0.0087 ns | 0.0020 ns |  0.4120 ns |  0.4460 ns |  0.4260 ns |  0.65 |          Faster |    0.03 |
-| Decimal_MinMax | 10.9155 ns | 0.1661 ns | 0.1472 ns | 0.0393 ns | 10.6178 ns | 11.1804 ns | 10.9231 ns | 16.73 |          Slower |    0.52 |
+|         Equals |  0.5835 ns | 0.0943 ns | 0.0052 ns | 0.0030 ns |  0.5778 ns |  0.5879 ns |  0.5847 ns |  1.00 |            Base |    0.00 |
+| Decimal_Equals |  8.5861 ns | 1.7279 ns | 0.0947 ns | 0.0547 ns |  8.4767 ns |  8.6437 ns |  8.6377 ns | 14.72 |               ? |    0.05 |
+|         MinMax |  0.4054 ns | 0.1975 ns | 0.0108 ns | 0.0063 ns |  0.3983 ns |  0.4179 ns |  0.4001 ns |  0.69 |               ? |    0.01 |
+| Decimal_MinMax | 10.1899 ns | 1.8926 ns | 0.1037 ns | 0.0599 ns | 10.1088 ns | 10.3068 ns | 10.1541 ns | 17.46 |               ? |    0.09 |

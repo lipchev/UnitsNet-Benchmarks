@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>UnitsNet.Benchmark.Micro.Construction.UnitFromString-20210520-074102</title>
+<title>UnitsNet.Benchmark.Micro.Construction.UnitFromString-20210521-183652</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,23 +13,24 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
 Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
-  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-LPYFYS : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-VSPWKN : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
 </code></pre>
-<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  Categories=Micro,Construction,Unit,String  
+<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  IterationCount=3  
+LaunchCount=1  WarmupCount=3  Categories=Micro,Construction,Unit,String  
 </code></pre>
 
 <table>
 <thead><tr><th>                    Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>TryParseUnit(validString)</td><td>555.9 ns</td><td>10.58 ns</td><td>10.86 ns</td><td>2.63 ns</td><td>536.5 ns</td><td>571.8 ns</td><td>559.3 ns</td><td>0.99</td><td>Same</td><td>0.04</td><td>0.0637</td><td>-</td><td>-</td><td>418 B</td>
-</tr><tr><td>ParseUnit(validString)</td><td>559.8 ns</td><td>11.03 ns</td><td>13.13 ns</td><td>2.86 ns</td><td>538.8 ns</td><td>588.1 ns</td><td>556.4 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>0.0675</td><td>-</td><td>-</td><td>442 B</td>
-</tr><tr><td>UnitParser.TryParse(validString)</td><td>746.1 ns</td><td>14.46 ns</td><td>15.47 ns</td><td>3.65 ns</td><td>724.9 ns</td><td>771.5 ns</td><td>747.2 ns</td><td>1.33</td><td>Slower</td><td>0.05</td><td>0.0719</td><td>-</td><td>-</td><td>483 B</td>
-</tr><tr><td>UnitParser.Parse(validString)</td><td>755.7 ns</td><td>14.46 ns</td><td>19.30 ns</td><td>3.86 ns</td><td>717.9 ns</td><td>790.8 ns</td><td>751.9 ns</td><td>1.35</td><td>Slower</td><td>0.05</td><td>0.0757</td><td>-</td><td>-</td><td>507 B</td>
-</tr><tr><td>TryParseUnit(invalidUnit)</td><td>1,192.6 ns</td><td>23.02 ns</td><td>27.40 ns</td><td>5.98 ns</td><td>1,137.2 ns</td><td>1,251.5 ns</td><td>1,194.9 ns</td><td>2.13</td><td>Slower</td><td>0.07</td><td>0.1471</td><td>-</td><td>-</td><td>964 B</td>
+</thead><tbody><tr><td>TryParseUnit(validString)</td><td>486.4 ns</td><td>196.88 ns</td><td>10.79 ns</td><td>6.23 ns</td><td>479.3 ns</td><td>498.8 ns</td><td>481.1 ns</td><td>0.77</td><td>?</td><td>0.01</td><td>0.0637</td><td>-</td><td>-</td><td>418 B</td>
+</tr><tr><td>ParseUnit(validString)</td><td>632.4 ns</td><td>65.67 ns</td><td>3.60 ns</td><td>2.08 ns</td><td>628.4 ns</td><td>635.3 ns</td><td>633.5 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>0.0675</td><td>-</td><td>-</td><td>442 B</td>
+</tr><tr><td>UnitParser.Parse(validString)</td><td>825.5 ns</td><td>144.28 ns</td><td>7.91 ns</td><td>4.57 ns</td><td>816.9 ns</td><td>832.5 ns</td><td>827.2 ns</td><td>1.31</td><td>?</td><td>0.01</td><td>0.0757</td><td>-</td><td>-</td><td>507 B</td>
+</tr><tr><td>UnitParser.TryParse(validString)</td><td>837.6 ns</td><td>448.44 ns</td><td>24.58 ns</td><td>14.19 ns</td><td>819.7 ns</td><td>865.6 ns</td><td>827.4 ns</td><td>1.32</td><td>?</td><td>0.05</td><td>0.0719</td><td>-</td><td>-</td><td>483 B</td>
+</tr><tr><td>TryParseUnit(invalidUnit)</td><td>1,179.6 ns</td><td>2,219.10 ns</td><td>121.64 ns</td><td>70.23 ns</td><td>1,058.7 ns</td><td>1,302.0 ns</td><td>1,178.1 ns</td><td>1.87</td><td>?</td><td>0.19</td><td>0.1471</td><td>-</td><td>-</td><td>964 B</td>
 </tr></tbody></table>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>UnitsNet.Benchmark.Micro.Init.InitializationBenchmarks-20210520-073536</title>
+<title>UnitsNet.Benchmark.Micro.Init.InitializationBenchmarks-20210521-183333</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,20 +13,21 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1879 (1809/October2018Update/Redstone5)
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
 Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
-  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-JEKFIA : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-NKPUTO : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
 </code></pre>
-<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
+<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  IterationCount=3  
+LaunchCount=1  WarmupCount=3  
 </code></pre>
 
 <table>
-<thead><tr><th>              Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Median</th><th> Min</th><th> Max</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+<thead><tr><th>              Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>InitUnitAbbreviationsCache</td><td>2,750.0 &mu;s</td><td>51.64 &mu;s</td><td>55.26 &mu;s</td><td>13.02 &mu;s</td><td>2,737.5 &mu;s</td><td>2,663.3 &mu;s</td><td>2,872.3 &mu;s</td><td>246.0938</td><td>58.5938</td><td>-</td><td>1592.1 KB</td>
-</tr><tr><td>InitUnitConverter</td><td>600.1 &mu;s</td><td>25.23 &mu;s</td><td>73.19 &mu;s</td><td>7.43 &mu;s</td><td>571.0 &mu;s</td><td>496.5 &mu;s</td><td>794.6 &mu;s</td><td>-</td><td>-</td><td>-</td><td>718.66 KB</td>
+</thead><tbody><tr><td>InitUnitAbbreviationsCache</td><td>2,921.9 &mu;s</td><td>1,170.2 &mu;s</td><td>64.14 &mu;s</td><td>37.03 &mu;s</td><td>2,875.4 &mu;s</td><td>2,995.1 &mu;s</td><td>2,895.3 &mu;s</td><td>246.0938</td><td>58.5938</td><td>-</td><td>1592.1 KB</td>
+</tr><tr><td>InitUnitConverter</td><td>735.7 &mu;s</td><td>1,505.8 &mu;s</td><td>82.54 &mu;s</td><td>47.65 &mu;s</td><td>654.6 &mu;s</td><td>819.6 &mu;s</td><td>732.8 &mu;s</td><td>-</td><td>-</td><td>-</td><td>718.66 KB</td>
 </tr></tbody></table>
 </body>
 </html>
