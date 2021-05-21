@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621627453716,
+  "lastUpdate": 1621637408192,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals-report-full": [
@@ -348,6 +348,180 @@ window.BENCHMARK_DATA = {
             "value": 23.03157647450765,
             "unit": "ns",
             "range": "± 1.4163425065783155"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8",
+          "message": "Manual publish N1 (short)",
+          "timestamp": "2021-05-22T01:07:01+03:00",
+          "tree_id": "49ff670af70e4c4de72523822f7a08fb500e8b5e",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8"
+        },
+        "date": 1621637362118,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals(x: 1,234.56 m, y: 1,234.56 m)",
+            "value": 9.858142832914988,
+            "unit": "ns",
+            "range": "± 0.049169498792139395"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals(x: 1,234.56 cm, y: 1,234.56 cm)",
+            "value": 9.940385818481445,
+            "unit": "ns",
+            "range": "± 0.22688330165979803"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals(x: 1,234.56 m, y: 0 m)",
+            "value": 10.877300798892975,
+            "unit": "ns",
+            "range": "± 0.23780795913772826"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Relative(x: 1,234.56 m, y: 1,234.56 m)",
+            "value": 12.115578353404999,
+            "unit": "ns",
+            "range": "± 0.10286434811171413"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Relative(x: 1,234.56 cm, y: 1,234.56 cm)",
+            "value": 12.241792182127634,
+            "unit": "ns",
+            "range": "± 0.47959763735766947"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Relative(x: 1,234.56 m, y: 0 m)",
+            "value": 12.358527382214865,
+            "unit": "ns",
+            "range": "± 0.15855783754776534"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Absolute(x: 1,234.56 m, y: 1,234.56 m)",
+            "value": 13.520622253417969,
+            "unit": "ns",
+            "range": "± 0.40250372416130964"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Absolute(x: 1,234.56 m, y: 0 m)",
+            "value": 13.557708263397217,
+            "unit": "ns",
+            "range": "± 0.3290848266603391"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Absolute(x: 1,234.56 cm, y: 1,234.56 cm)",
+            "value": 13.710510730743408,
+            "unit": "ns",
+            "range": "± 0.10728383726321775"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.IQuantity_Equals(x: 1,234.56 cm, y: 1,234.56 cm)",
+            "value": 15.121722221374512,
+            "unit": "ns",
+            "range": "± 0.1474284890645596"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.IQuantity_Equals(x: 1,234.56 m, y: 1,234.56 m)",
+            "value": 15.297337373097738,
+            "unit": "ns",
+            "range": "± 0.337942977086343"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals(x: 1,234.56 cm, y: 0 km)",
+            "value": 16.542551914850872,
+            "unit": "ns",
+            "range": "± 0.47191337150653945"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals(x: 1,234.56 cm, y: 0 m)",
+            "value": 16.891515751679737,
+            "unit": "ns",
+            "range": "± 0.2158591718693692"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.IQuantity_Equals(x: 1,234.56 m, y: 0 m)",
+            "value": 17.00448195139567,
+            "unit": "ns",
+            "range": "± 0.5222793857300042"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.MinMax(x: 1,234.56 m, y: 1,234.56 m)",
+            "value": 19.68421737353007,
+            "unit": "ns",
+            "range": "± 0.3499440980967653"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.MinMax(x: 1,234.56 cm, y: 1,234.56 cm)",
+            "value": 19.8978324731191,
+            "unit": "ns",
+            "range": "± 0.18563547119912213"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.MinMax(x: 1,234.56 m, y: 0 m)",
+            "value": 19.94011451800664,
+            "unit": "ns",
+            "range": "± 0.27063390443299146"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Relative(x: 1,234.56 cm, y: 0 km)",
+            "value": 20.067642132441204,
+            "unit": "ns",
+            "range": "± 0.2793525296679761"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Relative(x: 1,234.56 cm, y: 0 m)",
+            "value": 20.57479719320933,
+            "unit": "ns",
+            "range": "± 0.20185718904845254"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Absolute(x: 1,234.56 cm, y: 0 km)",
+            "value": 21.782909830411274,
+            "unit": "ns",
+            "range": "± 0.24186229272233567"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.IQuantity_Equals(x: 1,234.56 cm, y: 0 m)",
+            "value": 22.211700677871704,
+            "unit": "ns",
+            "range": "± 0.13257480882011455"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.Equals_Absolute(x: 1,234.56 cm, y: 0 m)",
+            "value": 22.434643904368084,
+            "unit": "ns",
+            "range": "± 0.5191542793445957"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.IQuantity_Equals(x: 1,234.56 cm, y: 0 km)",
+            "value": 22.45212694009145,
+            "unit": "ns",
+            "range": "± 0.40275073909543824"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.MinMax(x: 1,234.56 cm, y: 0 km)",
+            "value": 24.30982490380605,
+            "unit": "ns",
+            "range": "± 0.4725119913056839"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Comparison.MinMaxEquals.MinMax(x: 1,234.56 cm, y: 0 m)",
+            "value": 24.655592441558838,
+            "unit": "ns",
+            "range": "± 0.7560406045077006"
           }
         ]
       }
