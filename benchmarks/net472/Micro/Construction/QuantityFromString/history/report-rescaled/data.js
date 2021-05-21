@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621625950575,
+  "lastUpdate": 1621635531059,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "UnitsNet.Benchmark.Micro.Construction.QuantityFromString-report-rescaled": [
@@ -144,6 +144,78 @@ window.BENCHMARK_DATA = {
             "value": 77056.77340263095,
             "unit": "ns",
             "range": "± 1857.4859388891307"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8",
+          "message": "Manual publish N1 (short)",
+          "timestamp": "2021-05-22T01:07:01+03:00",
+          "tree_id": "49ff670af70e4c4de72523822f7a08fb500e8b5e",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8"
+        },
+        "date": 1621635489490,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.Parse",
+            "value": 68274.40165828589,
+            "unit": "ns",
+            "range": "± 4514.743589465574"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.TryParse_Valid",
+            "value": 72258.09051318151,
+            "unit": "ns",
+            "range": "± 4158.691192432956"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.TryParse_InvalidNumber",
+            "value": 72652.65947654209,
+            "unit": "ns",
+            "range": "± 1900.832860093198"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.QuantityTryParse_InvalidNumber",
+            "value": 82261.35795093731,
+            "unit": "ns",
+            "range": "± 3751.7213949915426"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.Quantity_Parse",
+            "value": 83189.99419875623,
+            "unit": "ns",
+            "range": "± 571.465142025944"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.QuantityTryParse_InvalidUnit",
+            "value": 84464.6819714668,
+            "unit": "ns",
+            "range": "± 1440.7577823140678"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.TryParse_InvalidUnit",
+            "value": 87048.4979873795,
+            "unit": "ns",
+            "range": "± 605.4314946094105"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Micro.Construction.QuantityFromString.Quantity_TryParse",
+            "value": 88069.98996876556,
+            "unit": "ns",
+            "range": "± 2081.9374637348833"
           }
         ]
       }
