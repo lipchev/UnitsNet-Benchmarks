@@ -117,14 +117,14 @@ jobs:
         if: contains(matrix.scenario.Benchmark, 'Gradient')
         uses: actions/upload-artifact@v2
         with:
-          name: UnitsNet Gradient Benchmarks (${{ matrix.scenario.runtime }})
+          name: Gradient Benchmarks (${{ matrix.scenario.runtime }})
           path: UnitsNet\Artifacts\Benchmark\Gradient
           
       - name: Store baseline benchmark artifact
         if: matrix.scenario.scaled
         uses: actions/upload-artifact@v2
         with:
-          name: UnitsNet Baseline Benchmarks (${{ matrix.scenario.runtime }})
+          name: Baseline Benchmarks (${{ matrix.scenario.runtime }})
           path: UnitsNet\Artifacts\Benchmark\Baseline
           
   publish-results:
@@ -148,21 +148,21 @@ jobs:
         if: contains(matrix.scenario.Benchmark, 'Micro')
         uses: actions/download-artifact@v2
         with:
-          name: UnitsNet Micro Benchmarks (${{ matrix.scenario.runtime }})
+          name: Micro Benchmarks (${{ matrix.scenario.runtime }})
           path: .${{ matrix.scenario.runtime }}/Micro        
           
       - name: Download gradient benchmark artifact
         if: contains(matrix.scenario.Benchmark, 'Gradient')
         uses: actions/download-artifact@v2
         with:
-          name: UnitsNet Gradient Benchmarks (${{ matrix.scenario.runtime }})
+          name: Gradient Benchmarks (${{ matrix.scenario.runtime }})
           path: .${{ matrix.scenario.runtime }}/Gradient  
           
       - name: Download baseline benchmark artifact
         if: matrix.scenario.scaled
         uses: actions/download-artifact@v2
         with:
-          name: UnitsNet Baseline Benchmarks (${{ matrix.scenario.runtime }})
+          name: Baseline Benchmarks (${{ matrix.scenario.runtime }})
           path: .${{ matrix.scenario.runtime }}/Baseline  
           
       # Copy all of the results to the target framework folder and output the (json) list of updated json files
