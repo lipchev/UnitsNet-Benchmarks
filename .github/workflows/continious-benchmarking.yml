@@ -66,6 +66,7 @@ jobs:
           path: gh-pages
             
       - uses: actions/setup-dotnet@v1
+        if: matrix.scenario.dotnet != ''
         with: 
           dotnet-version: ${{ matrix.scenario.dotnet }}
       
