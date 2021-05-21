@@ -6,9 +6,7 @@ on:
       - "UnitsNet/*"
       - "UnitsNet.Benchmark/*"
       - ".github/workflows/**"
-      - ".github/actions/**"
-      
-
+   
 env: 
   EXECUTION_OPTIONS: --disableLogFile --job Short  # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
@@ -30,17 +28,17 @@ jobs:
            
   benchmark:
     needs: [ scenarios ]
-    if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
+    #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     strategy: 
       matrix: 
         scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:
-      - run: echo "Starting benchmarks for ${{ matrix.scenario.benchmark }} (tracked = ${{ matrix.scenario.tracked }}) running on ${{ matrix.scenario.runtime }} (${{ matrix.scenario.dotnet }})"
+      - run: echo "Starting benchmarks for ${{ matrix.scenario.benchmark }} (tracked = ${{ matrix.scenario.tracked }}) running on ${{ matrix.scenario.runtime }}"
       
       - run: echo "Benchmark options ${{ matrix.scenario.benchmark-options }}"
       
-      - name: "Baseline comparison ${{ matrix.scenario.tracked }}"
+      - name: "Baseline comparison ${{ matrix.scenario.scaled }}"
         if: matrix.scenario.scaled
         run: echo "Baseline options ${{ matrix.scenario.baseline-options }}"  
               
@@ -64,24 +62,37 @@ jobs:
         with:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
           path: gh-pages
-            
+       
+      # Inspired by: https://github.com/dotnet/performance/blob/3852b31dc84afef3c6b4fa52c1e440af5627b94a/scripts/benchmarks_ci.py#L200
+      # net472/net48 appear to be working fine on my machine even without the work-around but fail without it on the CI (same with the nightly BDN build)
+      - name: Configure target framework
+        id: target-frameworks
+        run: |
+          $Frameworks = if ('${{ matrix.scenario.runtime}}'.StartsWith('net4')){
+            '${{ matrix.scenario.framework }};${{ matrix.scenario.runtime}}'
+          } 
+          else {
+            ${{ matrix.scenario.framework }}
+          }
+          echo "::set-output name=frameworks::$Frameworks"
+        shell: pwsh           
       
       # executing the benchmark for the current framework(s)
       - name: Benchmark scenario execution (Micro)
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }};net472
+          PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Micro')
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
           
       - name: Benchmark execution (Gradient) 
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }};net472
+          PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Gradient')
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
                 
       - name: Benchmark scenario execution (Baseline)
         env:
-          PERFLAB_TARGET_FRAMEWORKS: ${{ matrix.scenario.framework }};net472
+          PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: matrix.scenario.scaled
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.baseline-options }} ${{ env.EXECUTION_OPTIONS }}
                 
@@ -97,8 +108,7 @@ jobs:
             dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f ${{ matrix.scenario.framework }} `
             --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.scenario.runtime }}\Baseline `
             --diff UnitsNet\Artifacts\Benchmark `
-            --stable ${{ env.STABLE_BASELINES }} `
-            --output UnitsNet\Artifacts\Benchmark          
+            --stable ${{ env.STABLE_BASELINES }}       
           }else{
             echo "No previous baseline found (using current results)"
             Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
@@ -178,9 +188,12 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: Automatic benchmark generation for ${{ github.sha }} (${{ matrix.scenario.runtime }})  
+          
+      - name: Result
+        run: echo ${{ steps.update-reports.outputs.reports }}
   
   get-reports:
-    if: true # break glass in case of emergency
+    if: false # break glass in case of emergency
     runs-on: ubuntu-latest
     outputs:
       reports: ${{ steps.path.outputs.reports }}        
@@ -202,15 +215,15 @@ jobs:
         run: echo ${{ steps.path.outputs.reports }}
         
   update-history:
-    needs: [ get-reports ]
-    #needs: [publish-results]
+    #needs: [ get-reports ]
+    needs: [publish-results]
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
       max-parallel: 1 # we cannot commit on the same branch in parallel (multiple points added on retry- can we 'force' this?)
       matrix: 
-        report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
-        #report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
+        #report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
+        report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
@@ -257,7 +270,4 @@ jobs:
           alert-comment-cc-users: '@lipchev'
         
       - name: Result
-        run: echo http://${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ env.BENCHMARK_DATA_FOLDER }}/${{ steps.history.outputs.target-path }}/
-     
-  
-     
+        run: echo http://${{ github.actor }}.github.io/${{ github.event.repository.name }}/${{ steps.history.outputs.target-path }}/
