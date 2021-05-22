@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621693918962,
+  "lastUpdate": 1621716248135,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "Micro.Construction.UnitFromString-report-rescaled": [
@@ -54,6 +54,60 @@ window.BENCHMARK_DATA = {
             "value": 1936.4192986340254,
             "unit": "ns",
             "range": "± 37.041536821161536"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "fb5ca97684f9b8e84bd4bfbdf83bd511eba73370",
+          "message": "Publish results (Test Run1)",
+          "timestamp": "2021-05-22T23:26:55+03:00",
+          "tree_id": "7d14fd79414a35099140e5b52af71b53051e0a4b",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/fb5ca97684f9b8e84bd4bfbdf83bd511eba73370"
+        },
+        "date": 1621716191693,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Micro.Construction.UnitFromString.ParseUnit",
+            "value": 775.9550736023557,
+            "unit": "ns",
+            "range": "± 12.263622812365057"
+          },
+          {
+            "name": "Micro.Construction.UnitFromString.TryParseUnit_Valid",
+            "value": 803.7742771388902,
+            "unit": "ns",
+            "range": "± 24.804966760278212"
+          },
+          {
+            "name": "Micro.Construction.UnitFromString.UnitParser_Parse",
+            "value": 901.6643855475261,
+            "unit": "ns",
+            "range": "± 16.751314703394588"
+          },
+          {
+            "name": "Micro.Construction.UnitFromString.UnitParser_TryParse",
+            "value": 902.9726596591252,
+            "unit": "ns",
+            "range": "± 14.779336693803796"
+          },
+          {
+            "name": "Micro.Construction.UnitFromString.TryParseUnit_Invalid",
+            "value": 1850.2435989889186,
+            "unit": "ns",
+            "range": "± 14.255444394344705"
           }
         ]
       }
