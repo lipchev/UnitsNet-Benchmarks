@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Baseline.BaselineBenchmarks-20210522-134349</title>
+<title>Baseline.BaselineBenchmarks-20210522-170046</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -14,10 +14,10 @@
 <body>
 <pre><code>
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
-Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
   [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-OTRDBN : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-YJREBG : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
 </code></pre>
 <pre><code>Runtime=.NET Core 5.0  Toolchain=netcoreapp50  
 </code></pre>
@@ -25,8 +25,8 @@ Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
 <table>
 <thead><tr><th>   Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th>
 </tr>
-</thead><tbody><tr><td>ToValue</td><td>12.63 ns</td><td>0.249 ns</td><td>0.287 ns</td><td>0.064 ns</td><td>12.13 ns</td><td>13.30 ns</td><td>12.62 ns</td><td>1.00</td><td>Base</td><td>0.00</td>
-</tr><tr><td>Decimal_ToValue</td><td>400.19 ns</td><td>7.898 ns</td><td>9.096 ns</td><td>2.034 ns</td><td>385.08 ns</td><td>416.18 ns</td><td>399.13 ns</td><td>31.70</td><td>Slower</td><td>0.90</td>
+</thead><tbody><tr><td>ToValue</td><td>10.67 ns</td><td>0.156 ns</td><td>0.146 ns</td><td>0.038 ns</td><td>10.44 ns</td><td>10.93 ns</td><td>10.68 ns</td><td>1.00</td><td>Base</td><td>0.00</td>
+</tr><tr><td>Decimal_ToValue</td><td>409.28 ns</td><td>4.534 ns</td><td>4.241 ns</td><td>1.095 ns</td><td>401.90 ns</td><td>415.53 ns</td><td>408.69 ns</td><td>38.35</td><td>Slower</td><td>0.72</td>
 </tr></tbody></table>
 </body>
 </html>
