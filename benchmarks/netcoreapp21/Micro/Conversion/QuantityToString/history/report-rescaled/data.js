@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621695136890,
+  "lastUpdate": 1621717571594,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "Micro.Conversion.QuantityToString-report-rescaled": [
@@ -132,6 +132,138 @@ window.BENCHMARK_DATA = {
             "value": 2424.6971905231476,
             "unit": "ns",
             "range": "± 110.57275604632666"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "fb5ca97684f9b8e84bd4bfbdf83bd511eba73370",
+          "message": "Publish results (Test Run1)",
+          "timestamp": "2021-05-22T23:26:55+03:00",
+          "tree_id": "7d14fd79414a35099140e5b52af71b53051e0a4b",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/fb5ca97684f9b8e84bd4bfbdf83bd511eba73370"
+        },
+        "date": 1621717515887,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: \"v\", culture: )",
+            "value": 429.9898782008439,
+            "unit": "ns",
+            "range": "± 5.358558241895148"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: \"v\", culture: )",
+            "value": 446.21585330230806,
+            "unit": "ns",
+            "range": "± 5.383654701324708"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: \"a\", culture: )",
+            "value": 774.5660780336815,
+            "unit": "ns",
+            "range": "± 15.20496138781711"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: \"a\", culture: )",
+            "value": 781.888716599742,
+            "unit": "ns",
+            "range": "± 10.66093539773371"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 ft, format: \"a2\", culture: )",
+            "value": 1055.8185622179615,
+            "unit": "ns",
+            "range": "± 13.784845042039366"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 ft, format: \"a2\", culture: )",
+            "value": 1064.2392986704522,
+            "unit": "ns",
+            "range": "± 18.820520720268338"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: \"f2\", culture: )",
+            "value": 1509.4051541272931,
+            "unit": "ns",
+            "range": "± 27.183783302903233"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: \"f2\", culture: )",
+            "value": 1534.2605556717929,
+            "unit": "ns",
+            "range": "± 18.035345107887654"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 8.1e-04 m, format: null, culture: )",
+            "value": 2072.7116929051867,
+            "unit": "ns",
+            "range": "± 23.64940310822454"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 8.1e-04 m, format: null, culture: )",
+            "value": 2078.501348417288,
+            "unit": "ns",
+            "range": "± 29.825542999400163"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 ft, format: null, culture: ru-RU)",
+            "value": 2082.5638829907543,
+            "unit": "ns",
+            "range": "± 31.16524312376083"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 ft, format: null, culture: ru-RU)",
+            "value": 2096.394129049449,
+            "unit": "ns",
+            "range": "± 36.00713364462706"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 m, format: null, culture: )",
+            "value": 2126.8317418998486,
+            "unit": "ns",
+            "range": "± 32.76092822775184"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 m, format: null, culture: )",
+            "value": 2154.488225333117,
+            "unit": "ns",
+            "range": "± 28.035380107285167"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 1,234.56 ft, format: null, culture: )",
+            "value": 2223.98293090782,
+            "unit": "ns",
+            "range": "± 24.867124315254994"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 1,234.56 ft, format: null, culture: )",
+            "value": 2264.4614870039186,
+            "unit": "ns",
+            "range": "± 18.52977946658781"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.ToString_(quantity: 8.1e-04 m, format: \"s4\", culture: )",
+            "value": 2317.699984690316,
+            "unit": "ns",
+            "range": "± 44.605427771806276"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToString.IQuantity_ToString(quantity: 8.1e-04 m, format: \"s4\", culture: )",
+            "value": 2384.279826883987,
+            "unit": "ns",
+            "range": "± 42.7377201390932"
           }
         ]
       }
