@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Micro.Init.InitializationBenchmarks-20210522-125834</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-QHBJZE : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET 4.7.2  Toolchain=net472  
+</code></pre>
+
+<table>
+<thead><tr><th>              Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>InitUnitAbbreviationsCache</td><td>3,059.0 &mu;s</td><td>59.86 &mu;s</td><td>61.47 &mu;s</td><td>14.91 &mu;s</td><td>2,955.6 &mu;s</td><td>3,155.4 &mu;s</td><td>3,070.4 &mu;s</td><td>253.9063</td><td>125.0000</td><td>-</td><td>1638.61 KB</td>
+</tr><tr><td>InitUnitConverter</td><td>685.7 &mu;s</td><td>19.98 &mu;s</td><td>57.34 &mu;s</td><td>5.88 &mu;s</td><td>564.0 &mu;s</td><td>827.9 &mu;s</td><td>681.8 &mu;s</td><td>-</td><td>-</td><td>-</td><td>720.88 KB</td>
+</tr></tbody></table>
+</body>
+</html>
