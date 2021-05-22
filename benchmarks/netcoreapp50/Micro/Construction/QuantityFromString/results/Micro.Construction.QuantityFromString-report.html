@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Micro.Construction.QuantityFromString-20210522-112312</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-DLCWKC : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET Core 5.0  Toolchain=netcoreapp50  Categories=Micro,Construction,Quantity,String  
+</code></pre>
+
+<table>
+<thead><tr><th>                    Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>TryParse(validString)</td><td>54.46 &mu;s</td><td>1.035 &mu;s</td><td>0.968 &mu;s</td><td>0.250 &mu;s</td><td>52.68 &mu;s</td><td>55.95 &mu;s</td><td>54.46 &mu;s</td><td>0.98</td><td>Same</td><td>0.04</td><td>1.7469</td><td>-</td><td>-</td><td>32.32 KB</td>
+</tr><tr><td>Parse(validString)</td><td>54.98 &mu;s</td><td>1.089 &mu;s</td><td>1.415 &mu;s</td><td>0.289 &mu;s</td><td>52.56 &mu;s</td><td>58.04 &mu;s</td><td>54.97 &mu;s</td><td>1.00</td><td>Base</td><td>0.00</td><td>1.7469</td><td>-</td><td>-</td><td>32.34 KB</td>
+</tr><tr><td>TryParse(invalidNumber)</td><td>60.17 &mu;s</td><td>0.796 &mu;s</td><td>0.706 &mu;s</td><td>0.189 &mu;s</td><td>58.86 &mu;s</td><td>61.41 &mu;s</td><td>60.23 &mu;s</td><td>1.09</td><td>Slower</td><td>0.03</td><td>1.6637</td><td>-</td><td>-</td><td>31.93 KB</td>
+</tr><tr><td>Quantity.TryParse(invalidNumber)</td><td>63.26 &mu;s</td><td>1.255 &mu;s</td><td>1.541 &mu;s</td><td>0.329 &mu;s</td><td>60.34 &mu;s</td><td>66.53 &mu;s</td><td>63.17 &mu;s</td><td>1.15</td><td>Slower</td><td>0.04</td><td>1.6637</td><td>-</td><td>-</td><td>31.93 KB</td>
+</tr><tr><td>TryParse(invalidUnit)</td><td>65.60 &mu;s</td><td>1.311 &mu;s</td><td>1.658 &mu;s</td><td>0.346 &mu;s</td><td>61.64 &mu;s</td><td>68.42 &mu;s</td><td>65.69 &mu;s</td><td>1.19</td><td>Slower</td><td>0.05</td><td>1.6822</td><td>-</td><td>-</td><td>31.78 KB</td>
+</tr><tr><td>Quantity.TryParse(validString)</td><td>66.36 &mu;s</td><td>1.272 &mu;s</td><td>1.250 &mu;s</td><td>0.312 &mu;s</td><td>63.60 &mu;s</td><td>67.98 &mu;s</td><td>66.77 &mu;s</td><td>1.20</td><td>Slower</td><td>0.03</td><td>1.8088</td><td>-</td><td>-</td><td>35.36 KB</td>
+</tr><tr><td>Quantity.Parse(validString)</td><td>68.22 &mu;s</td><td>1.346 &mu;s</td><td>1.321 &mu;s</td><td>0.330 &mu;s</td><td>66.24 &mu;s</td><td>69.96 &mu;s</td><td>67.86 &mu;s</td><td>1.24</td><td>Slower</td><td>0.05</td><td>1.8303</td><td>0.1077</td><td>-</td><td>35.36 KB</td>
+</tr><tr><td>Quantity.TryParse(invalidUnit)</td><td>68.58 &mu;s</td><td>1.102 &mu;s</td><td>0.977 &mu;s</td><td>0.261 &mu;s</td><td>67.09 &mu;s</td><td>70.20 &mu;s</td><td>68.93 &mu;s</td><td>1.24</td><td>Slower</td><td>0.04</td><td>1.6822</td><td>-</td><td>-</td><td>31.78 KB</td>
+</tr></tbody></table>
+</body>
+</html>
