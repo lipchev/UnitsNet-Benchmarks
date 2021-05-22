@@ -15,7 +15,7 @@ env:
   STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:  
 
-  scenarios:
+  scenarios: # loads the strategy inputs (i.e. the benchmark-scenarios.json)
     runs-on: ubuntu-latest
     outputs:
       json: ${{ steps.load-matrix.outputs.json }}
@@ -25,9 +25,8 @@ jobs:
         run: |
           SCENARIOS=$(echo $(cat .github/workflows/benchmark-scenarios.json))
           echo "::set-output name=json::$SCENARIOS"
-                   
-           
-  benchmark:
+                              
+  benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
     needs: [ scenarios ]
     # if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
@@ -115,7 +114,7 @@ jobs:
             echo "No previous baseline found (using current results)"
             Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | 
             % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
-            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\*\Baseline *-report-full.json -Recurse | 
+            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\Baseline *-report-full.json -Recurse | 
             % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-chart-scale.json") }
           }      
                 
@@ -141,10 +140,10 @@ jobs:
           name: Baseline Benchmarks (${{ matrix.scenario.runtime }})
           path: UnitsNet\Artifacts\Benchmark\Baseline
           
-  publish-results:
+  publish-results: # commits all artifacts for a given scenario to the benchmark branch, returning the list of created/updated reports (max-parallel: 1) 
     needs: [benchmark, scenarios]
     runs-on: ubuntu-latest
-    outputs:
+    outputs: # the list of reports that were created/modified
       reports: ${{ steps.update-reports.outputs.json }} 
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
@@ -183,7 +182,7 @@ jobs:
       - name: Update benchmark reports
         id: update-reports
         run: |
-          $Reports = git diff --name-only '*report*.json' | ConvertTo-Json -Compress
+          $Reports = (git status -s *report*.json).Substring(3) | ConvertTo-Json -Compress
           echo "::set-output name=json::$Reports"
         shell: pwsh
       
@@ -196,7 +195,7 @@ jobs:
       - name: Result
         run: echo ${{ steps.update-reports.outputs.json }}
   
-  get-reports:
+  get-reports: # get all reports currently present on the benchmark branch (obsolete)
     if: false # break glass in case of emergency
     runs-on: ubuntu-latest
     outputs:
@@ -209,7 +208,6 @@ jobs:
           
       - name: Result path configuration
         id: path
-        # working-directory: ${{ env.BENCHMARK_DATA_FOLDER }}
         run: |
           $Reports = (Get-ChildItem -Filter *report*.json -Recurse | Resolve-Path -Relative).replace('./', '') | ConvertTo-Json -Compress
           echo "::set-output name=json::$Reports"
@@ -218,7 +216,7 @@ jobs:
       - name: Result
         run: echo ${{ steps.path.outputs.json }}
         
-  update-history:
+  update-history: # create/append the historic data plots for each report (added/modified)
     #needs: [ get-reports ]
     needs: [publish-results]
     runs-on: ubuntu-latest
