@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Micro.Conversion.QuantityToValue-20210522-132733</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-VJWDWC : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
+</code></pre>
+
+<table>
+<thead><tr><th>                          Method</th><th>                        Categories</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>Length&lt;BaseUnit&gt;.As(derivedUnit)</td><td>Struct,Unit,Value,Micro,Conversion</td><td>12.22 ns</td><td>0.241 ns</td><td>0.322 ns</td><td>0.064 ns</td><td>11.70 ns</td><td>13.01 ns</td><td>12.18 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Length&lt;DerivedUnit&gt;.As(derivedUnit)</td><td>Struct,Unit,Value,Micro,Conversion</td><td>12.27 ns</td><td>0.245 ns</td><td>0.478 ns</td><td>0.070 ns</td><td>11.51 ns</td><td>13.32 ns</td><td>12.23 ns</td><td>1.02</td><td>Same</td><td>0.05</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ILength&lt;BaseUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>17.37 ns</td><td>0.337 ns</td><td>0.450 ns</td><td>0.090 ns</td><td>16.62 ns</td><td>18.28 ns</td><td>17.38 ns</td><td>1.42</td><td>Slower</td><td>0.06</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ILength&lt;DerivedUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>17.42 ns</td><td>0.341 ns</td><td>0.443 ns</td><td>0.090 ns</td><td>16.84 ns</td><td>18.53 ns</td><td>17.22 ns</td><td>1.43</td><td>Slower</td><td>0.05</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>IQuantity&lt;BaseUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>76.80 ns</td><td>1.529 ns</td><td>1.820 ns</td><td>0.397 ns</td><td>74.59 ns</td><td>80.80 ns</td><td>76.57 ns</td><td>6.30</td><td>Slower</td><td>0.24</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.As(baseUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>76.96 ns</td><td>1.538 ns</td><td>2.653 ns</td><td>0.430 ns</td><td>72.57 ns</td><td>81.55 ns</td><td>76.67 ns</td><td>6.34</td><td>Slower</td><td>0.21</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.As(derivedUnit)</td><td>Interface,Unit,Value,Micro,Conversion</td><td>98.13 ns</td><td>1.923 ns</td><td>2.137 ns</td><td>0.490 ns</td><td>94.15 ns</td><td>101.68 ns</td><td>98.14 ns</td><td>8.04</td><td>Slower</td><td>0.19</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Length&lt;BaseUnit&gt;.As(untSystem)</td><td>Struct,UnitSystem,Value,Micro,Conversion</td><td>508.44 ns</td><td>7.829 ns</td><td>6.940 ns</td><td>1.855 ns</td><td>497.86 ns</td><td>519.65 ns</td><td>507.32 ns</td><td>41.47</td><td>Slower</td><td>1.42</td><td>0.0288</td><td>-</td><td>-</td><td>192 B</td>
+</tr><tr><td>Length&lt;DerivedUnit&gt;.As(untSystem)</td><td>Struct,UnitSystem,Value,Micro,Conversion</td><td>521.52 ns</td><td>10.190 ns</td><td>9.034 ns</td><td>2.414 ns</td><td>506.90 ns</td><td>542.60 ns</td><td>520.52 ns</td><td>42.53</td><td>Slower</td><td>1.34</td><td>0.0288</td><td>-</td><td>-</td><td>192 B</td>
+</tr></tbody></table>
+</body>
+</html>

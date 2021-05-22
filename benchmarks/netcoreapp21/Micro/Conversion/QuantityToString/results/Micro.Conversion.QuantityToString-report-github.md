@@ -1,0 +1,31 @@
+``` ini
+
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-HRJSBZ : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+
+Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
+
+```
+|             Method |                        Categories |    quantity | format | culture |       Mean |    Error |    StdDev |   StdErr |        Min |        Max |     Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------- |---------------------------------- |------------ |------- |-------- |-----------:|---------:|----------:|---------:|-----------:|-----------:|-----------:|-------:|------:|------:|----------:|
+| IQuantity_ToString | Interface,Micro,Conversion,String |  1,234.56 m |      v |         |   419.1 ns |  8.10 ns |   7.96 ns |  1.99 ns |   405.4 ns |   430.8 ns |   420.8 ns | 0.0296 |     - |     - |     192 B |
+|           ToString |    Struct,Micro,Conversion,String |  1,234.56 m |      v |         |   441.2 ns |  8.89 ns |  15.81 ns |  2.50 ns |   409.9 ns |   473.2 ns |   441.5 ns | 0.0296 |     - |     - |     192 B |
+|           ToString |    Struct,Micro,Conversion,String |  1,234.56 m |      a |         |   804.2 ns | 15.87 ns |  16.98 ns |  4.00 ns |   776.4 ns |   839.8 ns |   803.4 ns | 0.1011 |     - |     - |     648 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String |  1,234.56 m |      a |         |   832.6 ns | 16.37 ns |  21.28 ns |  4.34 ns |   799.4 ns |   875.9 ns |   828.6 ns | 0.1011 |     - |     - |     648 B |
+|           ToString |    Struct,Micro,Conversion,String | 1,234.56 ft |     a2 |         | 1,065.0 ns | 21.11 ns |  26.70 ns |  5.57 ns | 1,024.9 ns | 1,127.7 ns | 1,065.8 ns | 0.1087 |     - |     - |     712 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String | 1,234.56 ft |     a2 |         | 1,107.5 ns | 22.19 ns |  30.37 ns |  5.96 ns | 1,058.8 ns | 1,167.3 ns | 1,105.2 ns | 0.1087 |     - |     - |     712 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String |  1,234.56 m |     f2 |         | 1,501.7 ns | 30.00 ns |  40.04 ns |  8.01 ns | 1,429.5 ns | 1,590.8 ns | 1,491.9 ns | 0.1183 |     - |     - |     768 B |
+|           ToString |    Struct,Micro,Conversion,String |  1,234.56 m |     f2 |         | 1,578.7 ns | 30.60 ns |  41.89 ns |  8.22 ns | 1,509.2 ns | 1,654.9 ns | 1,573.3 ns | 0.1183 |     - |     - |     768 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String |   8.1e-04 m |      ? |         | 2,050.0 ns | 37.71 ns |  56.44 ns | 10.30 ns | 1,967.6 ns | 2,156.4 ns | 2,042.6 ns | 0.1450 |     - |     - |     976 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String | 1,234.56 ft |      ? |   ru-RU | 2,102.9 ns | 39.15 ns |  34.71 ns |  9.28 ns | 2,039.6 ns | 2,177.9 ns | 2,102.4 ns | 0.1450 |     - |     - |     976 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String |  1,234.56 m |      ? |         | 2,110.9 ns | 41.14 ns |  59.00 ns | 11.15 ns | 2,013.5 ns | 2,235.2 ns | 2,118.2 ns | 0.1450 |     - |     - |     968 B |
+|           ToString |    Struct,Micro,Conversion,String |   8.1e-04 m |      ? |         | 2,111.8 ns | 41.04 ns |  48.86 ns | 10.66 ns | 2,016.1 ns | 2,199.5 ns | 2,099.9 ns | 0.1450 |     - |     - |     976 B |
+|           ToString |    Struct,Micro,Conversion,String | 1,234.56 ft |      ? |   ru-RU | 2,167.3 ns | 42.51 ns |  62.32 ns | 11.57 ns | 2,079.6 ns | 2,298.3 ns | 2,150.2 ns | 0.1450 |     - |     - |     976 B |
+|           ToString |    Struct,Micro,Conversion,String |  1,234.56 m |      ? |         | 2,211.5 ns | 37.87 ns |  33.57 ns |  8.97 ns | 2,146.6 ns | 2,281.2 ns | 2,204.3 ns | 0.1450 |     - |     - |     968 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String | 1,234.56 ft |      ? |         | 2,226.3 ns | 39.02 ns |  52.09 ns | 10.42 ns | 2,147.7 ns | 2,330.6 ns | 2,206.8 ns | 0.1488 |     - |     - |     984 B |
+| IQuantity_ToString | Interface,Micro,Conversion,String |   8.1e-04 m |     s4 |         | 2,328.5 ns | 44.80 ns |  53.33 ns | 11.64 ns | 2,232.5 ns | 2,434.5 ns | 2,337.6 ns | 0.1526 |     - |     - |    1024 B |
+|           ToString |    Struct,Micro,Conversion,String | 1,234.56 ft |      ? |         | 2,383.6 ns | 42.88 ns |  51.04 ns | 11.14 ns | 2,305.0 ns | 2,476.1 ns | 2,380.8 ns | 0.1488 |     - |     - |     984 B |
+|           ToString |    Struct,Micro,Conversion,String |   8.1e-04 m |     s4 |         | 2,424.7 ns | 47.71 ns | 110.57 ns | 13.82 ns | 2,247.3 ns | 2,706.6 ns | 2,415.4 ns | 0.1526 |     - |     - |    1024 B |

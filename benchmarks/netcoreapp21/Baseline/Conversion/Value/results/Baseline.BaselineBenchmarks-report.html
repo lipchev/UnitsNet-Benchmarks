@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Baseline.BaselineBenchmarks-20210522-134430</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-HHFIZD : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
+</code></pre>
+
+<table>
+<thead><tr><th>   Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th>
+</tr>
+</thead><tbody><tr><td>ToValue</td><td>8.914 ns</td><td>0.1628 ns</td><td>0.1523 ns</td><td>0.0393 ns</td><td>8.682 ns</td><td>9.142 ns</td><td>8.887 ns</td><td>1.00</td><td>Base</td><td>0.00</td>
+</tr><tr><td>Decimal_ToValue</td><td>851.527 ns</td><td>16.3400 ns</td><td>22.9065 ns</td><td>4.4084 ns</td><td>815.762 ns</td><td>905.894 ns</td><td>844.999 ns</td><td>95.89</td><td>Slower</td><td>3.32</td>
+</tr></tbody></table>
+</body>
+</html>
