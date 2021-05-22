@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621695574627,
+  "lastUpdate": 1621718069644,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "Micro.Construction.QuantityFromString-report-rescaled": [
@@ -72,6 +72,78 @@ window.BENCHMARK_DATA = {
             "value": 80810.34151536868,
             "unit": "ns",
             "range": "± 2193.680175739973"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "fb5ca97684f9b8e84bd4bfbdf83bd511eba73370",
+          "message": "Publish results (Test Run1)",
+          "timestamp": "2021-05-22T23:26:55+03:00",
+          "tree_id": "7d14fd79414a35099140e5b52af71b53051e0a4b",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/fb5ca97684f9b8e84bd4bfbdf83bd511eba73370"
+        },
+        "date": 1621718012800,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Micro.Construction.QuantityFromString.TryParse_Valid",
+            "value": 73285.91311525223,
+            "unit": "ns",
+            "range": "± 1395.8664020219762"
+          },
+          {
+            "name": "Micro.Construction.QuantityFromString.Parse",
+            "value": 74777.19973525943,
+            "unit": "ns",
+            "range": "± 1380.8330861603865"
+          },
+          {
+            "name": "Micro.Construction.QuantityFromString.TryParse_InvalidNumber",
+            "value": 77349.21066584057,
+            "unit": "ns",
+            "range": "± 940.7273244715069"
+          },
+          {
+            "name": "Micro.Construction.QuantityFromString.QuantityTryParse_InvalidNumber",
+            "value": 81848.18681717008,
+            "unit": "ns",
+            "range": "± 1000.1067778503668"
+          },
+          {
+            "name": "Micro.Construction.QuantityFromString.Quantity_Parse",
+            "value": 85862.48205356697,
+            "unit": "ns",
+            "range": "± 1976.0301805037009"
+          },
+          {
+            "name": "Micro.Construction.QuantityFromString.Quantity_TryParse",
+            "value": 86489.67216376693,
+            "unit": "ns",
+            "range": "± 1613.8999543111545"
+          },
+          {
+            "name": "Micro.Construction.QuantityFromString.TryParse_InvalidUnit",
+            "value": 89286.63112131703,
+            "unit": "ns",
+            "range": "± 833.7993297133306"
+          },
+          {
+            "name": "Micro.Construction.QuantityFromString.QuantityTryParse_InvalidUnit",
+            "value": 90267.80588988769,
+            "unit": "ns",
+            "range": "± 2063.8268366231487"
           }
         ]
       }
