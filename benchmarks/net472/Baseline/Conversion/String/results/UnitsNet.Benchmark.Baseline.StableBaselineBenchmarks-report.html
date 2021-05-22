@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks-20210521-215016</title>
+<title>UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks-20210522-001606</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -14,20 +14,19 @@
 <body>
 <pre><code>
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
-Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
   [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-BILBZT : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+  Job-HMJDNO : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
 </code></pre>
-<pre><code>Runtime=.NET 4.7.2  Toolchain=net472  IterationCount=3  
-LaunchCount=1  WarmupCount=3  
+<pre><code>Runtime=.NET 4.7.2  Toolchain=net472  
 </code></pre>
 
 <table>
 <thead><tr><th>    Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th>
 </tr>
-</thead><tbody><tr><td>ToString</td><td>622.7 ns</td><td>80.03 ns</td><td>4.39 ns</td><td>2.53 ns</td><td>619.7 ns</td><td>627.7 ns</td><td>620.7 ns</td><td>1.00</td><td>Base</td>
-</tr><tr><td>Decimal_ToString</td><td>142.7 ns</td><td>57.59 ns</td><td>3.16 ns</td><td>1.82 ns</td><td>139.2 ns</td><td>145.3 ns</td><td>143.5 ns</td><td>0.23</td><td>?</td>
+</thead><tbody><tr><td>ToString</td><td>715.4 ns</td><td>11.37 ns</td><td>10.64 ns</td><td>2.75 ns</td><td>693.5 ns</td><td>728.5 ns</td><td>717.1 ns</td><td>1.00</td><td>Base</td>
+</tr><tr><td>Decimal_ToString</td><td>139.9 ns</td><td>2.90 ns</td><td>2.97 ns</td><td>0.72 ns</td><td>134.5 ns</td><td>146.5 ns</td><td>140.0 ns</td><td>0.20</td><td>Faster</td>
 </tr></tbody></table>
 </body>
 </html>
