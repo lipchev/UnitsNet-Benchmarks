@@ -2,7 +2,7 @@
 SET scriptdir=%~dp0
 SET projectdir=%scriptdir%..\..
 SET exportdir=%projectdir%\Artifacts\Benchmark\Baseline
-SET filter=BaselineBenchmarks
+SET filter=Baseline
 SET build-plots=results\BuildPlots.R
 SET generate-plots=results\GeneratePlots.R
 
