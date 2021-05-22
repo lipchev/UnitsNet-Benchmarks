@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
+using UnitsNet;
+using UnitsNet.Benchmark;
 using UnitsNet.Units;
 
-namespace UnitsNet.Benchmark.Gradient
+namespace Gradient
 {
     /// <summary>
     ///     Can be used to compare the performance gradient for the most common methods when used with a quantity/unit that is

@@ -1,5 +1,4 @@
-﻿using BenchmarkDotNet.Order;
-using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Running;
 
 namespace UnitsNet.Benchmark
 {

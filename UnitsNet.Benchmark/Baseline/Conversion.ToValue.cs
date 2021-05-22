@@ -2,10 +2,11 @@
 // Copyright 2013 Andreas Gullberg Larsen (andreas.larsen84@gmail.com). Maintained at https://github.com/angularsen/UnitsNet.
 
 using BenchmarkDotNet.Attributes;
+using UnitsNet.Benchmark;
 
-namespace UnitsNet.Benchmark.Baseline
+namespace Baseline
 {
-    public partial class StableBaselineBenchmarks
+    public partial class BaselineBenchmarks
     {
         [Benchmark(Baseline = true, OperationsPerInvoke = NbIterations)]
         [BenchmarkCategory(BenchmarkCategories.Conversion, BenchmarkCategories.Value)]

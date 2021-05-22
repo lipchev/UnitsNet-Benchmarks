@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Order;
+using UnitsNet;
+using UnitsNet.Benchmark;
 using UnitsNet.Units;
 
-namespace UnitsNet.Benchmark.Micro.Comparison
+namespace Micro.Comparison
 {
     [MemoryDiagnoser]
     [CategoriesColumn]

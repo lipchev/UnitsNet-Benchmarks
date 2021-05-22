@@ -2,7 +2,7 @@
 SET scriptdir=%~dp0
 SET projectdir=%scriptdir%..\..
 SET exportdir=%projectdir%\Artifacts\Benchmark\Micro
-SET filter=UnitsNet.Benchmark.Micro
+SET filter=Micro
 SET build-plots=results\BuildPlots.R
 SET generate-plots=results\GeneratePlots.R
 

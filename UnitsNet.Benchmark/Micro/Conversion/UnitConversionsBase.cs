@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Order;
+using UnitsNet;
+using UnitsNet.Benchmark;
 using UnitsNet.Units;
 
-namespace UnitsNet.Benchmark.Micro.Conversion
+namespace Micro.Conversion
 {
     public abstract class UnitConversionsBase
     {

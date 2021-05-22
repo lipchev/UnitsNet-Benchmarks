@@ -3,10 +3,11 @@
 
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
+using UnitsNet.Benchmark;
 
-namespace UnitsNet.Benchmark.Baseline
+namespace Baseline
 {
-    public partial class StableBaselineBenchmarks
+    public partial class BaselineBenchmarks
     {
         [Benchmark(Baseline = true)]
         [ArgumentsSource(nameof(GetStrings))]

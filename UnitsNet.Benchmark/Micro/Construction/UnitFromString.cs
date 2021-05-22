@@ -7,9 +7,11 @@ using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Order;
+using UnitsNet;
+using UnitsNet.Benchmark;
 using UnitsNet.Units;
 
-namespace UnitsNet.Benchmark.Micro.Construction
+namespace Micro.Construction
 {
     [MemoryDiagnoser]
     [CategoriesColumn]

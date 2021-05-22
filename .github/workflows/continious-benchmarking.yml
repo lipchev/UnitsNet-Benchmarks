@@ -11,7 +11,7 @@ env:
   EXECUTION_OPTIONS: --disableLogFile  # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
-  STABLE_BASELINES: "UnitsNet.Benchmark.Baseline" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
+  STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:  
 
   scenarios:
@@ -95,7 +95,8 @@ jobs:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: matrix.scenario.scaled
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-stable-baseline-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.baseline-options }} ${{ env.EXECUTION_OPTIONS }}
-                
+      
+      # '*-report-rescaled.json' is generated from gh-pages\Baseline\*\results\'*-chart-scale.json' and UnitsNet\Artifacts\Benchmark\*\results\'*-report-full.json'
       - name: Stable baseline comparison
         if: matrix.scenario.scaled
         env:
@@ -104,15 +105,17 @@ jobs:
           if (Test-Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.scenario.runtime }}\Baseline ) {
             echo "Running the ResultRescaler using the original baseline"
             Get-ChildItem -Path .\gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.scenario.runtime }}\Baseline *-report-scale.json -Recurse |
-            % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-report-scale.json", "-report-full.json") }
+            % {Copy-Item -Force -Path $_.FullName -Destination $_.FullName.Replace("-chart-scale.json", "-report-full.json") }
             dotnet run --project 'performance/src/tools/ResultRescaler' -c Release -f ${{ matrix.scenario.framework }} `
             --base gh-pages\${{ env.BENCHMARK_DATA_FOLDER }}\${{ matrix.scenario.runtime }}\Baseline `
             --diff UnitsNet\Artifacts\Benchmark `
             --stable ${{ env.STABLE_BASELINES }}       
-          }else{
+          }else{ 
             echo "No previous baseline found (using current results)"
-            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
-            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\*\Baseline *-report-full.json -Recurse | % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-scale.json") }
+            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\ *-report-full.json -Recurse | 
+            % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-report-rescaled.json") }
+            Get-ChildItem -Path .\UnitsNet\Artifacts\Benchmark\*\Baseline *-report-full.json -Recurse | 
+            % {Copy-Item -Path $_.FullName -Destination $_.FullName.Replace("-report-full.json", "-chart-scale.json") }
           }      
                 
       # saving the current artifact (downloadable until the expiration date of this action)        
@@ -179,7 +182,7 @@ jobs:
       - name: Update benchmark reports
         id: update-reports
         run: |
-          $Reports = git diff --name-only '*.json' | ConvertTo-Json -Compress
+          $Reports = git diff --name-only '*report*.json' | ConvertTo-Json -Compress
           echo "::set-output name=json::$Reports"
         shell: pwsh
       

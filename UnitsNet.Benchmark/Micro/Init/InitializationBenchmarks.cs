@@ -1,6 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
+using UnitsNet;
+using UnitsNet.Benchmark;
 
-namespace UnitsNet.Benchmark.Micro.Init
+namespace Micro.Init
 {
     [MemoryDiagnoser]
     [MinColumn]

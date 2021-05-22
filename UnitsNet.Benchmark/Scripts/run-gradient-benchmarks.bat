@@ -2,7 +2,7 @@
 SET scriptdir=%~dp0
 SET projectdir=%scriptdir%..\..
 SET exportdir=%projectdir%\Artifacts\Benchmark\Gradient
-SET filter=UnitsNet.Benchmark.Gradient
+SET filter=Gradient
 SET build-plots=results\BuildPlots.R
 SET generate-plots=results\GeneratePlots.R
 

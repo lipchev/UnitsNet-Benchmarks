@@ -3,9 +3,10 @@
 
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
+using UnitsNet.Benchmark;
 using UnitsNet.Units;
 
-namespace UnitsNet.Benchmark.Micro.Conversion
+namespace Micro.Conversion
 {
     [MemoryDiagnoser]
     [CategoriesColumn]

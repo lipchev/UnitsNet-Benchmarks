@@ -4,8 +4,9 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Engines;
+using UnitsNet.Benchmark;
 
-namespace UnitsNet.Benchmark.Baseline
+namespace Baseline
 {
     [MinColumn]
     [MaxColumn]
@@ -14,7 +15,7 @@ namespace UnitsNet.Benchmark.Baseline
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [BenchmarkCategory(BenchmarkCategories.Baseline)]
     // [Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
-    public partial class StableBaselineBenchmarks
+    public partial class BaselineBenchmarks
     {
         private const double DoubleValue = 1234.56789; // 0.0004;
         private const decimal DecimalValue = 1234.56789m; // 0.0004m;

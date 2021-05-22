@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
+using UnitsNet;
+using UnitsNet.Benchmark;
 
-namespace UnitsNet.Benchmark.Micro.Conversion
+namespace Micro.Conversion
 {
     [MemoryDiagnoser]
     [CategoriesColumn]
