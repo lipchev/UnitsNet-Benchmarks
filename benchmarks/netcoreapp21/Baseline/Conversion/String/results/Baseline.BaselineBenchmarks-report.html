@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Baseline.BaselineBenchmarks-20210522-115912</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-ZBDOVC : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
+</code></pre>
+
+<table>
+<thead><tr><th>    Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th>
+</tr>
+</thead><tbody><tr><td>ToString</td><td>288.3 ns</td><td>5.43 ns</td><td>5.08 ns</td><td>1.31 ns</td><td>280.4 ns</td><td>296.5 ns</td><td>288.3 ns</td><td>1.00</td><td>Base</td>
+</tr><tr><td>Decimal_ToString</td><td>145.9 ns</td><td>2.17 ns</td><td>2.03 ns</td><td>0.52 ns</td><td>143.4 ns</td><td>148.9 ns</td><td>145.2 ns</td><td>0.51</td><td>Faster</td>
+</tr></tbody></table>
+</body>
+</html>
