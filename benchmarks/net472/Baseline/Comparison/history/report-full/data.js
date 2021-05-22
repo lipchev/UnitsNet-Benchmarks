@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621694746513,
+  "lastUpdate": 1621717150962,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "Baseline.BaselineBenchmarks-report-full": [
@@ -48,6 +48,54 @@ window.BENCHMARK_DATA = {
             "value": 17.943109784807472,
             "unit": "ns",
             "range": "± 0.19189740588844234"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "fb5ca97684f9b8e84bd4bfbdf83bd511eba73370",
+          "message": "Publish results (Test Run1)",
+          "timestamp": "2021-05-22T23:26:55+03:00",
+          "tree_id": "7d14fd79414a35099140e5b52af71b53051e0a4b",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/fb5ca97684f9b8e84bd4bfbdf83bd511eba73370"
+        },
+        "date": 1621717093533,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Baseline.BaselineBenchmarks.Equals",
+            "value": 0.9342701637473412,
+            "unit": "ns",
+            "range": "± 0.011993901300439208"
+          },
+          {
+            "name": "Baseline.BaselineBenchmarks.Decimal_Equals",
+            "value": 10.706942145622046,
+            "unit": "ns",
+            "range": "± 0.1506776683823833"
+          },
+          {
+            "name": "Baseline.BaselineBenchmarks.MinMax",
+            "value": 0.5151072348126713,
+            "unit": "ns",
+            "range": "± 0.00794417283264284"
+          },
+          {
+            "name": "Baseline.BaselineBenchmarks.Decimal_MinMax",
+            "value": 15.795609373483599,
+            "unit": "ns",
+            "range": "± 0.14597063424300852"
           }
         ]
       }
