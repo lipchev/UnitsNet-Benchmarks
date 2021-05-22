@@ -28,7 +28,7 @@ jobs:
                               
   benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
     needs: [ scenarios ]
-    if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
+    #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     strategy: 
       matrix: 
@@ -181,6 +181,7 @@ jobs:
       # Copy all of the results to the target framework folder and output the (json) list of updated json files
       - name: Update benchmark reports
         id: update-reports
+        if: matrix.tracked
         run: |
           $Reports = (git status -s *report*.json).Substring(3) | ConvertTo-Json -Compress
           echo "::set-output name=json::$Reports"
@@ -217,15 +218,15 @@ jobs:
         run: echo ${{ steps.path.outputs.json }}
         
   update-history: # create/append the historic data plots for each report (added/modified)
-    needs: [ get-reports ]
-    #needs: [publish-results]
+    #needs: [ get-reports ]
+    needs: [publish-results]
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
       max-parallel: 1 # we cannot commit on the same branch in parallel (multiple points added on retry- can we 'force' this?)
       matrix: 
-        report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
-        #report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
+        #report-path: ${{ fromJson(needs.get-reports.outputs.reports) }}
+        report-path: ${{ fromJson(needs.publish-results.outputs.reports) }}
     steps:        
       - name: Initializing git folder ️
         uses: actions/checkout@v2.3.1
