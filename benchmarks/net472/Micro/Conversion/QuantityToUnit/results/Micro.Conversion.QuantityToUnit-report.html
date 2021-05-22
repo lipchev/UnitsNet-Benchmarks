@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Micro.Conversion.QuantityToUnit-20210522-114037</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
+.NET Core SDK=5.0.203
+  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+  Job-PIJCAQ : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET 4.7.2  Toolchain=net472  
+</code></pre>
+
+<table>
+<thead><tr><th>                              Method</th><th>                           Categories</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Min</th><th>Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>Length&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Struct,Unit,Quantity,Micro,Conversion</td><td>23.89 ns</td><td>0.312 ns</td><td>0.277 ns</td><td>0.074 ns</td><td>23.54 ns</td><td>24.46 ns</td><td>23.83 ns</td><td>1.00</td><td>Base</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>Length&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Struct,Unit,Quantity,Micro,Conversion</td><td>24.22 ns</td><td>0.360 ns</td><td>0.337 ns</td><td>0.087 ns</td><td>23.68 ns</td><td>24.71 ns</td><td>24.16 ns</td><td>1.02</td><td>Same</td><td>0.02</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ILength&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>32.25 ns</td><td>0.600 ns</td><td>0.532 ns</td><td>0.142 ns</td><td>31.24 ns</td><td>33.06 ns</td><td>32.34 ns</td><td>1.35</td><td>Slower</td><td>0.02</td><td>0.0050</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>ILength&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>32.30 ns</td><td>0.498 ns</td><td>0.466 ns</td><td>0.120 ns</td><td>31.73 ns</td><td>33.25 ns</td><td>32.10 ns</td><td>1.35</td><td>Slower</td><td>0.03</td><td>0.0050</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.ToUnit(baseUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>118.04 ns</td><td>2.330 ns</td><td>2.590 ns</td><td>0.594 ns</td><td>112.93 ns</td><td>121.76 ns</td><td>118.04 ns</td><td>4.93</td><td>Slower</td><td>0.14</td><td>0.0049</td><td>-</td><td>-</td><td>33 B</td>
+</tr><tr><td>IQuantity&lt;BaseUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>124.27 ns</td><td>2.393 ns</td><td>2.457 ns</td><td>0.596 ns</td><td>121.06 ns</td><td>129.22 ns</td><td>124.27 ns</td><td>5.21</td><td>Slower</td><td>0.13</td><td>0.0048</td><td>-</td><td>-</td><td>33 B</td>
+</tr><tr><td>IQuantity&lt;DerivedUnit&gt;.ToUnit(derivedUnit)</td><td>Interface,Unit,Quantity,Micro,Conversion</td><td>138.11 ns</td><td>2.733 ns</td><td>3.648 ns</td><td>0.730 ns</td><td>132.54 ns</td><td>146.45 ns</td><td>137.89 ns</td><td>5.77</td><td>Slower</td><td>0.16</td><td>0.0046</td><td>-</td><td>-</td><td>33 B</td>
+</tr><tr><td>Length&lt;DerivedUnit&gt;.ToUnit(untSystem)</td><td>Struct,UnitSystem,Quantity,Micro,Conversion</td><td>547.95 ns</td><td>7.311 ns</td><td>6.481 ns</td><td>1.732 ns</td><td>540.85 ns</td><td>565.33 ns</td><td>546.12 ns</td><td>22.93</td><td>Slower</td><td>0.29</td><td>0.0303</td><td>-</td><td>-</td><td>201 B</td>
+</tr><tr><td>Length&lt;BaseUnit&gt;.ToUnit(untSystem)</td><td>Struct,UnitSystem,Quantity,Micro,Conversion</td><td>552.64 ns</td><td>10.045 ns</td><td>9.865 ns</td><td>2.466 ns</td><td>538.69 ns</td><td>570.54 ns</td><td>549.63 ns</td><td>23.17</td><td>Slower</td><td>0.39</td><td>0.0303</td><td>-</td><td>-</td><td>201 B</td>
+</tr></tbody></table>
+</body>
+</html>
