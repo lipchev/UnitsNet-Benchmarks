@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621694983154,
+  "lastUpdate": 1621717412103,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "Micro.Conversion.QuantityToValue-report-rescaled": [
@@ -78,6 +78,84 @@ window.BENCHMARK_DATA = {
             "value": 521.5197775569128,
             "unit": "ns",
             "range": "± 9.033501684732206"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "fb5ca97684f9b8e84bd4bfbdf83bd511eba73370",
+          "message": "Publish results (Test Run1)",
+          "timestamp": "2021-05-22T23:26:55+03:00",
+          "tree_id": "7d14fd79414a35099140e5b52af71b53051e0a4b",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/fb5ca97684f9b8e84bd4bfbdf83bd511eba73370"
+        },
+        "date": 1621717352779,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Micro.Conversion.QuantityToValue.BaseQuantity_As",
+            "value": 11.519171849507998,
+            "unit": "ns",
+            "range": "± 0.23739486637346913"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.DerivedQuantity_As",
+            "value": 11.80636355393861,
+            "unit": "ns",
+            "range": "± 0.2070260489242835"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.IBaseQuantity_As",
+            "value": 16.323511478905225,
+            "unit": "ns",
+            "range": "± 0.15695423846225565"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.IDerivedQuantity_As",
+            "value": 16.41244623982928,
+            "unit": "ns",
+            "range": "± 0.34494416362011837"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.IRandomDerivedQuantity_AsBase",
+            "value": 80.76291967222622,
+            "unit": "ns",
+            "range": "± 1.0782367464556357"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.IRandomBaseQuantity_As",
+            "value": 84.20036420812234,
+            "unit": "ns",
+            "range": "± 1.397565272923027"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.IRandomDerivedQuantity_As",
+            "value": 104.50809308984407,
+            "unit": "ns",
+            "range": "± 1.3835476673870841"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.BaseQuantity_AsUnitSystem",
+            "value": 509.77257756145684,
+            "unit": "ns",
+            "range": "± 6.901401306374608"
+          },
+          {
+            "name": "Micro.Conversion.QuantityToValue.DerivedQuantity_AsUnitSystem",
+            "value": 516.8659434365193,
+            "unit": "ns",
+            "range": "± 5.737299691549957"
           }
         ]
       }
