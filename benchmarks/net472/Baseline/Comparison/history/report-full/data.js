@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1621636415917,
+  "lastUpdate": 1621643836551,
   "repoUrl": "https://github.com/lipchev/UnitsNet-Benchmarks",
   "entries": {
     "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks-report-full": [
@@ -119,6 +119,54 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/039ade9a6c5b4c6dc5adc8b6c12e531df09ee6e8"
         },
         "date": 1621636373195,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Equals",
+            "value": 0.6138434197838508,
+            "unit": "ns",
+            "range": "± 0.022852324042080843"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Decimal_Equals",
+            "value": 9.484042094607778,
+            "unit": "ns",
+            "range": "± 0.1950959000675559"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.MinMax",
+            "value": 0.33393533086678007,
+            "unit": "ns",
+            "range": "± 0.009887507778751175"
+          },
+          {
+            "name": "UnitsNet.Benchmark.Baseline.StableBaselineBenchmarks.Decimal_MinMax",
+            "value": 12.966813902924025,
+            "unit": "ns",
+            "range": "± 0.6602453646267374"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "committer": {
+            "email": "lipchev@gmail.com",
+            "name": "lipchev",
+            "username": "lipchev"
+          },
+          "distinct": true,
+          "id": "812b3ec0d66a065dcc70246a807651d99c695d90",
+          "message": "Auto-Run N2",
+          "timestamp": "2021-05-22T02:32:24+03:00",
+          "tree_id": "bf3800811efc7feaf7c2b085348ea6902de1be19",
+          "url": "https://github.com/lipchev/UnitsNet-Benchmarks/commit/812b3ec0d66a065dcc70246a807651d99c695d90"
+        },
+        "date": 1621643783726,
         "tool": "benchmarkdotnet",
         "benches": [
           {
