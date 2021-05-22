@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Baseline.BaselineBenchmarks-20210522-134006</title>
+<title>Baseline.BaselineBenchmarks-20210522-165550</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -14,10 +14,10 @@
 <body>
 <pre><code>
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
-Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 .NET Core SDK=5.0.203
   [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-CZEOMP : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+  Job-ASFYXH : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
 </code></pre>
 <pre><code>Runtime=.NET 4.7.2  Toolchain=net472  
 </code></pre>
@@ -25,10 +25,10 @@ Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
 <table>
 <thead><tr><th>  Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Ratio</th><th>MannWhitney(5%)</th><th>RatioSD</th>
 </tr>
-</thead><tbody><tr><td>Equals</td><td>0.7323 ns</td><td>0.0098 ns</td><td>0.0092 ns</td><td>0.0024 ns</td><td>0.7116 ns</td><td>0.7456 ns</td><td>0.7326 ns</td><td>1.00</td><td>Base</td><td>0.00</td>
-</tr><tr><td>Decimal_Equals</td><td>10.8857 ns</td><td>0.0932 ns</td><td>0.0872 ns</td><td>0.0225 ns</td><td>10.7529 ns</td><td>10.9979 ns</td><td>10.8759 ns</td><td>14.87</td><td>Slower</td><td>0.20</td>
-</tr><tr><td>MinMax</td><td>0.4126 ns</td><td>0.0077 ns</td><td>0.0072 ns</td><td>0.0019 ns</td><td>0.4005 ns</td><td>0.4234 ns</td><td>0.4110 ns</td><td>0.56</td><td>Faster</td><td>0.01</td>
-</tr><tr><td>Decimal_MinMax</td><td>17.9431 ns</td><td>0.2051 ns</td><td>0.1919 ns</td><td>0.0495 ns</td><td>17.5054 ns</td><td>18.3137 ns</td><td>17.9199 ns</td><td>24.51</td><td>Slower</td><td>0.45</td>
+</thead><tbody><tr><td>Equals</td><td>0.9343 ns</td><td>0.0128 ns</td><td>0.0120 ns</td><td>0.0031 ns</td><td>0.9166 ns</td><td>0.9629 ns</td><td>0.9328 ns</td><td>1.00</td><td>Base</td><td>0.00</td>
+</tr><tr><td>Decimal_Equals</td><td>10.7069 ns</td><td>0.1611 ns</td><td>0.1507 ns</td><td>0.0389 ns</td><td>10.4796 ns</td><td>11.0373 ns</td><td>10.7228 ns</td><td>11.46</td><td>Slower</td><td>0.24</td>
+</tr><tr><td>MinMax</td><td>0.5151 ns</td><td>0.0085 ns</td><td>0.0079 ns</td><td>0.0021 ns</td><td>0.5051 ns</td><td>0.5332 ns</td><td>0.5162 ns</td><td>0.55</td><td>Faster</td><td>0.01</td>
+</tr><tr><td>Decimal_MinMax</td><td>15.7956 ns</td><td>0.1647 ns</td><td>0.1460 ns</td><td>0.0390 ns</td><td>15.5183 ns</td><td>15.9672 ns</td><td>15.8395 ns</td><td>16.90</td><td>Slower</td><td>0.32</td>
 </tr></tbody></table>
 </body>
 </html>
