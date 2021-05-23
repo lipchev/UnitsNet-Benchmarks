@@ -31,7 +31,8 @@ jobs:
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
     outputs: # the benchmark reports (compress json)
-      results: ${{ steps.prepare-results.outputs.json }} 
+      # results: ${{ steps.prepare-results.outputs.json }} 
+      ${{ matrix.runtime }}: ${{ steps.prepare-results.outputs.json }} 
     strategy: 
       matrix: 
         scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
@@ -51,7 +52,7 @@ jobs:
       - name: Configure target framework
         id: target-frameworks
         run: |
-          $Frameworks = if ('${{ matrix.scenario.runtime}}'.StartsWith('net4')){
+          $Frameworks = if ('${{ matrix.scenario.runtime}}'.StartsWith('Xnet4')){
             '${{ matrix.scenario.framework }};${{ matrix.scenario.runtime}}'
           } 
           else {
@@ -79,15 +80,23 @@ jobs:
               @{Name = 'Timestamp'; Expression = {$d}}, 
               @{Name = 'Benchmarks'; Expression = {$_.Benchmarks | select -Property * -ExcludeProperty Metrics, Measurements}} )} | 
             ConvertTo-Json -Depth 20 -Compress
-          echo "::set-output name=json::$Results"
+          echo "::set-output name=${{ matrix.runtime }}::$Results"
         shell: pwsh           
         
       - name: Results
-        run: echo '${{ steps.prepare-results.outputs.json }}'
+        run: echo '${{ toJson(test.outputs }}'
+        
+      - name: Nah
+        run: echo '${{ toJson(outputs}}'
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
     needs: [test]
     runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1 # cannot commit on the same branch in parallel
+      matrix: 
+        # scenario: ${{ fromJson(needs.test.outputs.json) }}
+        scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:                 
       # The benchmarks reporistory (e.g. gh-pages) is checked out 
       - name: Benchmark reporistory checkout ️
