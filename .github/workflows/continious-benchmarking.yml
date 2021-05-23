@@ -80,7 +80,7 @@ jobs:
             ConvertTo-Json -Compress
           echo "::set-output name=json::$Results"
    
-   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
+  test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
     needs: [test]
     runs-on: ubuntu-latest
     strategy:
