@@ -43,7 +43,7 @@ jobs:
       
       - id: cpuinfo
         run: |
-          $Processor = 
+          $Processor = (Get-CimInstance CIM_Processor).Name
           echo ('Processor Name: ' + $Processor)
           echo "::set-output name=processor::$Processor"
       - name: Concurrent task for ${{ steps.cpuinfo.outputs.processor }}
