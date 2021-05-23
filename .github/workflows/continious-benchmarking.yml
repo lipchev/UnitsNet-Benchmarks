@@ -82,7 +82,7 @@ jobs:
           echo "::set-output name=json::$Results"
         shell: pwsh           
         
-      - name: name: Results
+      - name: Results
         run: echo ${{ steps.prepare-results.outputs.json }}
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
