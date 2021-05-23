@@ -9,7 +9,7 @@ on:
       - ".github/workflows/*"
    
 env: 
-  EXECUTION_OPTIONS: --disableLogFile --job Short # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --disableLogFile --minIterationCount 5 --maxIterationCount 10 --warmupCount 1 # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
@@ -30,9 +30,8 @@ jobs:
     needs: [ scenarios ]
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
-    defaults:
-      run:
-        shell: pwsh
+    outputs: # the benchmark reports (compress json)
+      results: ${{ steps.prepare-results.outputs.json }} 
     strategy: 
       matrix: 
         scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
@@ -59,6 +58,7 @@ jobs:
             '${{ matrix.scenario.framework }}'
           }
           echo "::set-output name=frameworks::$Frameworks"
+        shell: pwsh           
         
       - uses: actions/checkout@v2.3.1
       
@@ -69,16 +69,19 @@ jobs:
         run: .\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
       
       - name: Results
+        id: prepare-results
         run: |
           $Results = Get-ChildItem -Path Artifacts\Benchmark -Filter *.json -Recurse | 
             ForEach-Object { 
               $d=(Get-Date $_.LastWriteTime.DateTime -UFormat %s); 
-              (Get-Content -Raw $_.FullName | ConvertFrom-Json|select -Property HostEnvironmentInfo, 
+              (Get-Content -Raw $_.FullName | ConvertFrom-Json | 
+              select -Property HostEnvironmentInfo, 
               @{Name = 'Framework'; Expression = {'netcoreapp50'}}, 
               @{Name = 'Timestamp'; Expression = {$d}}, 
               @{Name = 'Benchmarks'; Expression = {$_.Benchmarks | select -Property * -ExcludeProperty Metrics, Measurements}} )} | 
-            ConvertTo-Json -Compress
+            ConvertTo-Json -Depth 20 -Compress
           echo "::set-output name=json::$Results"
+        shell: pwsh           
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
     needs: [test]
