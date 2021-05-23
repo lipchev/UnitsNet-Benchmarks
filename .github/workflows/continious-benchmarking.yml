@@ -9,7 +9,7 @@ on:
       - ".github/workflows/*"
    
 env: 
-  EXECUTION_OPTIONS: --disableLogFile --minIterationCount 5 --maxIterationCount 10 --warmupCount 1 # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --disableLogFile --job Dry # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
@@ -68,8 +68,7 @@ jobs:
         if: contains(matrix.scenario.Benchmark, 'Micro')
         run: .\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
       
-      - name: Results
-        id: prepare-results
+      - id: prepare-results
         run: |
           $Results = Get-ChildItem -Path Artifacts\Benchmark -Filter *.json -Recurse | 
             ForEach-Object { 
@@ -82,14 +81,18 @@ jobs:
             ConvertTo-Json -Depth 20 -Compress
           echo "::set-output name=json::$Results"
         shell: pwsh           
+        
+      - name: name: Results
+        run: echo ${{ steps.prepare-results.outputs.json }}
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
-    needs: [test]
+    needs: [scenarios, test]
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1 # cannot commit on the same branch in parallel
       matrix: 
-        scenario: ${{ fromJson(needs.test.outputs.json) }}
+        # scenario: ${{ fromJson(needs.test.outputs.json) }}
+        scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:                 
       # The benchmarks reporistory (e.g. gh-pages) is checked out 
       - name: Benchmark reporistory checkout ️
@@ -99,6 +102,12 @@ jobs:
           
       - name: Input report
         run: echo ${{ steps.test.outputs.json }}
+        
+      - name: Inputs
+        run: echo ${{ steps.test.outputs }}
+        
+      - name: Jobs
+        run: echo ${{ steps.test }}
         
           
   benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
