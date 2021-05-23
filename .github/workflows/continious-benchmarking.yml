@@ -75,7 +75,7 @@ jobs:
               $d=(Get-Date $_.LastWriteTime.DateTime -UFormat %s); 
               (Get-Content -Raw $_.FullName | ConvertFrom-Json | 
               select -Property HostEnvironmentInfo, 
-              @{Name = 'Framework'; Expression = {'netcoreapp50'}}, 
+              @{Name = 'Framework'; Expression = {'${{ matrix.scenario.runtime }}'}}, 
               @{Name = 'Timestamp'; Expression = {$d}}, 
               @{Name = 'Benchmarks'; Expression = {$_.Benchmarks | select -Property * -ExcludeProperty Metrics, Measurements}} )} | 
             ConvertTo-Json -Depth 20 -Compress
