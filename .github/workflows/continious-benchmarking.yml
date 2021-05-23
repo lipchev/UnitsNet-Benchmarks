@@ -96,13 +96,13 @@ jobs:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
           
       - name: Input report
-        run: '${{ needs.test.outputs.json }}'
+        run: echo '${{ needs.test.outputs.json }}'
         
       - name: Inputs
-        run: '${{ needs.test.outputs }}'
+        run: echo '${{ toJson(needs.test.outputs ) }}'
         
       - name: Jobs
-        run: '${{ needs.test }}'
+        run: echo '${{ toJson(needs.test ) }}'
         
           
   benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
