@@ -96,13 +96,13 @@ jobs:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
           
       - name: Input report
-        run: '${{ steps.test.outputs.json }}'
+        run: '${{ needs.test.outputs.json }}'
         
       - name: Inputs
-        run: '${{ steps.test.outputs }}'
+        run: '${{ needs.test.outputs }}'
         
       - name: Jobs
-        run: '${{ steps.test }}'
+        run: '${{ needs.test }}'
         
           
   benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
