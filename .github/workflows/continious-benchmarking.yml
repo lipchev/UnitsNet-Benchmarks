@@ -9,7 +9,7 @@ on:
       - ".github/workflows/*"
    
 env: 
-  EXECUTION_OPTIONS: --disableLogFile --job Dry --allCateogires Construction Unit Value # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --disableLogFile --job Dry --allCategories Construction Unit Value # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
@@ -88,11 +88,6 @@ jobs:
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
     needs: [scenarios, test]
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1 # cannot commit on the same branch in parallel
-      matrix: 
-        # scenario: ${{ fromJson(needs.test.outputs.json) }}
-        scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:                 
       # The benchmarks reporistory (e.g. gh-pages) is checked out 
       - name: Benchmark reporistory checkout ️
