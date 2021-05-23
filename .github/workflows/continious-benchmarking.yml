@@ -83,7 +83,7 @@ jobs:
         shell: pwsh           
         
       - name: Results
-        run: echo "${{ steps.prepare-results.outputs.json }}"
+        run: echo '${{ steps.prepare-results.outputs.json }}'
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
     needs: [test]
@@ -96,13 +96,13 @@ jobs:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
           
       - name: Input report
-        run: "${{ steps.test.outputs.json }}"
+        run: '${{ steps.test.outputs.json }}'
         
       - name: Inputs
-        run: "${{ steps.test.outputs }}"
+        run: '${{ steps.test.outputs }}'
         
       - name: Jobs
-        run: "${{ steps.test }}"
+        run: '${{ steps.test }}'
         
           
   benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
