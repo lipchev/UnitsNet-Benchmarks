@@ -9,7 +9,7 @@ on:
       - ".github/workflows/*"
    
 env: 
-  EXECUTION_OPTIONS: --disableLogFile  --job Dry # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --disableLogFile --job Short # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
@@ -46,8 +46,6 @@ jobs:
           $Processor = (Get-CimInstance CIM_Processor).Name
           echo ('Processor Name: ' + $Processor)
           echo "::set-output name=processor::$Processor"
-      - name: Concurrent task for ${{ steps.cpuinfo.outputs.processor }}
-        run: echo Running long task...       
       
       # Inspired by: https://github.com/dotnet/performance/blob/3852b31dc84afef3c6b4fa52c1e440af5627b94a/scripts/benchmarks_ci.py#L200
       # net472/net48 appear to be working fine on my machine even without the work-around but fail without it on the CI (same with the nightly BDN build)
@@ -69,9 +67,37 @@ jobs:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Micro')
         run: .\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
-     
+      
+      - name: Results
+        run: |
+          $Results = Get-ChildItem -Path Artifacts\Benchmark -Filter *.json -Recurse | 
+            ForEach-Object { 
+              $d=(Get-Date $_.LastWriteTime.DateTime -UFormat %s); 
+              (Get-Content -Raw $_.FullName | ConvertFrom-Json|select -Property HostEnvironmentInfo, 
+              @{Name = 'Framework'; Expression = {'netcoreapp50'}}, 
+              @{Name = 'Timestamp'; Expression = {$d}}, 
+              @{Name = 'Benchmarks'; Expression = {$_.Benchmarks | select -Property * -ExcludeProperty Metrics, Measurements}} )} | 
+            ConvertTo-Json -Compress
+          echo "::set-output name=json::$Results"
+   
+   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
+    needs: [test]
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1 # cannot commit on the same branch in parallel
+      matrix: 
+        scenario: ${{ fromJson(needs.test.outputs.json) }}
+    steps:                 
+      # The benchmarks reporistory (e.g. gh-pages) is checked out 
+      - name: Benchmark reporistory checkout ️
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
           
-                                  
+      - name: Input report
+        run: echo ${{ steps.test.outputs.json }}
+        
+          
   benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
     needs: [ scenarios ]
     if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
