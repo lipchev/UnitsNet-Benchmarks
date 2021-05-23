@@ -18,7 +18,7 @@ namespace Micro.Construction
     [MaxColumn]
     [MedianColumn]
     [StdErrorColumn]
-    [BenchmarkCategory(BenchmarkCategories.Micro, BenchmarkCategories.Construction)]
+    [BenchmarkCategory(BenchmarkCategories.Micro, BenchmarkCategories.Construction, BenchmarkCategories.Value)]
     [Orderer(SummaryOrderPolicy.FastestToSlowest)]
     public class QuantityFromUnit
     {
@@ -49,7 +49,7 @@ namespace Micro.Construction
             _unitSystems = new[] {UnitSystem.SI};
         }
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "new (value, unit)")]
+        [Benchmark(Baseline = true, OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "new(value,unit)")]
         [BenchmarkCategory(BenchmarkCategories.Unit)]
         public void Constructor()
         {
@@ -64,7 +64,7 @@ namespace Micro.Construction
             }
         }
 
-        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "new (value, unitSystem)")]
+        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "new(value,unitSystem)")]
         [BenchmarkCategory(BenchmarkCategories.UnitSystem)]
         public void Constructor_UnitSystem()
         {
@@ -92,7 +92,7 @@ namespace Micro.Construction
             }
         }
         
-        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "Quantity.From(value, unit)")]
+        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "Quantity.From(value,unit)")]
         [BenchmarkCategory(BenchmarkCategories.Unit)]
         public void QuantityFrom()
         {
@@ -122,7 +122,7 @@ namespace Micro.Construction
             }
         }
         
-        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "Quantity.From(value, randomUnit)")]
+        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "Quantity.From(value,randomUnit)")]
         [BenchmarkCategory(BenchmarkCategories.Unit)]
         public void QuantityFrom_RandomUnit()
         {
@@ -137,7 +137,7 @@ namespace Micro.Construction
             }
         }
         
-        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbQuantities, Description = "FromQuantityInfo(randomInfo, value)")]
+        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbQuantities, Description = "FromQuantityInfo(randomInfo,value)")]
         [BenchmarkCategory(BenchmarkCategories.Quantity)]
         public void QuantityFromQuantityInfo()
         {
