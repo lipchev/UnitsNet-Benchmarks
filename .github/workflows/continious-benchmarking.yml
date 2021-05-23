@@ -86,7 +86,7 @@ jobs:
         run: echo "${{ steps.prepare-results.outputs.json }}"
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
-    needs: [scenarios, test]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:                 
       # The benchmarks reporistory (e.g. gh-pages) is checked out 

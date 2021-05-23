@@ -107,7 +107,7 @@ namespace Micro.Construction
             }
         }
         
-        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "Quantity<Q,U>.From(value, unit)")]
+        [Benchmark(OperationsPerInvoke = BenchmarkConstants.NbUnits, Description = "Quantity<Q,U>.From(value,unit)")]
         [BenchmarkCategory(BenchmarkCategories.Unit)]
         public void QuantityFrom_Generic() // as if there was a Quantity.From<TQuantity, TUnit>(..) overload
         {
