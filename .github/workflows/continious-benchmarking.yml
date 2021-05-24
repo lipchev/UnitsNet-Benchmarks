@@ -98,7 +98,7 @@ jobs:
         
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
-    needs: [scenarios]
+    needs: [scenarios, test]
     runs-on: ubuntu-latest
     steps:                 
       # The benchmarks repository (e.g. gh-pages) is checked out 
