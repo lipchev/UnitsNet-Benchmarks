@@ -54,7 +54,7 @@ jobs:
         id: target-frameworks
         run: |
           $Frameworks = if ('${{ matrix.scenario.runtimes[0]}}'.StartsWith('net4')){
-            '${{ matrix.scenario.framework }};${{ matrix.scenario.runtimes -join ';'}}'
+            '${{ matrix.scenario.framework }};${{ join(matrix.scenario.runtimes, ';') }}'
           } 
           else {
             '${{ matrix.scenario.framework }}'
