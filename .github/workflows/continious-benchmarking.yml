@@ -121,15 +121,15 @@ jobs:
           $scenarios = ConvertFrom-Json ${{ needs.scenarios.outputs.json }}
           foreach ($scenario in $scenarios) {
             $artifact = Join-Path $scenario.Benchmark $scenario.runtime
-            $benchmarks-dir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ scenario.runtime }}
+            $benchmarks-dir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} $scenario.runtime
             
             if(!(Test-Path -Path $benchmarks-dir )){
                 New-Item -ItemType directory -Path $benchmarks-dir
             }
             
-            Copy-Item $artifact $benchmark-dir -Recurse -Force ${{ scenario.persistance-options }}
+            Copy-Item $artifact $benchmark-dir -Recurse -Force $scenario.persistance-options
             
-            if (${{ scenario.tracked }}){ continue }
+            if ($scenario.tracked){ continue }
             
             $results += Get-ChildItem -Path $artifact -Filter *.json -Recurse | 
                 ForEach-Object { 
