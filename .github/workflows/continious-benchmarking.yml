@@ -31,9 +31,6 @@ jobs:
     needs: [ scenarios ]
     #if: github.repository_owner == 'angularsen' # (by default) the workflow doesn't need to run in a fork
     runs-on: windows-latest # required by the older frameworks
-    outputs: # the benchmark reports (compress json)
-      results: ${{ steps.prepare-results.outputs.json }} 
-      continue-on-error: true
     strategy: 
       matrix: 
         scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
@@ -112,12 +109,12 @@ jobs:
         run: |          
           $scenarios = ConvertFrom-Json '${{ needs.scenarios.outputs.json }}'
           foreach ($scenario in $scenarios) {
-            $runtimes = ($scenario.runtimes -join '-')
+            $runtimes = $scenario.runtimes -join '-'
             $artifact = Join-Path $scenario.Benchmark $runtimes
-            $benchmarks-dir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} $runtimes
+            $benchmarks_dir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} $runtimes
             
-            if(!(Test-Path -Path $benchmarks-dir )){
-                New-Item -ItemType directory -Path $benchmarks-dir
+            if(!(Test-Path -Path $benchmarks_dir )){
+                New-Item -ItemType directory -Path $benchmarks_dir
             }
             
             Copy-Item $artifact $benchmark-dir -Recurse -Force $scenario.persistance-options
@@ -142,16 +139,16 @@ jobs:
           if ($results.Count -eq 0) { exit }
           
           // creating / appending to the benchmark history data file
-          $data-file = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
-          $head-commit = ${{ github.event.head_commit }} | ConvertFrom-Json 
+          $data_file = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
+          $head_commit = ${{ github.event.head_commit }} | ConvertFrom-Json 
           $commit-data = @{commit = $commit, benchmarks = $results }
-          if (Test-Path $data-file ){
-            $historic-data = $commit-data + (Get-Content $data-file | ConvertFrom-Json )
+          if (Test-Path $data_file ){
+            $historic_data = $commit-data + (Get-Content $data_file | ConvertFrom-Json )
           }
           else{
-            $historic-data = @($commit-data)           
+            $historic_data = @($commit-data)           
           }
-          $historic-data | ConvertTo-Json -Depth 20 | Out-File $data-file
+          $historic_data | ConvertTo-Json -Depth 20 | Out-File $data_file
         shell: pwsh
         
       - name: Benchmark reports summary
@@ -332,7 +329,7 @@ jobs:
         run: echo ${{ steps.update-reports.outputs.json }}
   
   get-reports: # get all reports currently present on the benchmark branch (obsolete)
-    if: false # break glass in case of emergency
+    if: 'false' # break glass in case of emergency
     runs-on: ubuntu-latest
     outputs:
       reports: ${{ steps.path.outputs.json }}        
