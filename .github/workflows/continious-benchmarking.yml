@@ -120,7 +120,7 @@ jobs:
         run: |          
           $scenarios = ConvertFrom-Json ${{ needs.scenarios.outputs.json }}
           foreach ($scenario in $scenarios) {
-            $artifact = ${{ scenario.Benchmark }} (${{ scenario.runtime }})
+            $artifact = Join-Path $scenario.Benchmark $scenario.runtime
             $benchmarks-dir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ scenario.runtime }}
             
             if(!(Test-Path -Path $benchmarks-dir )){
