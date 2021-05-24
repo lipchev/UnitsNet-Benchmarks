@@ -117,7 +117,7 @@ jobs:
                 New-Item -ItemType directory -Path $benchmarks_dir
             }
             
-            Copy-Item $artifact $benchmark-dir -Recurse -Force $scenario.persistance-options
+            Copy-Item $artifact $benchmarks_dir -Recurse -Force $scenario.persistance-options
             
             if ($scenario.tracked){ continue }
             
