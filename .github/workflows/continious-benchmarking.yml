@@ -54,7 +54,7 @@ jobs:
         id: target-frameworks
         run: |
           $Frameworks = if ('${{ matrix.scenario.runtimes[0]}}'.StartsWith('net4')){
-            '${{ matrix.scenario.framework }};${{ matrix.scenario.runtimes}}'
+            '${{ matrix.scenario.framework }};${{ matrix.scenario.runtimes -join ';'}}'
           } 
           else {
             '${{ matrix.scenario.framework }}'
@@ -75,12 +75,7 @@ jobs:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Gradient')
         run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ join(matrix.scenario.runtimes, ' ') }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
-                    
-      - name: Global env
-        run: echo "TEST-VAR=$(echo $GITHUB_SHA | cut -c 1-6)" >> $env:GITHUB_ENV         
-        shell: pwsh           
         
-                
       # saving the current artifact (downloadable until the expiration date of this action)        
       - name: Store micro benchmark artifact
         if: contains(matrix.scenario.Benchmark, 'Micro')
@@ -106,9 +101,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
-          
-      - name: Test var
-        run: echo '${{ env.TEST-VAR }}'
         
      # The benchmark results are downloaded into a corresponding 'artifact' folder.
       - name: Download benchmark artifacts
@@ -118,7 +110,7 @@ jobs:
  
       - name: Update reports data
         run: |          
-          $scenarios = ConvertFrom-Json ${{ needs.scenarios.outputs.json }}
+          $scenarios = ConvertFrom-Json '${{ needs.scenarios.outputs.json }}'
           foreach ($scenario in $scenarios) {
             $runtimes = ($scenario.runtimes -join '-')
             $artifact = Join-Path $scenario.Benchmark $runtimes
