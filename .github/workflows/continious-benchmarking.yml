@@ -131,8 +131,7 @@ jobs:
                     select -Property *, 
                     @{Name = 'Runtime'; Expression = {$_.DisplayInfo.Substring($_.DisplayInfo.IndexOf('Runtime=') + 8).Split(',)')[0]}},
                     @{Name = 'Toolchain'; Expression = {$_.DisplayInfo.Substring($_.DisplayInfo.IndexOf('Toolchain=') + 10).Split(',)')[0]}} -ExcludeProperty Metrics, Measurements}})
-                } 
-            }            
+                }             
           }          
           
           Remove-Item Artifacts -Recurse          
