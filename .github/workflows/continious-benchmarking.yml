@@ -79,14 +79,14 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.scenario.Benchmark }} (${{ join(matrix.scenario.runtimes, '-') }})
-          path: UnitsNet\Artifacts\Benchmark\Micro
+          path: Artifacts\Benchmark\Micro
           
       - name: Store gradient benchmark artifact
         if: contains(matrix.scenario.Benchmark, 'Gradient')
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.scenario.Benchmark }} (${{ join(matrix.scenario.runtimes, '-')  }})
-          path: UnitsNet\Artifacts\Benchmark\Gradient
+          path: Artifacts\Benchmark\Gradient
         
    
   publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
