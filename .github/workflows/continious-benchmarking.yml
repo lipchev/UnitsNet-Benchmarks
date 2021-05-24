@@ -12,6 +12,7 @@ env:
   EXECUTION_OPTIONS: --disableLogFile --job Dry --allCategories Construction Unit Value # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
+  BENCHMARK_DATA_FILE: benchmark-data.json
   STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:  
 
@@ -68,53 +69,103 @@ jobs:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Micro')
         run: .\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
-      
-      - name: This Results
-        run: echo '${{ toJson(outputs) }}'
-        
-      - name: Previous Results
-        run: echo '${{ toJson(test.outputs) }}'
-        
-      - id: prepare-results
-        run: |
-          $Results = Get-ChildItem -Path Artifacts\Benchmark -Filter *.json -Recurse | 
-            ForEach-Object { 
-              $d=(Get-Date $_.LastWriteTime.DateTime -UFormat %s); 
-              (Get-Content -Raw $_.FullName | ConvertFrom-Json | 
-              select -Property HostEnvironmentInfo, 
-              @{Name = 'Framework'; Expression = {'${{ matrix.scenario.runtime }}'}}, 
-              @{Name = 'Timestamp'; Expression = {$d}}, 
-              @{Name = 'Benchmarks'; Expression = {$_.Benchmarks | select -Property * -ExcludeProperty Metrics, Measurements}} )} | 
-            ConvertTo-Json -Depth 20 -Compress
-          echo "::set-output name=json::$Results"
+
+      - name: Benchmark execution (Gradient) 
+        env:
+          PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
+        if: contains(matrix.scenario.Benchmark, 'Gradient')
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.scenario.runtime }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+                    
+      - name: Global env
+        run: echo "TEST-VAR=$(echo $GITHUB_SHA | cut -c 1-6)" >> $env:GITHUB_ENV         
         shell: pwsh           
         
-      - name: Results
-        run: echo '${{ steps.prepare-results.outputs.json }}'
+                
+      # saving the current artifact (downloadable until the expiration date of this action)        
+      - name: Store micro benchmark artifact
+        if: contains(matrix.scenario.Benchmark, 'Micro')
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.scenario.Benchmark }} (${{ matrix.scenario.runtime }})
+          path: UnitsNet\Artifacts\Benchmark\Micro
+          
+      - name: Store gradient benchmark artifact
+        if: contains(matrix.scenario.Benchmark, 'Gradient')
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.scenario.Benchmark }} (${{ matrix.scenario.runtime }})
+          path: UnitsNet\Artifacts\Benchmark\Gradient
+        
    
   test-publish-results: # commits all artifacts for a given scenario to the benchmark branch(max-parallel: 1) 
-    needs: [test]
+    needs: [scenarios]
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1 # cannot commit on the same branch in parallel
-      matrix: 
-        # scenario: ${{ fromJson(needs.test.outputs.json) }}
-        scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:                 
-      # The benchmarks reporistory (e.g. gh-pages) is checked out 
-      - name: Benchmark reporistory checkout ️
+      # The benchmarks repository (e.g. gh-pages) is checked out 
+      - name: Benchmark repository checkout ️
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}
           
-      - name: Input report
-        run: echo '${{ needs.test.outputs.results }}'
+      - name: Test var
+        run: echo '${{ env.TEST-VAR }}'
         
-      - name: Inputs
-        run: echo '${{ toJson(needs.test.outputs ) }}'
+     # The benchmark results are downloaded into a corresponding 'artifact' folder.
+      - name: Download benchmark artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: Artifacts        
+ 
+      - name: Update reports data
+        run: |          
+          $scenarios = ConvertFrom-Json ${{ needs.scenarios.outputs.json }}
+          foreach ($scenario in $scenarios) {
+            $artifact = ${{ scenario.Benchmark }} (${{ scenario.runtime }})
+            $benchmarks-dir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ scenario.runtime }}
+            
+            if(!(Test-Path -Path $benchmarks-dir )){
+                New-Item -ItemType directory -Path $benchmarks-dir
+            }
+            
+            Copy-Item $artifact $benchmark-dir -Recurse -Force ${{ scenario.persistance-options }}
+            
+            if (${{ scenario.tracked }}){ continue }
+            
+            $results += Get-ChildItem -Path $artifact -Filter *.json -Recurse | 
+                ForEach-Object { 
+                  (Get-Content -Raw $_.FullName | ConvertFrom-Json | 
+                  select -Property HostEnvironmentInfo, 
+                  @{Name = 'Category'; Expression = {$_.Title.Substring(0, $_.Title.Length - 16)}}, 
+                  @{Name = 'Timestamp'; Expression = {[DateTimeOffset]::ParseExact($_.Title.Substring($_.Title.Length - 15), 'yyyyMMdd-HHmmss', [System.Globalization.CultureInfo]::InvariantCulture).ToUnixTimeSeconds()}}, 
+                  @{Name = 'Benchmarks'; Expression = {$_.Benchmarks | 
+                    select -Property *, 
+                    @{Name = 'Runtime'; Expression = {$_.DisplayInfo.Substring($_.DisplayInfo.IndexOf('Runtime=') + 8).Split(',)')[0]}},
+                    @{Name = 'Toolchain'; Expression = {$_.DisplayInfo.Substring($_.DisplayInfo.IndexOf('Toolchain=') + 10).Split(',)')[0]}} -ExcludeProperty Metrics, Measurements}})
+                } 
+            }            
+          }          
+          
+          Remove-Item Artifacts -Recurse          
+          if ($results.Count -eq 0) { exit }
+          
+          // creating / appending to the benchmark history data file
+          $data-file = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
+          $head-commit = ${{ github.event.head_commit }} | ConvertFrom-Json 
+          $commit-data = @{commit = $commit, benchmarks = $results }
+          if (Test-Path $data-file ){
+            $historic-data = $commit-data + (Get-Content $data-file | ConvertFrom-Json )
+          }
+          else{
+            $historic-data = @($commit-data)           
+          }
+          $historic-data | ConvertTo-Json -Depth 20 | Out-File $data-file
+        shell: pwsh
         
-      - name: Jobs
-        run: echo '${{ toJson(needs.test ) }}'
+      - name: Benchmark reports summary
+        run: |
+          git status
+          git diff Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
+        shell: pwsh         
         
           
   benchmark: # runs all scenarios in parallel, creating the corresponding artifacts
@@ -241,8 +292,8 @@ jobs:
       matrix: 
         scenario: ${{ fromJson(needs.scenarios.outputs.json) }}
     steps:                 
-      # The benchmarks reporistory (e.g. gh-pages) is checked out 
-      - name: Benchmark reporistory checkout ️
+      # The benchmarks repository (e.g. gh-pages) is checked out 
+      - name: Benchmark repository checkout ️
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BENCHMARK_PAGES_BRANCH }}

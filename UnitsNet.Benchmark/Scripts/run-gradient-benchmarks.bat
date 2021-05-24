@@ -36,10 +36,10 @@ if exist %exportdir%\Unit\QuantityToValue\%build-plots% (
 )
 
 %run-benchmarks% --artifacts=%exportdir%\Unit\QuantityToUnit --filter %filter%.UnitGradientBenchmarks* --anyCategories String --runtimes %*
-if exist %exportdir%\Unit\QuantityToUnit\%build-plots% (
-  if not exist %exportdir%\Unit\QuantityToUnit\%generate-plots% (
-    call %scriptdir%\r-plot\flip-charts.bat %exportdir%\Unit\QuantityToUnit\%build-plots% %exportdir%\Unit\QuantityToUnit\%generate-plots%
-    call %scriptdir%\r-plot\export-charts.bat %exportdir%\Unit\QuantityToUnit\%generate-plots%
+if exist %exportdir%\Unit\QuantityToString\%build-plots% (
+  if not exist %exportdir%\Unit\QuantityToString\%generate-plots% (
+    call %scriptdir%\r-plot\flip-charts.bat %exportdir%\Unit\QuantityToString\%build-plots% %exportdir%\Unit\QuantityToString\%generate-plots%
+    call %scriptdir%\r-plot\export-charts.bat %exportdir%\Unit\QuantityToString\%generate-plots%
   )
 )
 
