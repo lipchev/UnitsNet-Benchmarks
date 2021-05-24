@@ -53,7 +53,7 @@ jobs:
       - name: Configure target framework
         id: target-frameworks
         run: |
-          $Frameworks = if ('${{ matrix.scenario.runtime}}'.StartsWith('Xnet4')){
+          $Frameworks = if ('${{ matrix.scenario.runtime}}'.StartsWith('net4')){
             '${{ matrix.scenario.framework }};${{ matrix.scenario.runtime}}'
           } 
           else {
