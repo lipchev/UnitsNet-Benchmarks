@@ -140,7 +140,7 @@ jobs:
           // creating / appending to the benchmark history data file
           $data_file = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
           $head_commit = ${{ github.event.head_commit }} | ConvertFrom-Json 
-          $commit_data = @{Commit = $commit, Benchmarks = $results }
+          $commit_data = @{Commit = $commit; Benchmarks = $results }
           if (Test-Path $data_file ){
             $historic_data = $commit_data + (Get-Content $data_file | ConvertFrom-Json )
           }
