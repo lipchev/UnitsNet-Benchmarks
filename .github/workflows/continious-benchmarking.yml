@@ -37,7 +37,7 @@ jobs:
     steps:
       - run: echo "Starting benchmarks for ${{ matrix.scenario.benchmark }} (tracked = ${{ matrix.scenario.tracked }}) running on ${{ join(matrix.scenario.runtimes, ', ') }}"
       
-      - run: echo "Benchmark options ${{ matrix.scenario.benchmark-options }}"
+      - run: echo "Benchmark options ${{ matrix.scenario.executionOptions }}"
       
       - id: cpuinfo
         run: |
@@ -65,13 +65,13 @@ jobs:
         env:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Micro')
-        run: .\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ join(matrix.scenario.runtimes, ' ') }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+        run: .\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ join(matrix.scenario.runtimes, ' ') }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.executionOptions }} ${{ env.EXECUTION_OPTIONS }}
 
       - name: Benchmark execution (Gradient) 
         env:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Gradient')
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ join(matrix.scenario.runtimes, ' ') }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ join(matrix.scenario.runtimes, ' ') }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.executionOptions }} ${{ env.EXECUTION_OPTIONS }}
         
       # saving the current artifact (downloadable until the expiration date of this action)        
       - name: Store micro benchmark artifact
@@ -113,15 +113,15 @@ jobs:
         run: |          
           $scenarios = ConvertFrom-Json '${{ needs.scenarios.outputs.json }}'
           foreach ($scenario in $scenarios) {
-            $runtimes = $scenario.runtimes -join '-'
-            $artifact = Join-Path $scenario.Benchmark $runtimes
-            $benchmarks_dir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} $runtimes
+            $runtimesFolder = $scenario.runtimes -join '-'
+            $artifact = Join-Path $scenario.Benchmark $runtimesFolder
+            $targetDir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} $runtimesFolder
             
-            if(!(Test-Path -Path $benchmarks_dir )){
-                New-Item -ItemType directory -Path $benchmarks_dir
+            if(!(Test-Path -Path $targetDir )){
+                New-Item -ItemType directory -Path $targetDir
             }
 
-            Copy-Item $artifact $benchmarks_dir -Recurse -Force -Include $scenario.files-included -Exclude $scenario.files-excluded -verbose
+            Copy-Item $artifact $targetDir -Recurse -Force -Include $scenario.filesIncluded -Exclude $scenario.filesExcluded -verbose
             
             if ($scenario.tracked){ continue }
             
@@ -142,16 +142,16 @@ jobs:
           if ($results.Count -eq 0) { exit }
           
           // creating / appending to the benchmark history data file
-          $data_file = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
-          $head_commit = ${{ github.event.head_commit }} | ConvertFrom-Json 
-          $commit_data = @{Commit = $commit; Benchmarks = $results }
-          if (Test-Path $data_file ){
-            $historic_data = $commit_data + (Get-Content $data_file | ConvertFrom-Json )
+          $dataFile = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
+          $headCommit = ${{ github.event.head_commit }} | ConvertFrom-Json 
+          $commitBenchmarks = @{Commit = $headCommit; Benchmarks = $results }
+          if (Test-Path $dataFile ){
+            $historicData = $commitBenchmarks + (Get-Content $dataFile | ConvertFrom-Json )
           }
           else{
-            $historic_data = @($commit_data)           
+            $historicData = @($commitBenchmarks)           
           }
-          $historic_data | ConvertTo-Json -Depth 20 | Out-File $data_file
+          $historicData | ConvertTo-Json -Depth 20 | Out-File $dataFile
         shell: pwsh
         
       - name: Benchmark reports summary
@@ -171,7 +171,7 @@ jobs:
     steps:
       - run: echo "Starting benchmarks for ${{ matrix.scenario.benchmark }} (tracked = ${{ matrix.scenario.tracked }}) running on ${{ matrix.scenario.runtimes }}"
       
-      - run: echo "Benchmark options ${{ matrix.scenario.benchmark-options }}"
+      - run: echo "Benchmark options ${{ matrix.scenario.executionOptions }}"
       
       - name: "Baseline comparison ${{ matrix.scenario.scaled }}"
         if: matrix.scenario.scaled
@@ -217,13 +217,13 @@ jobs:
         env:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Micro')
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtimes }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-micro-benchmarks.bat ${{ matrix.scenario.runtimes }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.executionOptions }} ${{ env.EXECUTION_OPTIONS }}
           
       - name: Benchmark execution (Gradient) 
         env:
           PERFLAB_TARGET_FRAMEWORKS: ${{ steps.target-frameworks.outputs.frameworks }}
         if: contains(matrix.scenario.Benchmark, 'Gradient')
-        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.scenario.runtimes }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.benchmark-options }} ${{ env.EXECUTION_OPTIONS }}
+        run: .\UnitsNet\UnitsNet.Benchmark\Scripts\run-gradient-benchmarks.bat ${{ matrix.scenario.runtimes }} -f ${{ matrix.scenario.framework }} ${{ matrix.scenario.executionOptions }} ${{ env.EXECUTION_OPTIONS }}
                 
       - name: Benchmark scenario execution (Baseline)
         env:
