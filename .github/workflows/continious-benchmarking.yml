@@ -9,7 +9,7 @@ on:
       - ".github/workflows/*"
    
 env: 
-  EXECUTION_OPTIONS: --disableLogFile --job Dry --allCategories Construction Unit Value # see https://benchmarkdotnet.org/articles/guides/console-args.html
+  EXECUTION_OPTIONS: --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
   BENCHMARK_DATA_FILE: benchmark-data.json
@@ -157,8 +157,14 @@ jobs:
       - name: Benchmark reports summary
         run: |
           git status
-          git diff Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
-        shell: pwsh         
+          git diff (Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }})
+        shell: pwsh        
+      
+      # Push the modifications to the benchmarks branch
+      - name: Git Auto Commit
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
+        with:
+          commit_message: 'Automatic benchmark generation for ${{ github.sha }}: ${{ github.event.head_commit.message }}' 
         
           
   benchmark-old: # runs all scenarios in parallel, creating the corresponding artifacts
