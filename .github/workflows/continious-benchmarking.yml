@@ -103,7 +103,11 @@ jobs:
       - name: Download benchmark artifacts
         uses: actions/download-artifact@v2
         with:
-          path: Artifacts        
+          path: Artifacts
+
+      
+      - name: Global env
+        run: echo "TEST-VAR=$(echo $GITHUB_SHA | cut -c 1-6)" >> $env:GITHUB_ENV 
  
       - name: Update reports data
         run: |          
@@ -116,8 +120,8 @@ jobs:
             if(!(Test-Path -Path $benchmarks_dir )){
                 New-Item -ItemType directory -Path $benchmarks_dir
             }
-            
-            Copy-Item $artifact $benchmarks_dir -Recurse -Force $scenario.persistance-options
+
+            Copy-Item $artifact $benchmarks_dir -Recurse -Force -Include $scenario.files-included -Exclude $scenario.files-excluded -verbose
             
             if ($scenario.tracked){ continue }
             
