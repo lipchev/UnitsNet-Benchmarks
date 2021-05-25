@@ -12,7 +12,7 @@ env:
   EXECUTION_OPTIONS: --disableLogFile # see https://benchmarkdotnet.org/articles/guides/console-args.html
   BENCHMARK_PAGES_BRANCH: gh-pages
   BENCHMARK_DATA_FOLDER: benchmarks
-  BENCHMARK_DATA_FILE: benchmark-data.json
+  BENCHMARK_DATA_FILE: data.json
   STABLE_BASELINES: "BaselineBenchmarks" # TODO could use something like *Perf_Double* or System.MathBenchmarks.Double* from dotnet/performance
 jobs:  
 
@@ -104,10 +104,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: Artifacts
-
-      
-      - name: Global env
-        run: echo "TEST-VAR=$(echo $GITHUB_SHA | cut -c 1-6)" >> $env:GITHUB_ENV 
  
       - name: Update reports data
         run: |          
@@ -144,9 +140,9 @@ jobs:
           // creating / appending to the benchmark history data file
           $dataFile = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }}
           $headCommit = ${{ github.event.head_commit }} | ConvertFrom-Json 
-          $commitBenchmarks = @{Commit = $headCommit; Benchmarks = $results }
-          if (Test-Path $dataFile ){
-            $historicData = $commitBenchmarks + (Get-Content $dataFile | ConvertFrom-Json )
+          $commitBenchmarks = @{Commit = $headCommit; Benchmarks = $results}
+          if (Test-Path $dataFile){
+            $historicData = $commitBenchmarks + (Get-Content $dataFile | ConvertFrom-Json)
           }
           else{
             $historicData = @($commitBenchmarks)           
@@ -154,7 +150,11 @@ jobs:
           $historicData | ConvertTo-Json -Depth 20 | Out-File $dataFile
         shell: pwsh
         
+      - name: WTF
+        run: ls -R
+
       - name: Benchmark reports summary
+        if: 'false'
         run: |
           git status
           git diff (Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} ${{ env.BENCHMARK_DATA_FILE }})
