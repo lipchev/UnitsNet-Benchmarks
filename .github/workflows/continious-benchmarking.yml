@@ -114,18 +114,18 @@ jobs:
           $scenarios = ConvertFrom-Json '${{ needs.scenarios.outputs.json }}'
           foreach ($scenario in $scenarios) {
             $runtimesFolder = $scenario.runtimes -join '-'
-            $artifact = Join-Path $scenario.Benchmark $runtimesFolder
+            $srcDir = '{0} ({1})' -f $scenario.Benchmark, $runtimesFolder
             $targetDir = Join-Path ${{ env.BENCHMARK_DATA_FOLDER }} $runtimesFolder
             
             if(!(Test-Path -Path $targetDir )){
-                New-Item -ItemType directory -Path $targetDir
+                New-Item -ItemType directory -Path $targetDir -verbose
             }
 
-            Copy-Item $artifact $targetDir -Recurse -Force -Include $scenario.filesIncluded -Exclude $scenario.filesExcluded -verbose
+            Copy-Item $srcDir $targetDir -Recurse -Force -Include $scenario.filesIncluded -Exclude $scenario.filesExcluded -verbose
             
             if ($scenario.tracked){ continue }
             
-            $results += Get-ChildItem -Path $artifact -Filter *.json -Recurse | 
+            $results += Get-ChildItem -Path $srcDir -Filter *.json -Recurse | 
                 ForEach-Object { 
                   (Get-Content -Raw $_.FullName | ConvertFrom-Json | 
                   select -Property HostEnvironmentInfo, 
