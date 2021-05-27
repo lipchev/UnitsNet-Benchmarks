@@ -1,38 +1,38 @@
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
-Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
-.NET Core SDK=5.0.203
-  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-YMFBPF : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
+.NET SDK=5.0.203
+  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+  Job-GHXATF : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
 
-Runtime=.NET 4.7.2  Toolchain=net472  
+Runtime=.NET Framework 4.7.2  Toolchain=net472  
 
 ```
-|           Method |                          Categories |           x |           y |     Mean |    Error |   StdDev |   StdErr |      Min |      Max |   Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|----------------- |------------------------------------ |------------ |------------ |---------:|---------:|---------:|---------:|---------:|---------:|---------:|-------:|------:|------:|----------:|
-|           Equals |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 11.03 ns | 0.221 ns | 0.207 ns | 0.053 ns | 10.69 ns | 11.52 ns | 11.00 ns |      - |     - |     - |         - |
-|           Equals |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 11.05 ns | 0.149 ns | 0.125 ns | 0.035 ns | 10.85 ns | 11.21 ns | 11.05 ns |      - |     - |     - |         - |
-|  Equals_Absolute |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 11.74 ns | 0.212 ns | 0.198 ns | 0.051 ns | 11.51 ns | 12.23 ns | 11.69 ns |      - |     - |     - |         - |
-|  Equals_Absolute |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 11.83 ns | 0.261 ns | 0.244 ns | 0.063 ns | 11.50 ns | 12.35 ns | 11.82 ns |      - |     - |     - |         - |
-|  Equals_Relative |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 11.90 ns | 0.220 ns | 0.206 ns | 0.053 ns | 11.58 ns | 12.35 ns | 11.85 ns |      - |     - |     - |         - |
-|  Equals_Relative |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 11.91 ns | 0.151 ns | 0.141 ns | 0.037 ns | 11.74 ns | 12.13 ns | 11.83 ns |      - |     - |     - |         - |
-|  Equals_Absolute |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 11.91 ns | 0.146 ns | 0.129 ns | 0.035 ns | 11.67 ns | 12.07 ns | 11.96 ns |      - |     - |     - |         - |
-|  Equals_Relative |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 12.13 ns | 0.262 ns | 0.321 ns | 0.069 ns | 11.62 ns | 12.72 ns | 12.07 ns |      - |     - |     - |         - |
-|           Equals |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 13.13 ns | 0.239 ns | 0.212 ns | 0.057 ns | 12.78 ns | 13.50 ns | 13.11 ns |      - |     - |     - |         - |
-| IQuantity_Equals | Interface,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 16.65 ns | 0.121 ns | 0.095 ns | 0.027 ns | 16.47 ns | 16.75 ns | 16.66 ns |      - |     - |     - |         - |
-| IQuantity_Equals | Interface,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 16.71 ns | 0.270 ns | 0.253 ns | 0.065 ns | 16.26 ns | 17.04 ns | 16.73 ns |      - |     - |     - |         - |
-|           Equals |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 19.06 ns | 0.250 ns | 0.234 ns | 0.060 ns | 18.70 ns | 19.52 ns | 19.02 ns |      - |     - |     - |         - |
-| IQuantity_Equals | Interface,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 19.28 ns | 0.383 ns | 0.410 ns | 0.097 ns | 18.79 ns | 20.06 ns | 19.22 ns |      - |     - |     - |         - |
-|           MinMax |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 19.55 ns | 0.400 ns | 0.428 ns | 0.101 ns | 18.88 ns | 20.21 ns | 19.59 ns | 0.0050 |     - |     - |      32 B |
-|           MinMax |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 19.61 ns | 0.384 ns | 0.377 ns | 0.094 ns | 18.96 ns | 20.29 ns | 19.59 ns | 0.0050 |     - |     - |      32 B |
-|           Equals |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 19.64 ns | 0.415 ns | 0.407 ns | 0.102 ns | 18.78 ns | 20.38 ns | 19.65 ns |      - |     - |     - |         - |
-|  Equals_Relative |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 19.66 ns | 0.288 ns | 0.256 ns | 0.068 ns | 19.21 ns | 20.05 ns | 19.69 ns |      - |     - |     - |         - |
-|  Equals_Relative |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 20.54 ns | 0.423 ns | 0.550 ns | 0.112 ns | 19.62 ns | 21.48 ns | 20.57 ns |      - |     - |     - |         - |
-|           MinMax |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 20.69 ns | 0.415 ns | 0.716 ns | 0.116 ns | 19.41 ns | 21.87 ns | 20.68 ns | 0.0050 |     - |     - |      32 B |
-|  Equals_Absolute |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 21.34 ns | 0.225 ns | 0.199 ns | 0.053 ns | 20.96 ns | 21.66 ns | 21.37 ns |      - |     - |     - |         - |
-|  Equals_Absolute |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 21.35 ns | 0.338 ns | 0.300 ns | 0.080 ns | 20.74 ns | 21.97 ns | 21.36 ns |      - |     - |     - |         - |
-|           MinMax |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 24.39 ns | 0.404 ns | 0.378 ns | 0.098 ns | 23.83 ns | 25.01 ns | 24.30 ns | 0.0050 |     - |     - |      32 B |
-|           MinMax |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 25.17 ns | 0.485 ns | 0.454 ns | 0.117 ns | 24.62 ns | 25.94 ns | 25.23 ns | 0.0050 |     - |     - |      32 B |
-| IQuantity_Equals | Interface,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 25.50 ns | 0.513 ns | 0.480 ns | 0.124 ns | 24.59 ns | 26.35 ns | 25.51 ns |      - |     - |     - |         - |
-| IQuantity_Equals | Interface,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 25.57 ns | 0.479 ns | 0.448 ns | 0.116 ns | 24.68 ns | 26.15 ns | 25.50 ns |      - |     - |     - |         - |
+|           Method |                          Categories |           x |           y |      Mean |     Error |    StdDev |    StdErr |       Min |       Max |    Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|----------------- |------------------------------------ |------------ |------------ |----------:|----------:|----------:|----------:|----------:|----------:|----------:|-------:|------:|------:|----------:|
+|           Equals |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm |  9.734 ns | 0.0964 ns | 0.0855 ns | 0.0228 ns |  9.602 ns |  9.886 ns |  9.732 ns |      - |     - |     - |         - |
+|           Equals |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m |  9.879 ns | 0.2138 ns | 0.2287 ns | 0.0539 ns |  9.558 ns | 10.397 ns |  9.774 ns |      - |     - |     - |         - |
+|  Equals_Relative |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 11.024 ns | 0.1339 ns | 0.1187 ns | 0.0317 ns | 10.788 ns | 11.267 ns | 11.008 ns |      - |     - |     - |         - |
+|  Equals_Relative |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 11.140 ns | 0.1994 ns | 0.1768 ns | 0.0472 ns | 10.902 ns | 11.443 ns | 11.100 ns |      - |     - |     - |         - |
+|  Equals_Relative |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 11.161 ns | 0.2263 ns | 0.2006 ns | 0.0536 ns | 10.861 ns | 11.531 ns | 11.154 ns |      - |     - |     - |         - |
+|  Equals_Absolute |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 11.456 ns | 0.1164 ns | 0.1032 ns | 0.0276 ns | 11.316 ns | 11.619 ns | 11.443 ns |      - |     - |     - |         - |
+|  Equals_Absolute |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 11.456 ns | 0.1720 ns | 0.1609 ns | 0.0415 ns | 11.214 ns | 11.804 ns | 11.442 ns |      - |     - |     - |         - |
+|           Equals |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 11.676 ns | 0.1699 ns | 0.1590 ns | 0.0410 ns | 11.250 ns | 11.867 ns | 11.686 ns |      - |     - |     - |         - |
+|  Equals_Absolute |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 12.584 ns | 0.1283 ns | 0.1137 ns | 0.0304 ns | 12.319 ns | 12.771 ns | 12.607 ns |      - |     - |     - |         - |
+| IQuantity_Equals | Interface,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 14.855 ns | 0.1533 ns | 0.1359 ns | 0.0363 ns | 14.620 ns | 15.132 ns | 14.851 ns |      - |     - |     - |         - |
+| IQuantity_Equals | Interface,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 15.366 ns | 0.1895 ns | 0.1680 ns | 0.0449 ns | 15.163 ns | 15.729 ns | 15.326 ns |      - |     - |     - |         - |
+|           Equals |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 16.573 ns | 0.3492 ns | 0.4158 ns | 0.0907 ns | 15.589 ns | 17.049 ns | 16.655 ns |      - |     - |     - |         - |
+|           Equals |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 16.590 ns | 0.2620 ns | 0.2187 ns | 0.0607 ns | 16.393 ns | 17.071 ns | 16.505 ns |      - |     - |     - |         - |
+| IQuantity_Equals | Interface,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 16.974 ns | 0.3527 ns | 0.4331 ns | 0.0923 ns | 16.474 ns | 17.971 ns | 16.832 ns |      - |     - |     - |         - |
+|           MinMax |    Struct,Micro,Comparison,Quantity |  1,234.56 m |         0 m | 17.424 ns | 0.2197 ns | 0.1947 ns | 0.0520 ns | 17.155 ns | 17.832 ns | 17.367 ns | 0.0050 |     - |     - |      32 B |
+|           MinMax |    Struct,Micro,Comparison,Quantity | 1,234.56 cm | 1,234.56 cm | 17.685 ns | 0.1912 ns | 0.1789 ns | 0.0462 ns | 17.416 ns | 18.071 ns | 17.649 ns | 0.0050 |     - |     - |      32 B |
+|           MinMax |    Struct,Micro,Comparison,Quantity |  1,234.56 m |  1,234.56 m | 17.795 ns | 0.2943 ns | 0.2753 ns | 0.0711 ns | 17.457 ns | 18.182 ns | 17.792 ns | 0.0050 |     - |     - |      32 B |
+|  Equals_Absolute |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 18.939 ns | 0.3796 ns | 0.3551 ns | 0.0917 ns | 18.494 ns | 19.659 ns | 18.907 ns |      - |     - |     - |         - |
+|  Equals_Relative |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 18.968 ns | 0.3627 ns | 0.3393 ns | 0.0876 ns | 18.642 ns | 19.816 ns | 18.808 ns |      - |     - |     - |         - |
+|  Equals_Absolute |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 19.268 ns | 0.2376 ns | 0.1984 ns | 0.0550 ns | 18.906 ns | 19.678 ns | 19.221 ns |      - |     - |     - |         - |
+|  Equals_Relative |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 19.567 ns | 0.4111 ns | 0.9023 ns | 0.1185 ns | 17.848 ns | 21.393 ns | 19.787 ns |      - |     - |     - |         - |
+|           MinMax |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 21.877 ns | 0.3755 ns | 0.3136 ns | 0.0870 ns | 21.341 ns | 22.452 ns | 21.950 ns | 0.0050 |     - |     - |      32 B |
+|           MinMax |    Struct,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 21.898 ns | 0.4366 ns | 0.5521 ns | 0.1151 ns | 21.215 ns | 23.295 ns | 21.737 ns | 0.0050 |     - |     - |      32 B |
+| IQuantity_Equals | Interface,Micro,Comparison,Quantity | 1,234.56 cm |         0 m | 21.904 ns | 0.3755 ns | 0.3513 ns | 0.0907 ns | 21.440 ns | 22.660 ns | 21.896 ns |      - |     - |     - |         - |
+| IQuantity_Equals | Interface,Micro,Comparison,Quantity | 1,234.56 cm |        0 km | 22.580 ns | 0.2912 ns | 0.2724 ns | 0.0703 ns | 22.190 ns | 23.053 ns | 22.627 ns |      - |     - |     - |         - |

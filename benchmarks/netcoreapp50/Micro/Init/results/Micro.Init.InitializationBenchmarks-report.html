@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Micro.Init.InitializationBenchmarks-20210522-161414</title>
+<title>Micro.Init.InitializationBenchmarks-20210525-031503</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,20 +13,20 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
 Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
-.NET Core SDK=5.0.203
-  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-VYJAEK : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
+.NET SDK=5.0.203
+  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+  Job-OYANID : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
 </code></pre>
-<pre><code>Runtime=.NET Core 5.0  Toolchain=netcoreapp50  
+<pre><code>Runtime=.NET 5.0  Toolchain=netcoreapp50  
 </code></pre>
 
 <table>
 <thead><tr><th>              Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>InitUnitAbbreviationsCache</td><td>1,777.7 &mu;s</td><td>34.67 &mu;s</td><td>35.61 &mu;s</td><td>8.64 &mu;s</td><td>1,707.9 &mu;s</td><td>1,839.0 &mu;s</td><td>1,780.7 &mu;s</td><td>66.4063</td><td>33.2031</td><td>-</td><td>1234.65 KB</td>
-</tr><tr><td>InitUnitConverter</td><td>540.9 &mu;s</td><td>13.37 &mu;s</td><td>37.70 &mu;s</td><td>3.93 &mu;s</td><td>392.1 &mu;s</td><td>633.9 &mu;s</td><td>536.3 &mu;s</td><td>-</td><td>-</td><td>-</td><td>718.66 KB</td>
+</thead><tbody><tr><td>InitUnitAbbreviationsCache</td><td>1,933.2 &mu;s</td><td>37.46 &mu;s</td><td>35.04 &mu;s</td><td>9.05 &mu;s</td><td>1,876.7 &mu;s</td><td>1,985.7 &mu;s</td><td>1,934.0 &mu;s</td><td>66.4063</td><td>33.2031</td><td>-</td><td>1,235 KB</td>
+</tr><tr><td>InitUnitConverter</td><td>575.1 &mu;s</td><td>10.25 &mu;s</td><td>17.13 &mu;s</td><td>2.85 &mu;s</td><td>536.9 &mu;s</td><td>603.9 &mu;s</td><td>573.5 &mu;s</td><td>-</td><td>-</td><td>-</td><td>719 KB</td>
 </tr></tbody></table>
 </body>
 </html>

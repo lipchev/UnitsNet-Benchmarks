@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Micro.Init.InitializationBenchmarks-20210522-161417</title>
+<title>Micro.Init.InitializationBenchmarks-20210525-031450</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,20 +13,20 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
-Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
-.NET Core SDK=5.0.203
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5), VM=Hyper-V
+Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+.NET SDK=5.0.203
   [Host]     : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
-  Job-DJXYGA : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
+  Job-WDVGSY : .NET Core 2.1.28 (CoreCLR 4.6.30015.01, CoreFX 4.6.30015.01), X64 RyuJIT
 </code></pre>
 <pre><code>Runtime=.NET Core 2.1  Toolchain=netcoreapp21  
 </code></pre>
 
 <table>
-<thead><tr><th>              Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th> Min</th><th> Max</th><th>Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+<thead><tr><th>              Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>Median</th><th> Min</th><th> Max</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>InitUnitAbbreviationsCache</td><td>3,018.1 &mu;s</td><td>55.13 &mu;s</td><td>63.49 &mu;s</td><td>14.20 &mu;s</td><td>2,890.7 &mu;s</td><td>3,128.4 &mu;s</td><td>3,031.8 &mu;s</td><td>250.0000</td><td>125.0000</td><td>-</td><td>1592.1 KB</td>
-</tr><tr><td>InitUnitConverter</td><td>629.1 &mu;s</td><td>16.70 &mu;s</td><td>46.26 &mu;s</td><td>4.90 &mu;s</td><td>535.5 &mu;s</td><td>747.3 &mu;s</td><td>625.5 &mu;s</td><td>-</td><td>-</td><td>-</td><td>718.66 KB</td>
+</thead><tbody><tr><td>InitUnitAbbreviationsCache</td><td>2,709.1 &mu;s</td><td>56.50 &mu;s</td><td>166.59 &mu;s</td><td>16.66 &mu;s</td><td>2,727.1 &mu;s</td><td>2,366.4 &mu;s</td><td>3,106.2 &mu;s</td><td>246.0938</td><td>58.5938</td><td>-</td><td>1,592 KB</td>
+</tr><tr><td>InitUnitConverter</td><td>610.6 &mu;s</td><td>25.92 &mu;s</td><td>76.01 &mu;s</td><td>7.64 &mu;s</td><td>585.8 &mu;s</td><td>511.5 &mu;s</td><td>844.7 &mu;s</td><td>-</td><td>-</td><td>-</td><td>719 KB</td>
 </tr></tbody></table>
 </body>
 </html>

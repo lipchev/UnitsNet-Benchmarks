@@ -1,18 +1,18 @@
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
-Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
-.NET Core SDK=5.0.203
-  [Host]     : .NET Core 5.0.6 (CoreCLR 5.0.621.22011, CoreFX 5.0.621.22011), X64 RyuJIT
-  Job-HMWVGO : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.1935 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
+.NET SDK=5.0.203
+  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+  Job-GNUCEJ : .NET Framework 4.8 (4.8.4341.0), X64 RyuJIT
 
-Runtime=.NET 4.7.2  Toolchain=net472  Categories=Micro,Construction,Unit,String  
+Runtime=.NET Framework 4.7.2  Toolchain=net472  Categories=Micro,Construction,Unit,String  
 
 ```
 |                           Method |       Mean |    Error |   StdDev |  StdErr |        Min |        Max |     Median | Ratio | MannWhitney(5%) | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------------------------- |-----------:|---------:|---------:|--------:|-----------:|-----------:|-----------:|------:|---------------- |--------:|-------:|------:|------:|----------:|
-|           ParseUnit(validString) |   792.5 ns | 13.39 ns | 12.53 ns | 3.23 ns |   775.7 ns |   815.3 ns |   788.6 ns |  1.00 |            Base |    0.00 | 0.0758 |     - |     - |     497 B |
-|        TryParseUnit(validString) |   820.9 ns | 16.27 ns | 25.33 ns | 4.48 ns |   776.4 ns |   881.5 ns |   823.4 ns |  1.02 |            Same |    0.03 | 0.0713 |     - |     - |     473 B |
-|    UnitParser.Parse(validString) |   920.9 ns | 18.29 ns | 17.11 ns | 4.42 ns |   895.5 ns |   947.6 ns |   919.4 ns |  1.16 |          Slower |    0.03 | 0.0858 |     - |     - |     545 B |
-| UnitParser.TryParse(validString) |   922.2 ns | 16.14 ns | 15.09 ns | 3.90 ns |   887.2 ns |   944.5 ns |   924.6 ns |  1.16 |          Slower |    0.03 | 0.0795 |     - |     - |     521 B |
-|        TryParseUnit(invalidUnit) | 1,889.7 ns | 16.42 ns | 14.56 ns | 3.89 ns | 1,853.1 ns | 1,905.2 ns | 1,894.9 ns |  2.39 |          Slower |    0.04 | 0.1516 |     - |     - |    1003 B |
+|           ParseUnit(validString) |   709.9 ns | 12.47 ns | 11.06 ns | 2.95 ns |   690.1 ns |   730.8 ns |   712.4 ns |  1.00 |            Base |    0.00 | 0.0773 |     - |     - |     497 B |
+|        TryParseUnit(validString) |   716.5 ns | 12.78 ns | 10.67 ns | 2.96 ns |   696.8 ns |   730.9 ns |   719.7 ns |  1.01 |            Same |    0.02 | 0.0735 |     - |     - |     473 B |
+| UnitParser.TryParse(validString) |   825.3 ns |  9.49 ns |  8.41 ns | 2.25 ns |   814.1 ns |   846.6 ns |   822.1 ns |  1.16 |          Slower |    0.02 | 0.0807 |     - |     - |     521 B |
+|    UnitParser.Parse(validString) |   833.3 ns |  7.61 ns |  6.74 ns | 1.80 ns |   822.3 ns |   844.3 ns |   831.9 ns |  1.17 |          Slower |    0.02 | 0.0858 |     - |     - |     545 B |
+|        TryParseUnit(invalidUnit) | 1,663.8 ns | 32.79 ns | 32.21 ns | 8.05 ns | 1,620.1 ns | 1,742.9 ns | 1,652.2 ns |  2.34 |          Slower |    0.07 | 0.1547 |     - |     - |   1,003 B |
